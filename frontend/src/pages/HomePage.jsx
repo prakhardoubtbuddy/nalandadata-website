@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LeadCaptureForm } from "@/components/LeadCaptureForm";
+import RotatingGlobe from "@/components/RotatingGlobe";
 import axios from "axios";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
@@ -147,9 +148,15 @@ export default function HomePage() {
     <div className="min-h-screen bg-[#0A0A0A]" data-testid="home-page">
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden" data-testid="hero-section">
+        {/* Rotating Globe Background */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <div className="w-[800px] h-[800px] md:w-[1000px] md:h-[1000px] lg:w-[1200px] lg:h-[1200px]">
+            <RotatingGlobe />
+          </div>
+        </div>
+        
         {/* Background effects */}
         <div className="absolute inset-0 hero-gradient" />
-        <div className="absolute inset-0 grid-bg opacity-30" />
         
         {/* Animated orbs */}
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-[128px] animate-pulse" />
