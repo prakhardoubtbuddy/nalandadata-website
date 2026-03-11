@@ -1,34 +1,116 @@
-.App-logo {
-    height: 40vmin;
-    pointer-events: none;
+/* App-specific styles */
+.App {
+  min-height: 100vh;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-    .App-logo {
-        animation: App-logo-spin infinite 20s linear;
-    }
+/* Hero gradient overlay */
+.hero-gradient {
+  background: radial-gradient(ellipse at center top, rgba(59, 130, 246, 0.15) 0%, transparent 50%);
 }
 
-.App-header {
-    background-color: #0f0f10;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
+/* Section separators */
+.section-border {
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.App-link {
-    color: #61dafb;
+/* Stats number animation */
+.stat-number {
+  font-variant-numeric: tabular-nums;
 }
 
-@keyframes App-logo-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+/* Pipeline connector line */
+.pipeline-line {
+  position: relative;
+}
+
+.pipeline-line::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: -2rem;
+  width: 4rem;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(59, 130, 246, 0.5), transparent);
+}
+
+/* Dataset card glow on hover */
+.dataset-card {
+  position: relative;
+}
+
+.dataset-card::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, transparent 40%, rgba(59, 130, 246, 0.3) 50%, transparent 60%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.dataset-card:hover::before {
+  opacity: 1;
+}
+
+/* Benchmark table highlight */
+.benchmark-positive {
+  color: #10B981;
+}
+
+/* Navigation active state */
+.nav-link-active {
+  color: #fff !important;
+  position: relative;
+}
+
+.nav-link-active::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #3B82F6;
+  border-radius: 1px;
+}
+
+/* Form field focus ring */
+.form-field:focus-within {
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+}
+
+/* Admin sidebar */
+.admin-sidebar {
+  background: linear-gradient(180deg, #121212 0%, #0A0A0A 100%);
+}
+
+/* File upload zone */
+.upload-zone {
+  border: 2px dashed rgba(255, 255, 255, 0.1);
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.upload-zone:hover,
+.upload-zone.dragover {
+  border-color: rgba(59, 130, 246, 0.5);
+  background: rgba(59, 130, 246, 0.05);
+}
+
+/* Mobile menu animation */
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.mobile-menu-enter {
+  animation: slideIn 0.3s ease-out;
 }
