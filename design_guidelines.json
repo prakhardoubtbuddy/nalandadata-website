@@ -1,0 +1,134 @@
+{
+  "identity": {
+    "name": "S Chand AI Infrastructure",
+    "tone": "Serious, Academic, High-Tech, Industrial Scale",
+    "target_audience": "Frontier AI Labs, LLM Developers, Research Institutes",
+    "core_values": ["Precision", "Scale", "Academic Rigor", "Infrastructure-Grade"]
+  },
+  "tokens": {
+    "colors": {
+      "background": {
+        "DEFAULT": "#0A0A0A",
+        "secondary": "#121212",
+        "tertiary": "#1A1A1A"
+      },
+      "text": {
+        "primary": "#EDEDED",
+        "secondary": "#A1A1AA",
+        "tertiary": "#52525B"
+      },
+      "brand": {
+        "primary": "#3B82F6",
+        "accent": "#6366F1",
+        "success": "#10B981",
+        "warning": "#F59E0B",
+        "error": "#EF4444"
+      },
+      "border": {
+        "DEFAULT": "#27272A",
+        "hover": "#3F3F46"
+      }
+    },
+    "typography": {
+      "font_family": {
+        "sans": ["Inter", "system-ui", "sans-serif"],
+        "mono": ["JetBrains Mono", "monospace"]
+      },
+      "rules": {
+        "headings": "font-sans font-bold tracking-tight text-white",
+        "subheadings": "font-sans font-medium tracking-normal text-gray-400",
+        "body": "font-sans text-base text-gray-300 leading-relaxed",
+        "code": "font-mono text-sm text-blue-400",
+        "labels": "font-mono text-xs uppercase tracking-widest text-gray-500"
+      }
+    },
+    "spacing": {
+      "container_padding": "p-6 md:p-12 lg:p-24",
+      "section_gap": "gap-12 md:gap-24",
+      "element_gap": "gap-4 md:gap-8"
+    }
+  },
+  "visual_enhancers": {
+    "glassmorphism": "bg-white/5 backdrop-blur-xl border border-white/10",
+    "neon_glow": "shadow-[0_0_20px_rgba(59,130,246,0.3)]",
+    "grid_background": "bg-[linear-gradient(to_right,#27272a_1px,transparent_1px),linear-gradient(to_bottom,#27272a_1px,transparent_1px)] bg-[size:4rem_4rem]",
+    "tracing_beam": "relative overflow-hidden before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-blue-500/20 before:to-transparent before:translate-x-[-100%] hover:before:animate-[shimmer_1.5s_infinite]"
+  },
+  "layouts": {
+    "bento_grid": "grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6",
+    "hero_section": "flex flex-col items-center justify-center min-h-[80vh] text-center relative overflow-hidden",
+    "dashboard_grid": "grid grid-cols-12 gap-4 auto-rows-[minmax(100px,auto)]"
+  },
+  "components": {
+    "buttons": {
+      "primary": "bg-white text-black hover:bg-gray-200 font-semibold px-6 py-3 rounded-full transition-all duration-200 shadow-[0_0_10px_rgba(255,255,255,0.2)]",
+      "secondary": "bg-transparent border border-white/20 text-white hover:bg-white/10 px-6 py-3 rounded-full transition-all duration-200",
+      "ghost": "text-gray-400 hover:text-white transition-colors duration-200"
+    },
+    "cards": {
+      "feature": "group relative bg-[#121212] border border-white/10 p-8 rounded-xl hover:border-blue-500/50 transition-colors duration-300 overflow-hidden",
+      "dataset": "bg-[#0F0F10] border border-white/5 hover:border-white/20 p-6 rounded-lg transition-all duration-300 group cursor-pointer",
+      "stat": "flex flex-col gap-2 p-6 border-l border-white/10"
+    },
+    "inputs": {
+      "default": "bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white placeholder:text-gray-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all outline-none"
+    }
+  },
+  "assets": {
+    "hero_backgrounds": [
+      {
+        "url": "https://images.unsplash.com/photo-1771013304699-dda30119b3bf?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2OTF8MHwxfHNlYXJjaHwxfHxhYnN0cmFjdCUyMG5ldXJhbCUyMG5ldHdvcmslMjBkYXRhJTIwZmxvdyUyMGJsdWUlMjBkYXJrJTIwYmFja2dyb3VuZHxlbnwwfHx8fDE3NzMyMTE3MTZ8MA&ixlib=rb-4.1.0&q=85",
+        "description": "Abstract blue and black wavy pattern for hero background"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1772048197706-8aceac401bf2?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2OTF8MHwxfHNlYXJjaHwyfHxhYnN0cmFjdCUyMG5ldXJhbCUyMG5ldHdvcmslMjBkYXRhJTIwZmxvdyUyMGJsdWUlMjBkYXJrJTIwYmFja2dyb3VuZHxlbnwwfHx8fDE3NzMyMTE3MTZ8MA&ixlib=rb-4.1.0&q=85",
+        "description": "Dark blue swirls for section backgrounds"
+      }
+    ],
+    "dataset_thumbnails": [
+      {
+        "url": "https://images.unsplash.com/photo-1739055248837-b7eab3b30855?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDN8MHwxfHNlYXJjaHw0fHxnZW9tZXRyaWMlMjBzaGFwZXMlMjAzZCUyMGFic3RyYWN0JTIwZmxvYXRpbmclMjBtYXRoJTIwcGh5c2ljcyUyMGRhcmt8ZW58MHx8fHwxNzczMjExNzE4fDA&ixlib=rb-4.1.0&q=85",
+        "description": "Abstract geometric shapes for STEM/Reasoning datasets"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1680992046626-418f7e910589?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2Mzl8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBzZXJ2ZXIlMjByb29tJTIwZnV0dXJpc3RpYyUyMGRhdGElMjBjZW50ZXIlMjBkYXJrJTIwYmx1ZXxlbnwwfHx8fDE3NzMyMTE3MTd8MA&ixlib=rb-4.1.0&q=85",
+        "description": "Server rack for Infrastructure/Compute datasets"
+      }
+    ],
+    "logos": [
+      {
+        "url": "https://images.unsplash.com/photo-1636051028886-0059ad2383c8?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2ODl8MHwxfHNlYXJjaHwyfHx0ZWNoJTIwY29tcGFueSUyMGxvZ28lMjB3aGl0ZSUyMG1pbmltYWx8ZW58MHx8fHwxNzczMjExNzE4fDA&ixlib=rb-4.1.0&q=85",
+        "description": "Generic tech logo 1"
+      },
+      {
+         "url": "https://images.unsplash.com/photo-1683227235812-dbb413c77b26?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxODl8MHwxfHNlYXJjaHwxfHx1bml2ZXJzaXR5JTIwbG9nbyUyMHdoaXRlJTIwbWluaW1hbHxlbnwwfHx8fDE3NzMyMTE3MTl8MA&ixlib=rb-4.1.0&q=85",
+         "description": "University placeholder logo"
+      }
+    ]
+  },
+  "motion": {
+    "fade_up": "initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}",
+    "stagger_children": "variants={{ hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.1 } } }}",
+    "hover_scale": "whileHover={{ scale: 1.02 }} transition={{ duration: 0.2 }}"
+  },
+  "instructions_to_main_agent": [
+    "PHASE 1: THEME SETUP. Configure tailwind.config.js to use the 'class' strategy for dark mode and extend the color palette with the provided tokens. Ensure 'Inter' is the default sans font and 'JetBrains Mono' is the mono font.",
+    "PHASE 2: COMPONENT LIBRARY. Utilize existing Shadcn components but STRIP them of default borders/shadows and apply the 'glassmorphism' or 'neon_glow' styles defined in visual_enhancers.",
+    "PHASE 3: HOMEPAGE. Build the Hero section with a dark, immersive background (use assets.hero_backgrounds). Implement the 'Pipeline Visualization' using a horizontal scroll or step-based layout with animated connectors.",
+    "PHASE 4: DATASET PAGES. Create a reusable layout for dataset details. Use a Bento Grid for the 'Why Us' or 'Features' section. Use high-contrast stats (white text on black).",
+    "PHASE 5: ADMIN PANEL. Create a separate layout for the admin panel (/admin). It should be denser (Archetype 4: Swiss & High-Contrast). Use a table component for file management.",
+    "CRITICAL: Dark Mode is MANDATORY. Do not implement a light mode toggle unless explicitly requested (which it wasn't). The vibe must be 'Serious AI Infrastructure'.",
+    "CRITICAL: Use 'framer-motion' for all entrance animations. Elements should fade up as the user scrolls.",
+    "CRITICAL: Lead Capture Form must be prominent. On the homepage and dataset pages, ensure the CTA 'Request Access' or 'Download Sample' opens a Shadcn Dialog with the form."
+  ],
+  "UNIVERSAL_GUIDELINES": [
+    "Dark colors look good when used independently without gradients. DO NOT use dark colors as gradients.",
+    "Create depth through layered design elements with z-index hierarchy.",
+    "Use glass-morphism effects with backdrop filters (12-24px blur).",
+    "You MUST NOT apply universal transition (transition: all).",
+    "Every interaction needs micro-animations - hover states, transitions.",
+    "Use 2-3x more spacing than feels comfortable.",
+    "Subtle grain textures, noise overlays, custom cursors.",
+    "NEVER use AI assistant Emoji characters."
+  ]
+}
