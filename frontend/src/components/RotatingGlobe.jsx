@@ -25,7 +25,7 @@ export default function RotatingGlobe() {
     const centerX = canvas.offsetWidth / 2;
     const centerY = canvas.offsetHeight / 2;
     const radius = Math.min(centerX, centerY) * 0.75;
-    const dotCount = 2000;
+    const dotCount = 1200; // Reduced dot count
     const dots = [];
 
     // Generate random dots on sphere surface using fibonacci sphere
@@ -36,75 +36,75 @@ export default function RotatingGlobe() {
       dots.push({
         phi,
         theta,
-        size: Math.random() * 2 + 1
+        size: Math.random() * 1.5 + 0.5 // Smaller dots
       });
     }
 
-    // Add latitude/longitude lines for wireframe effect
-    const meridians = 18;
-    const parallels = 12;
+    // Add latitude/longitude lines for wireframe effect - reduced density
+    const meridians = 12;
+    const parallels = 8;
     const linePoints = [];
 
     // Meridians (vertical lines)
     for (let m = 0; m < meridians; m++) {
       const theta = (m / meridians) * Math.PI * 2;
-      for (let p = 0; p <= 60; p++) {
-        const phi = (p / 60) * Math.PI;
-        linePoints.push({ phi, theta, size: 1.2, isLine: true, meridianIndex: m });
+      for (let p = 0; p <= 40; p++) {
+        const phi = (p / 40) * Math.PI;
+        linePoints.push({ phi, theta, size: 0.8, isLine: true, meridianIndex: m });
       }
     }
 
     // Parallels (horizontal lines)
     for (let p = 1; p < parallels; p++) {
       const phi = (p / parallels) * Math.PI;
-      for (let m = 0; m <= 80; m++) {
-        const theta = (m / 80) * Math.PI * 2;
-        linePoints.push({ phi, theta, size: 1.2, isLine: true, parallelIndex: p });
+      for (let m = 0; m <= 50; m++) {
+        const theta = (m / 50) * Math.PI * 2;
+        linePoints.push({ phi, theta, size: 0.8, isLine: true, parallelIndex: p });
       }
     }
 
     const allDots = [...dots, ...linePoints];
 
-    // Create flowing particles along meridians and parallels
+    // Create flowing particles - reduced count
     const particles = [];
-    const particleCount = 60;
+    const particleCount = 30;
 
-    // Meridian particles (flowing up/down)
+    // Meridian particles
     for (let i = 0; i < particleCount / 2; i++) {
       const meridianIndex = Math.floor(Math.random() * meridians);
       const theta = (meridianIndex / meridians) * Math.PI * 2;
       particles.push({
         type: 'meridian',
         theta,
-        progress: Math.random(), // 0 to 1 along the meridian
-        speed: 0.003 + Math.random() * 0.004,
-        size: 2 + Math.random() * 2,
+        progress: Math.random(),
+        speed: 0.002 + Math.random() * 0.003,
+        size: 1.5 + Math.random() * 1.5,
         direction: Math.random() > 0.5 ? 1 : -1,
         trail: [],
-        trailLength: 8 + Math.floor(Math.random() * 6)
+        trailLength: 5 + Math.floor(Math.random() * 4)
       });
     }
 
-    // Parallel particles (flowing around)
+    // Parallel particles
     for (let i = 0; i < particleCount / 2; i++) {
       const parallelIndex = 1 + Math.floor(Math.random() * (parallels - 1));
       const phi = (parallelIndex / parallels) * Math.PI;
       particles.push({
         type: 'parallel',
         phi,
-        progress: Math.random() * Math.PI * 2, // angle around the parallel
-        speed: 0.015 + Math.random() * 0.02,
-        size: 2 + Math.random() * 2,
+        progress: Math.random() * Math.PI * 2,
+        speed: 0.01 + Math.random() * 0.015,
+        size: 1.5 + Math.random() * 1.5,
         direction: Math.random() > 0.5 ? 1 : -1,
         trail: [],
-        trailLength: 8 + Math.floor(Math.random() * 6)
+        trailLength: 5 + Math.floor(Math.random() * 4)
       });
     }
 
     const draw = () => {
       ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
 
-      // Sort dots by z-depth for proper rendering
+      // Sort dots by z-depth
       const sortedDots = allDots.map(dot => {
         const x = Math.sin(dot.phi) * Math.cos(dot.theta + rotation);
         const y = Math.cos(dot.phi);
@@ -119,30 +119,29 @@ export default function RotatingGlobe() {
         };
       }).sort((a, b) => a.depth - b.depth);
 
-      // Draw dots
+      // Draw dots with reduced opacity
       sortedDots.forEach(dot => {
         if (dot.z > -0.2) {
-          const opacity = Math.max(0.1, (dot.z + 0.2) / 1.2);
-          const adjustedSize = dot.size * (0.6 + (dot.z + 1) * 0.4);
+          const opacity = Math.max(0.05, (dot.z + 0.2) / 1.2);
+          const adjustedSize = dot.size * (0.5 + (dot.z + 1) * 0.3);
           
           ctx.beginPath();
           ctx.arc(dot.screenX, dot.screenY, adjustedSize, 0, Math.PI * 2);
           
           if (dot.isLine) {
-            ctx.fillStyle = `rgba(59, 130, 246, ${opacity * 0.5})`;
+            ctx.fillStyle = `rgba(59, 130, 246, ${opacity * 0.25})`; // Reduced opacity
           } else {
-            ctx.fillStyle = `rgba(200, 200, 220, ${opacity * 0.7})`;
+            ctx.fillStyle = `rgba(180, 180, 200, ${opacity * 0.35})`; // Reduced opacity
           }
           ctx.fill();
         }
       });
 
-      // Update and draw particles
+      // Update and draw particles with reduced glow
       particles.forEach(particle => {
         let phi, theta;
         
         if (particle.type === 'meridian') {
-          // Update progress along meridian
           particle.progress += particle.speed * particle.direction;
           if (particle.progress > 1) particle.progress = 0;
           if (particle.progress < 0) particle.progress = 1;
@@ -150,7 +149,6 @@ export default function RotatingGlobe() {
           phi = particle.progress * Math.PI;
           theta = particle.theta;
         } else {
-          // Update progress around parallel
           particle.progress += particle.speed * particle.direction;
           if (particle.progress > Math.PI * 2) particle.progress -= Math.PI * 2;
           if (particle.progress < 0) particle.progress += Math.PI * 2;
@@ -159,7 +157,6 @@ export default function RotatingGlobe() {
           theta = particle.progress;
         }
 
-        // Calculate 3D position
         const x = Math.sin(phi) * Math.cos(theta + rotation);
         const y = Math.cos(phi);
         const z = Math.sin(phi) * Math.sin(theta + rotation);
@@ -167,37 +164,35 @@ export default function RotatingGlobe() {
         const screenX = centerX + x * radius;
         const screenY = centerY + y * radius;
 
-        // Add to trail
         particle.trail.unshift({ x: screenX, y: screenY, z });
         if (particle.trail.length > particle.trailLength) {
           particle.trail.pop();
         }
 
-        // Only draw if on visible side
         if (z > -0.1) {
-          const baseOpacity = Math.max(0.2, (z + 0.1) / 1.1);
+          const baseOpacity = Math.max(0.15, (z + 0.1) / 1.1);
           
-          // Draw trail
+          // Draw trail with reduced opacity
           particle.trail.forEach((point, index) => {
             if (point.z > -0.1) {
-              const trailOpacity = baseOpacity * (1 - index / particle.trailLength) * 0.6;
+              const trailOpacity = baseOpacity * (1 - index / particle.trailLength) * 0.4;
               const trailSize = particle.size * (1 - index / particle.trailLength * 0.5);
               
               ctx.beginPath();
               ctx.arc(point.x, point.y, trailSize, 0, Math.PI * 2);
-              ctx.fillStyle = `rgba(100, 200, 255, ${trailOpacity})`;
+              ctx.fillStyle = `rgba(100, 180, 255, ${trailOpacity})`;
               ctx.fill();
             }
           });
 
-          // Draw main particle with glow
-          const glowSize = particle.size * 3;
+          // Smaller glow
+          const glowSize = particle.size * 2;
           const gradient = ctx.createRadialGradient(
             screenX, screenY, 0,
             screenX, screenY, glowSize
           );
-          gradient.addColorStop(0, `rgba(150, 220, 255, ${baseOpacity * 0.9})`);
-          gradient.addColorStop(0.3, `rgba(100, 180, 255, ${baseOpacity * 0.5})`);
+          gradient.addColorStop(0, `rgba(130, 200, 255, ${baseOpacity * 0.6})`);
+          gradient.addColorStop(0.4, `rgba(80, 150, 255, ${baseOpacity * 0.3})`);
           gradient.addColorStop(1, 'rgba(59, 130, 246, 0)');
           
           ctx.beginPath();
@@ -205,24 +200,15 @@ export default function RotatingGlobe() {
           ctx.fillStyle = gradient;
           ctx.fill();
 
-          // Draw bright core
+          // Core
           ctx.beginPath();
-          ctx.arc(screenX, screenY, particle.size, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(220, 240, 255, ${baseOpacity})`;
+          ctx.arc(screenX, screenY, particle.size * 0.8, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(200, 230, 255, ${baseOpacity * 0.8})`;
           ctx.fill();
         }
       });
 
-      // Draw faint glow behind the globe
-      const globeGlow = ctx.createRadialGradient(centerX, centerY, radius * 0.5, centerX, centerY, radius * 1.2);
-      globeGlow.addColorStop(0, 'rgba(59, 130, 246, 0.04)');
-      globeGlow.addColorStop(0.5, 'rgba(59, 130, 246, 0.02)');
-      globeGlow.addColorStop(1, 'rgba(59, 130, 246, 0)');
-      ctx.fillStyle = globeGlow;
-      ctx.fillRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
-
-      // Update rotation and time
-      rotation += 0.002;
+      rotation += 0.0015;
       time += 1;
       animationFrameId = requestAnimationFrame(draw);
     };
@@ -239,7 +225,7 @@ export default function RotatingGlobe() {
     <canvas
       ref={canvasRef}
       className="absolute inset-0 w-full h-full"
-      style={{ opacity: 0.85 }}
+      style={{ opacity: 0.7 }}
     />
   );
 }

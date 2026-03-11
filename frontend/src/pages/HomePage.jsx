@@ -148,9 +148,9 @@ export default function HomePage() {
     <div className="min-h-screen bg-[#0A0A0A]" data-testid="home-page">
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden" data-testid="hero-section">
-        {/* Rotating Globe Background */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <div className="w-[800px] h-[800px] md:w-[1000px] md:h-[1000px] lg:w-[1200px] lg:h-[1200px]">
+        {/* Rotating Globe Background - Hidden on small screens */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none hidden md:block">
+          <div className="w-[900px] h-[900px] lg:w-[1100px] lg:h-[1100px] opacity-50 lg:opacity-60">
             <RotatingGlobe />
           </div>
         </div>
@@ -158,9 +158,13 @@ export default function HomePage() {
         {/* Background effects */}
         <div className="absolute inset-0 hero-gradient" />
         
-        {/* Animated orbs */}
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-[128px] animate-pulse" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-[128px] animate-pulse" style={{ animationDelay: "1s" }} />
+        {/* Dark overlay for better text readability */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0A0A0A]/60 via-transparent to-[#0A0A0A]/60" />
+        <div className="absolute inset-0 bg-[#0A0A0A]/30" />
+        
+        {/* Animated orbs - smaller on mobile */}
+        <div className="absolute top-1/4 left-1/4 w-48 md:w-96 h-48 md:h-96 bg-blue-500/10 rounded-full blur-[80px] md:blur-[128px] animate-pulse" />
+        <div className="absolute bottom-1/4 right-1/4 w-48 md:w-96 h-48 md:h-96 bg-indigo-500/10 rounded-full blur-[80px] md:blur-[128px] animate-pulse" style={{ animationDelay: "1s" }} />
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
@@ -169,29 +173,29 @@ export default function HomePage() {
             transition={{ duration: 0.8 }}
           >
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-8">
+            <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full bg-black/50 backdrop-blur-sm border border-white/10 mb-6 sm:mb-8">
               <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-              <span className="text-sm text-gray-400">Trusted by leading AI labs worldwide</span>
+              <span className="text-xs sm:text-sm text-gray-300">Trusted by leading AI labs worldwide</span>
             </div>
 
-            {/* Headline */}
-            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold text-white leading-tight mb-6">
+            {/* Headline with text shadow for better readability */}
+            <h1 className="text-3xl sm:text-5xl lg:text-7xl font-bold text-white leading-tight mb-4 sm:mb-6" style={{ textShadow: '0 2px 20px rgba(0,0,0,0.8)' }}>
               Academic Intelligence Datasets
               <br />
               <span className="gradient-text">for Training Frontier AI Models</span>
             </h1>
 
-            {/* Subtext */}
-            <p className="text-lg sm:text-xl text-gray-400 max-w-3xl mx-auto mb-10 leading-relaxed">
+            {/* Subtext with background for mobile */}
+            <p className="text-base sm:text-lg lg:text-xl text-gray-300 max-w-3xl mx-auto mb-8 sm:mb-10 leading-relaxed px-2" style={{ textShadow: '0 1px 10px rgba(0,0,0,0.8)' }}>
               High-integrity knowledge datasets designed for pretraining, reasoning, 
               and post-training of advanced AI systems.
             </p>
 
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            {/* CTA Buttons - Stack on mobile */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
               <Button
                 onClick={() => setIsFormOpen(true)}
-                className="btn-primary text-lg px-8 py-6"
+                className="btn-primary text-base sm:text-lg px-6 sm:px-8 py-5 sm:py-6 w-full sm:w-auto"
                 data-testid="hero-request-dataset-btn"
               >
                 Request Dataset
@@ -200,15 +204,15 @@ export default function HomePage() {
               <Button
                 onClick={() => setIsFormOpen(true)}
                 variant="outline"
-                className="btn-secondary text-lg px-8 py-6"
+                className="btn-secondary text-base sm:text-lg px-6 sm:px-8 py-5 sm:py-6 w-full sm:w-auto"
                 data-testid="hero-download-sample-btn"
               >
                 Download Sample Data
               </Button>
             </div>
 
-            {/* Quick stats */}
-            <div className="mt-16 grid grid-cols-2 sm:grid-cols-4 gap-8 max-w-4xl mx-auto">
+            {/* Quick stats - with backdrop for readability */}
+            <div className="mt-12 sm:mt-16 grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-8 max-w-4xl mx-auto">
               {[
                 { value: 2, suffix: "B+", label: "Data Samples" },
                 { value: 15, suffix: "+", label: "Subjects" },
@@ -220,24 +224,24 @@ export default function HomePage() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.2 + i * 0.1 }}
-                  className="text-center"
+                  className="text-center p-3 sm:p-4 rounded-xl bg-black/30 backdrop-blur-sm border border-white/5"
                 >
-                  <div className="text-3xl sm:text-4xl font-bold text-white mb-1">
+                  <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-1">
                     <AnimatedCounter end={stat.value} suffix={stat.suffix} />
                   </div>
-                  <div className="text-sm text-gray-500">{stat.label}</div>
+                  <div className="text-xs sm:text-sm text-gray-400">{stat.label}</div>
                 </motion.div>
               ))}
             </div>
           </motion.div>
         </div>
 
-        {/* Scroll indicator */}
+        {/* Scroll indicator - hidden on mobile */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.5 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2"
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden sm:block"
         >
           <div className="w-6 h-10 rounded-full border-2 border-white/20 flex items-start justify-center p-2">
             <motion.div
