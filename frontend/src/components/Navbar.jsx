@@ -10,11 +10,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const datasetCategories = [
-  { name: "Academic Reasoning", slug: "academic-reasoning" },
-  { name: "STEM Datasets", slug: "stem-datasets" },
-  { name: "Multilingual Education", slug: "multilingual-education" },
-  { name: "OCR & Document AI", slug: "ocr-document-ai" },
-  { name: "Speech & Audio Learning", slug: "speech-audio-learning" },
+  { name: "STEM Reasoning", slug: "stem-reasoning" },
+  { name: "Language & Literacy", slug: "language-literacy" },
+  { name: "Social Sciences", slug: "social-sciences" },
+  { name: "Higher Education", slug: "higher-education" },
 ];
 
 const navLinks = [
@@ -22,7 +21,7 @@ const navLinks = [
   { name: "Datasets", path: "/datasets", hasDropdown: true },
   { name: "Solutions", path: "/solutions" },
   { name: "Industries", path: "/industries" },
-  { name: "Resources", path: "/resources" },
+  { name: "About", path: "/about" },
   { name: "Contact", path: "/contact" },
 ];
 
@@ -40,14 +39,31 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-3" data-testid="nav-logo">
-            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
-              <span className="text-white font-bold text-xl">S</span>
+          <Link to="/" className="flex items-center gap-2.5" data-testid="nav-logo">
+            {/* Geometric icon inspired by infobay.ai */}
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center shadow-lg shadow-blue-900/40" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <circle cx="11" cy="11" r="2.5" fill="white" />
+                <circle cx="4" cy="5" r="1.8" fill="white" fillOpacity="0.85" />
+                <circle cx="18" cy="5" r="1.8" fill="white" fillOpacity="0.85" />
+                <circle cx="4" cy="17" r="1.8" fill="white" fillOpacity="0.85" />
+                <circle cx="18" cy="17" r="1.8" fill="white" fillOpacity="0.85" />
+                <line x1="11" y1="11" x2="4" y2="5" stroke="white" strokeWidth="1.2" strokeOpacity="0.6" />
+                <line x1="11" y1="11" x2="18" y2="5" stroke="white" strokeWidth="1.2" strokeOpacity="0.6" />
+                <line x1="11" y1="11" x2="4" y2="17" stroke="white" strokeWidth="1.2" strokeOpacity="0.6" />
+                <line x1="11" y1="11" x2="18" y2="17" stroke="white" strokeWidth="1.2" strokeOpacity="0.6" />
+              </svg>
             </div>
+            {/* Wordmark + Tagline */}
             <div className="hidden sm:block">
-              <span className="text-white font-semibold text-lg">S Chand</span>
-              <span className="text-gray-500 text-sm block -mt-1">AI Infrastructure</span>
+              <span className="text-white font-bold text-lg tracking-tight leading-none">
+                Nalanda<span className="text-blue-400">data</span><span className="text-indigo-400">.ai</span>
+              </span>
+              <span className="text-gray-400 text-xs block mt-0.5 tracking-wide">Structured knowledge. Infinite intelligence.</span>
             </div>
+            <span className="sm:hidden text-white font-bold text-lg tracking-tight">
+              Nalanda<span className="text-blue-400">data</span><span className="text-indigo-400">.ai</span>
+            </span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -132,10 +148,13 @@ export default function Navbar() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-2 text-gray-400 hover:text-white"
+            aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-menu"
+            className="lg:hidden p-3 text-gray-400 hover:text-white transition-colors"
             data-testid="mobile-menu-toggle"
           >
-            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {mobileMenuOpen ? <X className="w-6 h-6" aria-hidden="true" /> : <Menu className="w-6 h-6" aria-hidden="true" />}
           </button>
         </div>
       </div>
@@ -144,26 +163,43 @@ export default function Navbar() {
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
+            id="mobile-menu"
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             className="lg:hidden bg-[#0A0A0A] border-t border-white/5"
           >
-            <div className="px-4 py-6 space-y-4">
+            <div className="px-4 py-6 space-y-1">
               {navLinks.map((link) => (
-                <Link
-                  key={link.name}
-                  to={link.path}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`block py-2 text-lg font-medium ${
-                    isActive(link.path)
-                      ? "text-white"
-                      : "text-gray-400"
-                  }`}
-                  data-testid={`mobile-nav-${link.name.toLowerCase()}`}
-                >
-                  {link.name}
-                </Link>
+                <div key={link.name}>
+                  <Link
+                    to={link.path}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`flex items-center min-h-[44px] py-2 text-lg font-medium transition-colors ${
+                      isActive(link.path)
+                        ? "text-white"
+                        : "text-gray-400 hover:text-white"
+                    }`}
+                    data-testid={`mobile-nav-${link.name.toLowerCase()}`}
+                  >
+                    {link.name}
+                  </Link>
+                  {link.hasDropdown && (
+                    <div className="pl-4 pb-2 space-y-1">
+                      {datasetCategories.map((cat) => (
+                        <Link
+                          key={cat.slug}
+                          to={`/datasets/${cat.slug}`}
+                          onClick={() => setMobileMenuOpen(false)}
+                          className="flex items-center min-h-[40px] py-1.5 text-sm text-gray-500 hover:text-blue-400 transition-colors"
+                          data-testid={`mobile-nav-dataset-${cat.slug}`}
+                        >
+                          {cat.name}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
               ))}
               <div className="pt-4 flex flex-col gap-3">
                 <Link

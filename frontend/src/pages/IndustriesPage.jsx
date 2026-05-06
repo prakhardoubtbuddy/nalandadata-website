@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { Helmet } from "react-helmet-async";
 import { 
   Cpu,
   GraduationCap,
@@ -91,6 +92,10 @@ export default function IndustriesPage() {
 
   return (
     <div className="min-h-screen bg-[#0A0A0A] pt-24" data-testid="industries-page">
+      <Helmet>
+        <title>Industries — Nalandadata.ai</title>
+        <meta name="description" content="AI training data for frontier AI labs, EdTech platforms, research institutions, and foundation model companies. Domain-specific academic datasets at scale." />
+      </Helmet>
       {/* Header */}
       <section className="py-16 relative">
         <div className="absolute inset-0 hero-gradient opacity-50" />

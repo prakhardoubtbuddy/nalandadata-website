@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { Helmet } from "react-helmet-async";
 import { 
   Layers,
   Settings,
@@ -95,6 +96,10 @@ export default function SolutionsPage() {
 
   return (
     <div className="min-h-screen bg-[#0A0A0A] pt-24" data-testid="solutions-page">
+      <Helmet>
+        <title>Solutions — Nalandadata.ai</title>
+        <meta name="description" content="AI training data solutions for every stage of the pipeline — pretraining corpora, supervised fine-tuning datasets, RLHF preference data, and evaluation benchmarks." />
+      </Helmet>
       {/* Header */}
       <section className="py-16 relative">
         <div className="absolute inset-0 hero-gradient opacity-50" />
@@ -105,10 +110,10 @@ export default function SolutionsPage() {
             transition={{ duration: 0.6 }}
           >
             <h1 className="text-4xl sm:text-5xl font-bold text-white mb-4">
-              Solutions
+              Built for every stage of the AI training pipeline.
             </h1>
             <p className="text-lg text-gray-400 max-w-2xl mx-auto">
-              End-to-end data solutions for every stage of your AI model development pipeline.
+              Whether you are pretraining a foundation model, fine-tuning for a specific domain, building evaluation benchmarks, or developing an AI tutor — Nalandadata has a dataset designed for your use case.
             </p>
           </motion.div>
         </div>
@@ -157,7 +162,7 @@ export default function SolutionsPage() {
                     className="btn-primary"
                     data-testid={`solution-cta-${solution.id}`}
                   >
-                    Request {solution.title}
+                    Request {solution.title} →
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </Button>
                 </div>
@@ -192,10 +197,10 @@ export default function SolutionsPage() {
             transition={{ duration: 0.6 }}
           >
             <h2 className="text-3xl font-bold text-white mb-4">
-              Need a Custom Solution?
+              Ready to bring structured knowledge to your AI?
             </h2>
             <p className="text-gray-400 mb-8">
-              Our team can design custom data pipelines tailored to your specific model training requirements.
+              Talk to our team. We'll help you identify the right datasets for your training pipeline and get you a sample within 48 hours.
             </p>
             <Button
               onClick={() => setIsFormOpen(true)}

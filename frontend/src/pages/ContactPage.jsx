@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { Helmet } from "react-helmet-async";
 import { 
   Mail,
   MapPin,
@@ -21,8 +22,35 @@ import {
 } from "@/components/ui/select";
 import { toast } from "sonner";
 import axios from "axios";
+import API from "@/lib/api";
 
-const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
+const countryCodes = [
+  { code: "+91", country: "India", flag: "🇮🇳" },
+  { code: "+1", country: "USA", flag: "🇺🇸" },
+  { code: "+44", country: "UK", flag: "🇬🇧" },
+  { code: "+61", country: "Australia", flag: "🇦🇺" },
+  { code: "+1", country: "Canada", flag: "🇨🇦" },
+  { code: "+86", country: "China", flag: "🇨🇳" },
+  { code: "+49", country: "Germany", flag: "🇩🇪" },
+  { code: "+33", country: "France", flag: "🇫🇷" },
+  { code: "+81", country: "Japan", flag: "🇯🇵" },
+  { code: "+82", country: "South Korea", flag: "🇰🇷" },
+  { code: "+65", country: "Singapore", flag: "🇸🇬" },
+  { code: "+971", country: "UAE", flag: "🇦🇪" },
+  { code: "+966", country: "Saudi Arabia", flag: "🇸🇦" },
+  { code: "+55", country: "Brazil", flag: "🇧🇷" },
+  { code: "+27", country: "South Africa", flag: "🇿🇦" },
+  { code: "+234", country: "Nigeria", flag: "🇳🇬" },
+  { code: "+60", country: "Malaysia", flag: "🇲🇾" },
+  { code: "+62", country: "Indonesia", flag: "🇮🇩" },
+  { code: "+92", country: "Pakistan", flag: "🇵🇰" },
+  { code: "+880", country: "Bangladesh", flag: "🇧🇩" },
+  { code: "+94", country: "Sri Lanka", flag: "🇱🇰" },
+  { code: "+977", country: "Nepal", flag: "🇳🇵" },
+  { code: "+31", country: "Netherlands", flag: "🇳🇱" },
+  { code: "+46", country: "Sweden", flag: "🇸🇪" },
+  { code: "+41", country: "Switzerland", flag: "🇨🇭" },
+];
 
 const companyTypes = [
   { value: "ai_lab", label: "AI Lab" },
@@ -43,17 +71,17 @@ const useCases = [
 ];
 
 const datasetOptions = [
-  { value: "academic-reasoning", label: "Academic Reasoning" },
-  { value: "stem-datasets", label: "STEM Datasets" },
-  { value: "multilingual-education", label: "Multilingual Education" },
-  { value: "ocr-document-ai", label: "OCR & Document AI" },
-  { value: "speech-audio-learning", label: "Speech & Audio Learning" },
+  { value: "stem-reasoning", label: "STEM Reasoning & Problem Solving" },
+  { value: "language-literacy", label: "Language, Literacy & Comprehension" },
+  { value: "social-sciences", label: "Social Sciences, Civics & General Knowledge" },
+  { value: "higher-education", label: "Higher Education & Professional Knowledge" },
   { value: "custom", label: "Custom Dataset" },
 ];
 
 export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [errors, setErrors] = useState({});
   const [formData, setFormData] = useState({
     full_name: "",
     work_email: "",
@@ -63,18 +91,27 @@ export default function ContactPage() {
     use_case: "",
     dataset_interest: "",
     message: "",
+    mobile_country_code: "+91-India",
+    mobile_number: "",
   });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    if (!formData.full_name || !formData.work_email || !formData.company || 
-        !formData.role || !formData.company_type || !formData.use_case || 
-        !formData.dataset_interest) {
-      toast.error("Please fill in all required fields");
+
+    const newErrors = {};
+    if (!formData.full_name) newErrors.full_name = "Full name is required";
+    if (!formData.work_email) newErrors.work_email = "Work email is required";
+    if (!formData.company) newErrors.company = "Company is required";
+    if (!formData.role) newErrors.role = "Role is required";
+    if (!formData.company_type) newErrors.company_type = "Please select a company type";
+    if (!formData.use_case) newErrors.use_case = "Please select a use case";
+    if (!formData.dataset_interest) newErrors.dataset_interest = "Please select a dataset";
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
       return;
     }
-
+    setErrors({});
     setIsSubmitting(true);
 
     try {
@@ -82,7 +119,7 @@ export default function ContactPage() {
       setIsSubmitted(true);
       toast.success("Thank you! We'll be in touch soon.");
     } catch (error) {
-      console.error("Error submitting:", error);
+      if (process.env.NODE_ENV === "development") console.error("Error submitting:", error);
       toast.error("Failed to submit. Please try again.");
     } finally {
       setIsSubmitting(false);
@@ -91,6 +128,10 @@ export default function ContactPage() {
 
   return (
     <div className="min-h-screen bg-[#0A0A0A] pt-24" data-testid="contact-page">
+      <Helmet>
+        <title>Request Dataset Access — Nalandadata.ai</title>
+        <meta name="description" content="Request access to Nalandadata AI training datasets. Contact our team to discuss licensing, custom datasets, and enterprise agreements." />
+      </Helmet>
       {/* Header */}
       <section className="py-16 relative">
         <div className="absolute inset-0 hero-gradient opacity-50" />
@@ -136,7 +177,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="text-white font-medium mb-1">Email</h3>
-                    <p className="text-gray-400">data@schand-ai.com</p>
+                    <p className="text-gray-400">info@nalandadata.ai</p>
                   </div>
                 </div>
 
@@ -146,7 +187,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="text-white font-medium mb-1">Headquarters</h3>
-                    <p className="text-gray-400">New Delhi, India</p>
+                    <p className="text-gray-400">A27, 2nd Floor, Mohan Cooperative Industrial Estate, New Delhi - 110 044, INDIA</p>
                   </div>
                 </div>
 
@@ -156,7 +197,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="text-white font-medium mb-1">Phone</h3>
-                    <p className="text-gray-400">+91 (11) 2345-6789</p>
+                    <p className="text-gray-400">+91 11 4973 1800</p>
                   </div>
                 </div>
               </div>
@@ -166,8 +207,8 @@ export default function ContactPage() {
                 <p className="text-gray-400 text-sm mb-4">
                   For large-scale data licensing and custom partnerships, contact our enterprise team.
                 </p>
-                <a href="mailto:enterprise@schand-ai.com" className="text-blue-400 text-sm hover:underline">
-                  enterprise@schand-ai.com
+                <a href="mailto:info@nalandadata.ai" className="text-blue-400 text-sm hover:underline">
+                  info@nalandadata.ai
                 </a>
               </div>
             </motion.div>
@@ -202,6 +243,8 @@ export default function ContactPage() {
                           use_case: "",
                           dataset_interest: "",
                           message: "",
+                          mobile_country_code: "+91-India",
+                          mobile_number: "",
                         });
                       }}
                       variant="outline"
@@ -218,11 +261,13 @@ export default function ContactPage() {
                         <Input
                           id="full_name"
                           value={formData.full_name}
-                          onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
-                          className="bg-black/50 border-white/10 text-white placeholder:text-gray-600"
+                          onChange={(e) => { setFormData({ ...formData, full_name: e.target.value }); setErrors(p => ({ ...p, full_name: "" })); }}
+                          className={`bg-black/50 border-white/10 text-white placeholder:text-gray-600 ${errors.full_name ? "border-red-500/60" : ""}`}
                           placeholder="John Smith"
+                          aria-describedby={errors.full_name ? "full_name-error" : undefined}
                           data-testid="contact-form-name"
                         />
+                        {errors.full_name && <p id="full_name-error" className="text-red-400 text-xs mt-1">{errors.full_name}</p>}
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="work_email" className="text-gray-300">Work Email *</Label>
@@ -230,10 +275,41 @@ export default function ContactPage() {
                           id="work_email"
                           type="email"
                           value={formData.work_email}
-                          onChange={(e) => setFormData({ ...formData, work_email: e.target.value })}
-                          className="bg-black/50 border-white/10 text-white placeholder:text-gray-600"
+                          onChange={(e) => { setFormData({ ...formData, work_email: e.target.value }); setErrors(p => ({ ...p, work_email: "" })); }}
+                          className={`bg-black/50 border-white/10 text-white placeholder:text-gray-600 ${errors.work_email ? "border-red-500/60" : ""}`}
                           placeholder="john@company.com"
+                          aria-describedby={errors.work_email ? "work_email-error" : undefined}
                           data-testid="contact-form-email"
+                        />
+                        {errors.work_email && <p id="work_email-error" className="text-red-400 text-xs mt-1">{errors.work_email}</p>}
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label className="text-gray-300">Mobile Number</Label>
+                      <div className="flex gap-2">
+                        <Select
+                          value={formData.mobile_country_code}
+                          onValueChange={(value) => setFormData({ ...formData, mobile_country_code: value })}
+                        >
+                          <SelectTrigger className="bg-black/50 border-white/10 text-white w-36 flex-shrink-0" data-testid="contact-form-country-code">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent className="bg-[#1A1A1A] border-white/10 max-h-60">
+                            {countryCodes.map((c, i) => (
+                              <SelectItem key={`${c.code}-${c.country}-${i}`} value={`${c.code}-${c.country}`} className="text-white hover:bg-white/10">
+                                {c.flag} {c.country} ({c.code})
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <Input
+                          type="tel"
+                          value={formData.mobile_number}
+                          onChange={(e) => setFormData({ ...formData, mobile_number: e.target.value })}
+                          className="bg-black/50 border-white/10 text-white placeholder:text-gray-600 flex-1"
+                          placeholder="Mobile number"
+                          data-testid="contact-form-mobile"
                         />
                       </div>
                     </div>
@@ -244,22 +320,26 @@ export default function ContactPage() {
                         <Input
                           id="company"
                           value={formData.company}
-                          onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                          className="bg-black/50 border-white/10 text-white placeholder:text-gray-600"
+                          onChange={(e) => { setFormData({ ...formData, company: e.target.value }); setErrors(p => ({ ...p, company: "" })); }}
+                          className={`bg-black/50 border-white/10 text-white placeholder:text-gray-600 ${errors.company ? "border-red-500/60" : ""}`}
                           placeholder="Company name"
+                          aria-describedby={errors.company ? "company-error" : undefined}
                           data-testid="contact-form-company"
                         />
+                        {errors.company && <p id="company-error" className="text-red-400 text-xs mt-1">{errors.company}</p>}
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="role" className="text-gray-300">Role *</Label>
                         <Input
                           id="role"
                           value={formData.role}
-                          onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                          className="bg-black/50 border-white/10 text-white placeholder:text-gray-600"
+                          onChange={(e) => { setFormData({ ...formData, role: e.target.value }); setErrors(p => ({ ...p, role: "" })); }}
+                          className={`bg-black/50 border-white/10 text-white placeholder:text-gray-600 ${errors.role ? "border-red-500/60" : ""}`}
                           placeholder="ML Engineer"
+                          aria-describedby={errors.role ? "role-error" : undefined}
                           data-testid="contact-form-role"
                         />
+                        {errors.role && <p id="role-error" className="text-red-400 text-xs mt-1">{errors.role}</p>}
                       </div>
                     </div>
 
@@ -268,9 +348,9 @@ export default function ContactPage() {
                         <Label className="text-gray-300">Company Type *</Label>
                         <Select
                           value={formData.company_type}
-                          onValueChange={(value) => setFormData({ ...formData, company_type: value })}
+                          onValueChange={(value) => { setFormData({ ...formData, company_type: value }); setErrors(p => ({ ...p, company_type: "" })); }}
                         >
-                          <SelectTrigger className="bg-black/50 border-white/10 text-white" data-testid="contact-form-company-type">
+                          <SelectTrigger className={`bg-black/50 border-white/10 text-white ${errors.company_type ? "border-red-500/60" : ""}`} data-testid="contact-form-company-type">
                             <SelectValue placeholder="Select type" />
                           </SelectTrigger>
                           <SelectContent className="bg-[#1A1A1A] border-white/10">
@@ -281,14 +361,15 @@ export default function ContactPage() {
                             ))}
                           </SelectContent>
                         </Select>
+                        {errors.company_type && <p className="text-red-400 text-xs mt-1">{errors.company_type}</p>}
                       </div>
                       <div className="space-y-2">
                         <Label className="text-gray-300">Use Case *</Label>
                         <Select
                           value={formData.use_case}
-                          onValueChange={(value) => setFormData({ ...formData, use_case: value })}
+                          onValueChange={(value) => { setFormData({ ...formData, use_case: value }); setErrors(p => ({ ...p, use_case: "" })); }}
                         >
-                          <SelectTrigger className="bg-black/50 border-white/10 text-white" data-testid="contact-form-use-case">
+                          <SelectTrigger className={`bg-black/50 border-white/10 text-white ${errors.use_case ? "border-red-500/60" : ""}`} data-testid="contact-form-use-case">
                             <SelectValue placeholder="Select use case" />
                           </SelectTrigger>
                           <SelectContent className="bg-[#1A1A1A] border-white/10">
@@ -299,6 +380,7 @@ export default function ContactPage() {
                             ))}
                           </SelectContent>
                         </Select>
+                        {errors.use_case && <p className="text-red-400 text-xs mt-1">{errors.use_case}</p>}
                       </div>
                     </div>
 
@@ -306,9 +388,9 @@ export default function ContactPage() {
                       <Label className="text-gray-300">Dataset Interest *</Label>
                       <Select
                         value={formData.dataset_interest}
-                        onValueChange={(value) => setFormData({ ...formData, dataset_interest: value })}
+                        onValueChange={(value) => { setFormData({ ...formData, dataset_interest: value }); setErrors(p => ({ ...p, dataset_interest: "" })); }}
                       >
-                        <SelectTrigger className="bg-black/50 border-white/10 text-white" data-testid="contact-form-dataset">
+                        <SelectTrigger className={`bg-black/50 border-white/10 text-white ${errors.dataset_interest ? "border-red-500/60" : ""}`} data-testid="contact-form-dataset">
                           <SelectValue placeholder="Select dataset" />
                         </SelectTrigger>
                         <SelectContent className="bg-[#1A1A1A] border-white/10">
@@ -319,6 +401,7 @@ export default function ContactPage() {
                           ))}
                         </SelectContent>
                       </Select>
+                      {errors.dataset_interest && <p className="text-red-400 text-xs mt-1">{errors.dataset_interest}</p>}
                     </div>
 
                     <div className="space-y-2">

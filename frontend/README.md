@@ -1,70 +1,84 @@
-# Getting Started with Create React App
+# Nalandadata.ai — Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Marketing and data catalogue website for **Nalandadata.ai**, a curated AI training data platform powered by S Chand Group (India's #1 academic publisher).
 
-## Available Scripts
+## Stack
 
-In the project directory, you can run:
+| Layer | Technology |
+|---|---|
+| Framework | React 19 (Create React App + CRACO) |
+| Routing | React Router v7 |
+| Styling | Tailwind CSS 3 + custom design tokens |
+| Animations | Framer Motion 12 |
+| UI primitives | Radix UI / shadcn components |
+| SEO | react-helmet-async |
+| Toasts | sonner |
 
-### `npm start`
+## Getting started
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+```bash
+# 1. Install dependencies
+yarn install
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+# 2. Set up environment
+cp .env.example .env
+# Edit .env — set REACT_APP_BACKEND_URL to your backend server
 
-### `npm test`
+# 3. Start dev server
+yarn start
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Environment variables
 
-### `npm run build`
+| Variable | Description |
+|---|---|
+| `REACT_APP_BACKEND_URL` | Base URL of the backend API (no trailing slash) |
+| `WDS_SOCKET_PORT` | Dev server websocket port (set to 443 behind HTTPS proxy) |
+| `ENABLE_HEALTH_CHECK` | Enable background health-check polling (`true`/`false`) |
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+See `.env.example` for defaults. **Never commit `.env`.**
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Project structure
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```
+src/
+├── components/       # Shared UI components (Navbar, Footer, Layout, ErrorBoundary…)
+│   └── ui/           # shadcn/Radix primitives
+├── lib/
+│   └── api.js        # Single source of truth for the API base URL
+├── pages/            # One file per route
+└── App.js            # Router config + providers
+```
 
-### `npm run eject`
+## Pages / routes
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+| Route | Page |
+|---|---|
+| `/` | HomePage |
+| `/datasets` | DatasetsPage |
+| `/datasets/:slug` | DatasetDetailPage |
+| `/solutions` | SolutionsPage |
+| `/industries` | IndustriesPage |
+| `/about` | AboutPage |
+| `/contact` | ContactPage |
+| `/privacy` | PrivacyPage |
+| `/admin` | AdminPage (password-protected) |
+| `*` | NotFoundPage |
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Build
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```bash
+yarn build
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Output is in `build/`. Serve with any static file server or nginx.
 
-## Learn More
+## Backend
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+The backend exposes a REST API. Key endpoints used by the frontend:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- `GET /api/files` — list all dataset files
+- `GET /api/files/category/:slug` — files for a specific dataset category
+- `GET /api/files/:id/download` — download a file (blob)
+- `POST /api/leads` — submit a lead / data request form
+- `POST /api/admin/login` — admin authentication

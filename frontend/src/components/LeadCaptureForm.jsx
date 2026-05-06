@@ -20,8 +20,35 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import axios from "axios";
+import API from "@/lib/api";
 
-const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
+const countryCodes = [
+  { code: "+91", country: "India", flag: "🇮🇳" },
+  { code: "+1", country: "USA", flag: "🇺🇸" },
+  { code: "+44", country: "UK", flag: "🇬🇧" },
+  { code: "+61", country: "Australia", flag: "🇦🇺" },
+  { code: "+1", country: "Canada", flag: "🇨🇦" },
+  { code: "+86", country: "China", flag: "🇨🇳" },
+  { code: "+49", country: "Germany", flag: "🇩🇪" },
+  { code: "+33", country: "France", flag: "🇫🇷" },
+  { code: "+81", country: "Japan", flag: "🇯🇵" },
+  { code: "+82", country: "South Korea", flag: "🇰🇷" },
+  { code: "+65", country: "Singapore", flag: "🇸🇬" },
+  { code: "+971", country: "UAE", flag: "🇦🇪" },
+  { code: "+966", country: "Saudi Arabia", flag: "🇸🇦" },
+  { code: "+55", country: "Brazil", flag: "🇧🇷" },
+  { code: "+27", country: "South Africa", flag: "🇿🇦" },
+  { code: "+234", country: "Nigeria", flag: "🇳🇬" },
+  { code: "+60", country: "Malaysia", flag: "🇲🇾" },
+  { code: "+62", country: "Indonesia", flag: "🇮🇩" },
+  { code: "+92", country: "Pakistan", flag: "🇵🇰" },
+  { code: "+880", country: "Bangladesh", flag: "🇧🇩" },
+  { code: "+94", country: "Sri Lanka", flag: "🇱🇰" },
+  { code: "+977", country: "Nepal", flag: "🇳🇵" },
+  { code: "+31", country: "Netherlands", flag: "🇳🇱" },
+  { code: "+46", country: "Sweden", flag: "🇸🇪" },
+  { code: "+41", country: "Switzerland", flag: "🇨🇭" },
+];
 
 const companyTypes = [
   { value: "ai_lab", label: "AI Lab" },
@@ -38,14 +65,14 @@ const useCases = [
   { value: "rlhf", label: "RLHF / DPO" },
   { value: "evaluation", label: "Evaluation" },
   { value: "research", label: "Research" },
+  { value: "other", label: "Other" },
 ];
 
 const datasetOptions = [
-  { value: "academic-reasoning", label: "Academic Reasoning" },
-  { value: "stem-datasets", label: "STEM Datasets" },
-  { value: "multilingual-education", label: "Multilingual Education" },
-  { value: "ocr-document-ai", label: "OCR & Document AI" },
-  { value: "speech-audio-learning", label: "Speech & Audio Learning" },
+  { value: "stem-reasoning", label: "STEM Reasoning & Problem Solving" },
+  { value: "language-literacy", label: "Language, Literacy & Comprehension" },
+  { value: "social-sciences", label: "Social Sciences, Civics & General Knowledge" },
+  { value: "higher-education", label: "Higher Education & Professional Knowledge" },
   { value: "custom", label: "Custom Dataset" },
 ];
 
@@ -61,6 +88,8 @@ export function LeadCaptureForm({ open, onOpenChange, preselectedDataset, downlo
     use_case: "",
     dataset_interest: preselectedDataset || "",
     message: "",
+    mobile_country_code: "+91-India",
+    mobile_number: "",
   });
 
   const handleSubmit = async (e) => {
@@ -80,7 +109,7 @@ export function LeadCaptureForm({ open, onOpenChange, preselectedDataset, downlo
       setIsSubmitted(true);
       toast.success("Thank you! Your request has been submitted.");
     } catch (error) {
-      console.error("Error submitting lead:", error);
+      if (process.env.NODE_ENV === "development") console.error("Error submitting lead:", error);
       toast.error("Failed to submit. Please try again.");
     } finally {
       setIsSubmitting(false);
@@ -99,6 +128,7 @@ export function LeadCaptureForm({ open, onOpenChange, preselectedDataset, downlo
       document.body.appendChild(link);
       link.click();
       link.remove();
+      window.URL.revokeObjectURL(url);
       toast.success(`Downloading ${file.original_filename}`);
     } catch (error) {
       toast.error("Download failed. Please try again.");
@@ -116,6 +146,8 @@ export function LeadCaptureForm({ open, onOpenChange, preselectedDataset, downlo
       use_case: "",
       dataset_interest: preselectedDataset || "",
       message: "",
+      mobile_country_code: "+91-India",
+      mobile_number: "",
     });
   };
 
@@ -195,6 +227,35 @@ export function LeadCaptureForm({ open, onOpenChange, preselectedDataset, downlo
                   className="bg-black/50 border-white/10 text-white placeholder:text-gray-600"
                   placeholder="john@company.com"
                   data-testid="lead-form-email"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label className="text-gray-300">Mobile Number</Label>
+              <div className="flex gap-2">
+                <Select
+                  value={formData.mobile_country_code}
+                  onValueChange={(value) => setFormData({ ...formData, mobile_country_code: value })}
+                >
+                  <SelectTrigger className="bg-black/50 border-white/10 text-white w-36 flex-shrink-0" data-testid="lead-form-country-code">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="bg-[#1A1A1A] border-white/10 max-h-60">
+                    {countryCodes.map((c, i) => (
+                      <SelectItem key={`${c.code}-${c.country}-${i}`} value={`${c.code}-${c.country}`} className="text-white hover:bg-white/10">
+                        {c.flag} {c.country} ({c.code})
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <Input
+                  type="tel"
+                  value={formData.mobile_number}
+                  onChange={(e) => setFormData({ ...formData, mobile_number: e.target.value })}
+                  className="bg-black/50 border-white/10 text-white placeholder:text-gray-600 flex-1"
+                  placeholder="Mobile number"
+                  data-testid="lead-form-mobile"
                 />
               </div>
             </div>

@@ -1,12 +1,11 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { 
-  Brain, 
-  Database, 
-  Globe2, 
-  FileText, 
-  Mic,
+import {
+  Brain,
+  Database,
+  Globe2,
+  FileText,
   ArrowRight,
   ArrowLeft,
   Download,
@@ -14,269 +13,252 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LeadCaptureForm } from "@/components/LeadCaptureForm";
+import { Helmet } from "react-helmet-async";
 import axios from "axios";
+import API from "@/lib/api";
 
-const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
-
-// Dataset configurations
 const datasetConfigs = {
-  "academic-reasoning": {
+  "stem-reasoning": {
     icon: Brain,
-    title: "Academic Reasoning Dataset",
-    subtitle: "JEE / Olympiad Level Reasoning",
-    overview: "High-quality reasoning dataset built from advanced academic problems with step-by-step expert solutions. Designed for training LLMs to perform complex multi-step reasoning across physics, chemistry, and mathematics.",
+    title: "STEM Reasoning & Problem Solving",
+    subtitle: "JEE / NEET / Olympiad Level Reasoning",
+    overview: "A large-scale collection of mathematics and science content spanning Class 1 to Class 12, aligned to CBSE and ICSE curricula. Covers JEE Advanced, NEET, and Olympiad-level problems with multi-step worked solutions ideal for chain-of-thought and reasoning model training.",
     useCases: [
-      "Fine-tuning reasoning LLMs",
-      "Training tutoring AI agents",
-      "Benchmark evaluation",
-      "Chain-of-thought training",
-      "Mathematical reasoning research"
+      "Chain-of-thought reasoning training",
+      "Fine-tuning STEM reasoning LLMs",
+      "Medical and engineering AI assistants",
+      "Benchmark evaluation for science models",
+      "Mathematical problem-solving research",
     ],
     structure: [
-      { field: "Question", description: "Problem statement with context" },
-      { field: "Options", description: "Multiple choice options (where applicable)" },
+      { field: "Question", description: "Problem statement with full context" },
+      { field: "Options", description: "Multiple choice options where applicable" },
       { field: "Correct Answer", description: "Verified correct answer" },
-      { field: "Solution", description: "Step-by-step expert explanation" },
-      { field: "Topic", description: "Main subject area (Physics/Chemistry/Math)" },
+      { field: "Solution", description: "Multi-step expert explanation CoT" },
+      { field: "Subject", description: "Maths / Physics / Chemistry / Biology" },
       { field: "Subtopic", description: "Specific topic classification" },
       { field: "Difficulty", description: "Easy / Medium / Hard / Advanced" },
-      { field: "Source", description: "JEE / Olympiad / NEET classification" }
+      { field: "Source", description: "JEE / NEET / Olympiad / CBSE classification" },
     ],
     stats: {
-      questions: "500K+",
-      solutions: "500K+",
-      topics: "120+",
-      difficultyLevels: "4",
-      languages: "English + Hindi"
+      "Tokens": "715M+",
+      "Questions": "1.5M+",
+      "Subjects": "4",
+      "Difficulty Levels": "4",
+      "Languages": "English, Hindi",
     },
     sampleData: [
       {
-        question: "A particle moves in a circle of radius 20 cm with constant tangential acceleration. If the velocity of the particle is 80 cm/s at the end of the second revolution after motion has begun, find the tangential acceleration.",
-        options: ["A) 2π cm/s²", "B) 4π cm/s²", "C) π cm/s²", "D) 8π cm/s²"],
-        answer: "B) 4π cm/s²",
-        topic: "Physics - Circular Motion",
-        difficulty: "Medium"
+        question: "Two blocks of masses 3 kg and 5 kg are connected by a light string passing over a frictionless pulley. Find the acceleration of the system and tension in the string. (g = 10 m/s²)",
+        options: "A) a = 2.5 m/s², T = 37.5 N  B) a = 3.0 m/s², T = 40 N  C) a = 2.0 m/s², T = 35 N  D) a = 2.5 m/s², T = 40 N",
+        answer: "A) a = 2.5 m/s², T = 37.5 N",
+        solution: "Net force = (5−3)×10 = 20 N. Total mass = 8 kg. a = 20/8 = 2.5 m/s². T = 3×(10+2.5) = 37.5 N",
+        subject: "Physics — Laws of Motion",
+        source: "JEE Mains",
+        difficulty: "Medium",
       },
       {
-        question: "Find the sum of the series: 1 + 1/2 + 1/4 + 1/8 + ... to infinity",
-        options: ["A) 1", "B) 2", "C) 3", "D) 4"],
-        answer: "B) 2",
-        topic: "Mathematics - Series",
-        difficulty: "Easy"
+        question: "Benzene reacts with Cl₂ in the presence of FeCl₃ to give chlorobenzene. Identify the type of reaction and write the mechanism.",
+        answer: "Electrophilic Aromatic Substitution (EAS). Step 1: FeCl₃ activates Cl₂ → Cl⁺ (electrophile). Step 2: Cl⁺ attacks π system forming arenium ion. Step 3: Loss of H⁺ restores aromaticity → C₆H₅Cl + HCl.",
+        subject: "Chemistry — Organic Reactions",
+        source: "JEE Advanced",
+        difficulty: "Hard",
       },
       {
-        question: "The IUPAC name of CH₃-CH(OH)-CH₂-CHO is:",
-        options: ["A) 3-hydroxybutanal", "B) 3-hydroxybutanol", "C) 2-hydroxybutanal", "D) 4-hydroxybutanal"],
-        answer: "A) 3-hydroxybutanal",
-        topic: "Chemistry - Organic",
-        difficulty: "Medium"
-      }
-    ]
-  },
-  "stem-datasets": {
-    icon: Database,
-    title: "STEM Training Dataset",
-    subtitle: "Physics, Chemistry, Mathematics",
-    overview: "Comprehensive STEM dataset featuring structured problems across physics, chemistry, and mathematics. Each entry includes verified expert solutions with detailed explanations suitable for scientific reasoning training.",
-    useCases: [
-      "Scientific reasoning model training",
-      "STEM tutoring systems",
-      "Automated problem solving",
-      "Educational AI assistants",
-      "Formula and concept extraction"
+        question: "If the roots of the equation x² − px + q = 0 are in the ratio 2:3, prove that 6p² = 25q.",
+        answer: "Let roots be 2α and 3α. Sum = 5α = p → α = p/5. Product = 6α² = q → 6(p/5)² = q → 6p²/25 = q → 6p² = 25q. ∎",
+        subject: "Mathematics — Quadratic Equations",
+        source: "CBSE Class 10 / Olympiad",
+        difficulty: "Medium",
+      },
+      {
+        question: "A solution contains 0.3 mol of NaCl and 0.2 mol of glucose in 1 kg of water. Calculate the boiling point elevation. (Kb for water = 0.512 K·kg/mol)",
+        answer: "NaCl dissociates: i = 2, so effective molality = 2×0.3 + 0.2 = 0.8 mol/kg. ΔTb = Kb × m = 0.512 × 0.8 = 0.41 K. BP = 100.41°C",
+        subject: "Chemistry — Solutions",
+        source: "NEET",
+        difficulty: "Medium",
+      },
     ],
-    structure: [
-      { field: "Problem", description: "Structured problem statement" },
-      { field: "Subject", description: "Physics / Chemistry / Mathematics" },
-      { field: "Chapter", description: "Chapter or unit classification" },
-      { field: "Concept", description: "Core concept being tested" },
-      { field: "Solution", description: "Detailed step-by-step solution" },
-      { field: "Formulas", description: "List of formulas used" },
-      { field: "Diagrams", description: "Associated diagrams (where applicable)" },
-      { field: "Grade Level", description: "Target academic level" }
-    ],
-    stats: {
-      problems: "1.2M+",
-      subjects: "3",
-      chapters: "200+",
-      formulas: "5000+",
-      languages: "English + Hindi"
-    },
-    sampleData: [
-      {
-        question: "Calculate the work done by a force F = (3i + 4j) N in displacing a particle from point A(1,2) to B(4,6).",
-        subject: "Physics",
-        chapter: "Work and Energy",
-        answer: "25 J",
-        difficulty: "Medium"
-      },
-      {
-        question: "Balance the equation: Fe₂O₃ + C → Fe + CO₂",
-        subject: "Chemistry",
-        chapter: "Redox Reactions",
-        answer: "2Fe₂O₃ + 3C → 4Fe + 3CO₂",
-        difficulty: "Easy"
-      },
-      {
-        question: "Find the derivative of f(x) = x³sin(x)",
-        subject: "Mathematics",
-        chapter: "Calculus",
-        answer: "3x²sin(x) + x³cos(x)",
-        difficulty: "Medium"
-      }
-    ]
   },
-  "multilingual-education": {
+  "language-literacy": {
     icon: Globe2,
-    title: "Multilingual Education Dataset",
-    subtitle: "12+ Languages Including Indic",
-    overview: "Educational content spanning English, Hindi, and 10+ major Indic languages. Includes parallel corpora for translation tasks and culturally contextualized content for building inclusive AI systems.",
+    title: "Language, Literacy & Comprehension",
+    subtitle: "English, Hindi & 8 Indic Languages",
+    overview: "Curriculum-aligned language content from Class 1 to Class 12 covering English grammar, Hindi literature, reading comprehension, and academic content in 8 Indic languages. One of the largest structured multilingual education corpora available for Indic AI development.",
     useCases: [
-      "Multilingual model training",
-      "Translation systems",
-      "Indic language AI development",
-      "Cross-lingual learning",
-      "Regional education platforms"
+      "Multilingual LLM pretraining",
+      "Indic language model development",
+      "Reading comprehension benchmarks",
+      "Grammar and composition fine-tuning",
+      "Cross-lingual transfer learning",
     ],
     structure: [
-      { field: "Content", description: "Educational text content" },
-      { field: "Language", description: "Source language code" },
-      { field: "Translation", description: "Parallel translations available" },
-      { field: "Subject", description: "Academic subject area" },
-      { field: "Grade", description: "Target grade level" },
-      { field: "Region", description: "Regional context (if applicable)" },
-      { field: "Script", description: "Writing script used" }
+      { field: "Content", description: "Educational text: prose, grammar, comprehension" },
+      { field: "Language", description: "Language code: en, hi, bn, ta, te, etc." },
+      { field: "Subject", description: "English / Hindi / Regional Language" },
+      { field: "Grade", description: "Target grade level 1–12" },
+      { field: "Type", description: "Explanation / Exercise / Q&A / Passage" },
+      { field: "Script", description: "Writing script used" },
+      { field: "Translation", description: "Parallel translations where available" },
     ],
     stats: {
-      samples: "800K+",
-      languages: "12",
-      subjects: "15+",
-      parallelPairs: "2M+",
-      scripts: "8"
+      "Tokens": "1.28B+",
+      "Languages": "10",
+      "Scripts": "8",
+      "Parallel Pairs": "2M+",
+      "Grades": "1–12",
     },
     sampleData: [
       {
-        content: "The water cycle describes how water evaporates from the surface of the earth...",
+        passage: "The ancient city of Mohenjo-daro, one of the largest settlements of the Indus Valley Civilisation, was remarkable for its urban planning. Its streets were laid out in a grid pattern, and the city had an advanced drainage system with covered drains running alongside the roads.",
+        question: "What does the passage suggest about the Indus Valley Civilisation?",
+        answer: "It was a highly organised and technically advanced civilisation with sophisticated infrastructure including planned streets and underground drainage.",
         language: "English",
-        subject: "Science",
-        grade: "Grade 5"
+        subject: "English Reading Comprehension",
+        grade: "Grade 8",
+        type: "Inferential Q&A",
       },
       {
-        content: "जल चक्र बताता है कि पानी पृथ्वी की सतह से कैसे वाष्पित होता है...",
+        content: "मेरे देश की धरती — कविता\nमेरे देश की धरती सोना उगले, उगले हीरे मोती।\nमेरे देश की धरती सोना उगले।\n\nप्रश्न: कवि ने 'धरती' को किसका प्रतीक बताया है?\nउत्तर: कवि ने 'धरती' को समृद्धि और उर्वरता का प्रतीक बताया है। वे कहते हैं कि यह भूमि इतनी उपजाऊ है मानो सोना, हीरे और मोती उगाती हो।",
         language: "Hindi",
-        subject: "Science",
-        grade: "Grade 5"
+        subject: "Hindi Literature & Comprehension",
+        grade: "Grade 9",
+        type: "Poetry Analysis Q&A",
       },
       {
-        content: "நீர் சுழற்சி என்பது பூமியின் மேற்பரப்பிலிருந்து நீர் எவ்வாறு ஆவியாகிறது...",
-        language: "Tamil",
-        subject: "Science",
-        grade: "Grade 5"
-      }
-    ]
+        content: "ভারতের জাতীয় পশু বাঘ। এটি শক্তি ও সাহসের প্রতীক। বাঘ ভারতের বনে বাস করে এবং এটি একটি বিপন্ন প্রজাতি।\n\nপ্রশ্ন: ভারতের জাতীয় পশু কী এবং এটি কীসের প্রতীক?\nউত্তর: ভারতের জাতীয় পশু হল বাঘ, যা শক্তি ও সাহসের প্রতীক।",
+        language: "Bengali",
+        subject: "Bengali Language & General Knowledge",
+        grade: "Grade 6",
+        type: "Factual Q&A",
+      },
+      {
+        content: "Grammar Exercise — Voices\nActive: The teacher explained the concept clearly.\nPassive: The concept was explained clearly by the teacher.\n\nRule: In passive voice, the object of the active sentence becomes the subject. The verb changes to 'be + past participle'. The original subject becomes 'by + agent' (optional).",
+        language: "English",
+        subject: "English Grammar",
+        grade: "Grade 10",
+        type: "Grammar Exercise",
+      },
+    ],
   },
-  "ocr-document-ai": {
+  "social-sciences": {
     icon: FileText,
-    title: "OCR & Document AI Dataset",
-    subtitle: "Textbooks & Educational Documents",
-    overview: "Structured educational documents including textbooks, question banks, and examination papers. Optimized for document understanding, OCR training, and information extraction from academic materials.",
+    title: "Social Sciences, Civics & General Knowledge",
+    subtitle: "History, Geography, Polity & UPSC",
+    overview: "Structured academic content covering Indian and world history, geography, political science, economics, and civics — from Class 6 through to the UPSC examination syllabus. Critical for grounding AI models in accurate Indian historical, governance, and general knowledge.",
     useCases: [
-      "Document OCR training",
-      "Equation recognition",
-      "Table extraction",
-      "Layout analysis",
-      "Educational document digitization"
+      "General knowledge model pretraining",
+      "UPSC and civil services AI assistants",
+      "Factual question answering systems",
+      "History and geography reasoning",
+      "RLHF data for knowledge-grounded models",
     ],
     structure: [
-      { field: "Image", description: "Document image/scan" },
-      { field: "Text", description: "Extracted text content" },
-      { field: "Layout", description: "Bounding box coordinates" },
-      { field: "Type", description: "Content type (text/equation/table/figure)" },
-      { field: "LaTeX", description: "LaTeX representation (for equations)" },
-      { field: "Table Data", description: "Structured table content" },
-      { field: "Document Type", description: "Textbook/Question Paper/Notes" }
+      { field: "Content", description: "Structured academic text" },
+      { field: "Subject", description: "History / Geography / Civics / Economics" },
+      { field: "Grade / Level", description: "Class 6–12 or Graduate UPSC" },
+      { field: "Q&A Pairs", description: "Derived question-answer pairs" },
+      { field: "Timeline", description: "Chronological tags where applicable" },
+      { field: "Region", description: "India / World classification" },
+      { field: "Language", description: "English or Hindi" },
     ],
     stats: {
-      documents: "300K+",
-      pages: "2M+",
-      equations: "500K+",
-      tables: "100K+",
-      formats: "PDF, PNG, JPEG"
+      "Tokens": "550M+",
+      "Subjects": "5",
+      "QA Pairs": "800K+",
+      "UPSC Domains": "9",
+      "Languages": "English, Hindi",
     },
     sampleData: [
       {
-        type: "Equation",
-        latex: "E = mc^2",
-        context: "Einstein's mass-energy equivalence",
-        source: "Physics Textbook"
+        question: "What were the main causes of the First War of Indian Independence (1857)?",
+        answer: "Causes included: (1) Political — annexation policy (Doctrine of Lapse) by Lord Dalhousie; (2) Economic — drain of wealth and ruin of Indian industries; (3) Social — interference in social customs and fear of Christianisation; (4) Military — discrimination in pay and the introduction of the Enfield rifle cartridge greased with animal fat.",
+        subject: "Indian History — Modern India",
+        source: "NCERT Class 8 / UPSC Prelims",
+        level: "Class 10 / UPSC",
       },
       {
-        type: "Table",
-        content: "Periodic Table - First 20 Elements",
-        columns: ["Element", "Symbol", "Atomic Number", "Mass"],
-        source: "Chemistry Reference"
+        question: "Explain the Directive Principles of State Policy (DPSP) and how they differ from Fundamental Rights.",
+        answer: "DPSPs (Part IV, Articles 36–51) are guidelines for the state to frame policies for socio-economic justice. Unlike Fundamental Rights (justiciable — enforceable in court), DPSPs are non-justiciable — they cannot be enforced in a court of law. However, they are fundamental to governance and the state must apply them in making laws.",
+        subject: "Indian Polity — Constitutional Framework",
+        source: "UPSC Mains GS-II",
+        level: "UPSC",
       },
       {
-        type: "Diagram",
-        description: "Human Digestive System",
-        labels: ["Esophagus", "Stomach", "Small Intestine", "Large Intestine"],
-        source: "Biology Textbook"
-      }
-    ]
+        question: "Describe the distribution of black soil in India and explain why it is ideal for cotton cultivation.",
+        answer: "Black soil (Regur soil) is found in the Deccan Plateau — Maharashtra, Gujarat, Madhya Pradesh, and parts of Karnataka and Andhra Pradesh. It is ideal for cotton because: (1) it has high water-retention capacity, (2) it is rich in lime, iron, magnesia, and potash, (3) it swells when wet and cracks when dry, allowing self-ploughing, and (4) it remains moist for a long period.",
+        subject: "Physical Geography — Soils of India",
+        source: "NCERT Class 11 / UPSC Prelims",
+        level: "Class 11 / UPSC",
+      },
+      {
+        question: "What is the significance of the 73rd Constitutional Amendment Act, 1992?",
+        answer: "The 73rd Amendment gave constitutional status to Panchayati Raj Institutions (PRIs). It added Part IX (Articles 243–243O) and the 11th Schedule. Key provisions: three-tier system (Gram Panchayat, Panchayat Samiti, Zila Parishad), reservation of seats for SCs, STs, and women (one-third), five-year term, and State Finance Commissions.",
+        subject: "Indian Polity — Local Government",
+        source: "UPSC Mains GS-II",
+        level: "UPSC",
+      },
+    ],
   },
-  "speech-audio-learning": {
-    icon: Mic,
-    title: "Speech & Audio Learning Dataset",
-    subtitle: "Educational Audio Corpora",
-    overview: "Comprehensive educational audio dataset featuring lecture recordings, pronunciation guides, and speech corpora. Designed for training audio AI models in educational contexts.",
+  "higher-education": {
+    icon: Database,
+    title: "Higher Education & Professional Knowledge",
+    subtitle: "Commerce, Law & Engineering — Diploma to UG",
+    overview: "Undergraduate and diploma-level content spanning commerce, economics, accountancy, constitutional law, and core engineering sciences. Built for AI assistants targeting professional and higher-education domains, grounded in Indian academic syllabi.",
     useCases: [
-      "Speech recognition training",
-      "Educational voice assistants",
-      "Lecture transcription",
-      "Pronunciation assessment",
-      "Audio-based learning systems"
+      "Finance and commerce AI assistants",
+      "Legal reasoning model training",
+      "Engineering education platforms",
+      "Professional certification prep tools",
+      "Domain-specific LLM fine-tuning",
     ],
     structure: [
-      { field: "Audio", description: "Audio file (WAV/MP3)" },
-      { field: "Transcript", description: "Accurate transcription" },
-      { field: "Speaker", description: "Speaker metadata" },
-      { field: "Language", description: "Spoken language" },
-      { field: "Accent", description: "Regional accent information" },
-      { field: "Topic", description: "Subject matter" },
-      { field: "Duration", description: "Audio length" },
-      { field: "Quality", description: "Audio quality rating" }
+      { field: "Content", description: "Structured academic text or problem" },
+      { field: "Domain", description: "Commerce / Law / Engineering" },
+      { field: "Level", description: "Diploma / Undergraduate" },
+      { field: "Subject", description: "Specific subject e.g. Thermodynamics, Contract Law" },
+      { field: "Solution", description: "Solved problems or case analysis" },
+      { field: "Concepts", description: "Key concepts and definitions" },
+      { field: "Language", description: "English" },
     ],
     stats: {
-      hours: "150K+",
-      speakers: "5000+",
-      languages: "8",
-      accents: "20+",
-      topics: "50+"
+      "Tokens": "565M+",
+      "Domains": "3",
+      "Subjects": "12+",
+      "Solved Problems": "400K+",
+      "Level": "Diploma-UG",
     },
     sampleData: [
       {
-        type: "Lecture",
-        topic: "Introduction to Quantum Mechanics",
-        duration: "45 minutes",
-        language: "English",
-        speaker: "Professor"
+        question: "A company forfeits 500 shares of ₹10 each (₹6 called up) held by Ramesh, who had paid ₹2 per share as application money. These shares are reissued at ₹4 per share as fully paid up. Pass journal entries for forfeiture and reissue.",
+        subject: "Accountancy — Share Capital",
+        domain: "Commerce",
+        solution: "Forfeiture: Share Capital A/c Dr ₹3,000 | To Share Allotment A/c ₹2,000 | To Calls-in-Arrears A/c ₹1,000 (if any) | To Forfeited Shares A/c ₹1,000. Reissue: Bank A/c Dr ₹2,000 | Forfeited Shares A/c Dr ₹3,000 | To Share Capital A/c ₹5,000. Capital Reserve = Forfeited Shares balance after reissue.",
+        level: "Class 12 / B.Com",
       },
       {
-        type: "Pronunciation",
-        word: "Photosynthesis",
-        language: "English",
-        accent: "Indian English",
-        duration: "3 seconds"
+        question: "Distinguish between 'void agreement' and 'voidable contract' under the Indian Contract Act, 1872. Give one example of each.",
+        subject: "Business Law / Contract Law",
+        domain: "Law",
+        solution: "A void agreement (Section 2(g)) is not enforceable by law from the very beginning — e.g., an agreement with a minor. A voidable contract (Section 2(i)) is enforceable at the option of one of the parties — it remains valid until the aggrieved party chooses to avoid it — e.g., a contract made under coercion. Key difference: void agreement has no legal effect at all; voidable contract has legal effect until rescinded.",
+        level: "B.Com / LLB",
       },
       {
-        type: "Educational Dialogue",
-        topic: "Math Problem Solving",
-        participants: "Tutor + Student",
-        duration: "15 minutes",
-        language: "Hindi"
-      }
-    ]
-  }
+        question: "For a simply supported beam of span 6 m carrying a uniformly distributed load (UDL) of 20 kN/m, find the maximum bending moment and its location.",
+        subject: "Strength of Materials / Structural Engineering",
+        domain: "Engineering",
+        solution: "Reactions: RA = RB = (20×6)/2 = 60 kN. Maximum BM occurs at mid-span (x = 3 m). M_max = (w × L²)/8 = (20 × 36)/8 = 90 kN·m. The bending moment diagram is parabolic with peak at centre.",
+        level: "Diploma / B.Tech",
+      },
+      {
+        question: "Explain the concept of 'price elasticity of demand'. If a 10% rise in price causes quantity demanded to fall by 25%, classify the elasticity and calculate its value.",
+        subject: "Micro-Economics",
+        domain: "Commerce",
+        solution: "Price Elasticity of Demand (PED) = % change in Qd / % change in Price = −25/10 = −2.5 (absolute value: 2.5). Since |PED| > 1, demand is elastic — consumers are highly responsive to the price change. This is typical of goods with many substitutes or those considered non-essential.",
+        level: "Class 12 / B.Com / B.A. Economics",
+      },
+    ],
+  },
 };
 
 export default function DatasetDetailPage() {
@@ -292,7 +274,7 @@ export default function DatasetDetailPage() {
         const response = await axios.get(`${API}/files/category/${slug}`);
         setDownloadFiles(response.data);
       } catch (error) {
-        console.error("Error fetching files:", error);
+        if (process.env.NODE_ENV === "development") console.error("Error fetching files:", error);
       }
     };
     if (slug) fetchFiles();
@@ -315,6 +297,22 @@ export default function DatasetDetailPage() {
 
   return (
     <div className="min-h-screen bg-[#0A0A0A] pt-24" data-testid="dataset-detail-page">
+      <Helmet>
+        <title>{dataset.title} — Nalandadata.ai</title>
+        <meta name="description" content={dataset.overview.slice(0, 155)} />
+        <meta property="og:title" content={`${dataset.title} — Nalandadata.ai`} />
+        <meta property="og:description" content={dataset.overview.slice(0, 155)} />
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Dataset",
+          "name": dataset.title,
+          "description": dataset.overview,
+          "creator": { "@type": "Organization", "name": "Nalandadata.ai" },
+          "publisher": { "@type": "Organization", "name": "S Chand Group" },
+          "license": "https://nalandadata.ai/contact",
+          "isAccessibleForFree": false,
+        })}</script>
+      </Helmet>
       {/* Header */}
       <section className="py-16 relative">
         <div className="absolute inset-0 hero-gradient opacity-50" />
@@ -383,8 +381,8 @@ export default function DatasetDetailPage() {
                 transition={{ duration: 0.5, delay: 0.2 }}
               >
                 <h2 className="text-2xl font-bold text-white mb-6">Dataset Structure</h2>
-                <div className="rounded-xl border border-white/10 overflow-hidden">
-                  <table className="w-full table-dark">
+                <div className="overflow-x-auto rounded-xl border border-white/10">
+                  <table className="w-full table-dark min-w-[480px]">
                     <thead>
                       <tr>
                         <th className="text-left p-4 w-1/3">Field</th>
@@ -418,8 +416,8 @@ export default function DatasetDetailPage() {
                     >
                       {Object.entries(sample).map(([key, value]) => (
                         <div key={key} className="flex gap-4 mb-2 last:mb-0">
-                          <span className="text-gray-500 font-mono text-sm w-24 flex-shrink-0 capitalize">
-                            {key}:
+                          <span className="text-gray-500 font-mono text-sm w-28 flex-shrink-0 capitalize">
+                            {key.replace(/([A-Z])/g, ' $1').trim()}:
                           </span>
                           <span className="text-gray-300 text-sm">
                             {Array.isArray(value) ? value.join(", ") : value}
@@ -433,7 +431,7 @@ export default function DatasetDetailPage() {
             </div>
 
             {/* Right Column - Stats & CTA */}
-            <div className="space-y-8">
+            <div className="space-y-8 lg:sticky lg:top-28 lg:self-start">
               {/* Dataset Stats */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -445,9 +443,7 @@ export default function DatasetDetailPage() {
                 <div className="space-y-4">
                   {Object.entries(dataset.stats).map(([key, value]) => (
                     <div key={key} className="flex justify-between items-center">
-                      <span className="text-gray-400 capitalize">
-                        {key.replace(/([A-Z])/g, ' $1').trim()}
-                      </span>
+                      <span className="text-gray-400">{key}</span>
                       <span className="text-white font-mono font-semibold">{value}</span>
                     </div>
                   ))}
@@ -492,11 +488,10 @@ export default function DatasetDetailPage() {
                 </p>
                 <Button
                   onClick={() => setIsFormOpen(true)}
-                  variant="outline"
                   className="w-full btn-secondary"
                   data-testid="request-full-dataset-btn"
                 >
-                  Request Full Dataset
+                  Request Full Dataset →
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
               </motion.div>
@@ -505,8 +500,8 @@ export default function DatasetDetailPage() {
         </div>
       </section>
 
-      <LeadCaptureForm 
-        open={isFormOpen} 
+      <LeadCaptureForm
+        open={isFormOpen}
         onOpenChange={setIsFormOpen}
         preselectedDataset={slug}
         downloadFiles={downloadFiles}

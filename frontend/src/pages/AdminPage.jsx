@@ -40,8 +40,7 @@ import {
 } from "@/components/ui/table";
 import { toast } from "sonner";
 import axios from "axios";
-
-const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
+import API from "@/lib/api";
 
 const datasetCategories = [
   { value: "academic-reasoning", label: "Academic Reasoning" },
@@ -100,7 +99,7 @@ export default function AdminPage() {
       setLeads(leadsRes.data);
       setStats(statsRes.data);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      if (process.env.NODE_ENV === "development") console.error("Error fetching data:", error);
       toast.error("Failed to fetch data");
     } finally {
       setIsLoading(false);
@@ -166,7 +165,7 @@ export default function AdminPage() {
       setUploadData({ file: null, dataset_category: "", description: "", is_sample: true });
       fetchData();
     } catch (error) {
-      console.error("Upload error:", error);
+      if (process.env.NODE_ENV === "development") console.error("Upload error:", error);
       toast.error("Upload failed");
     } finally {
       setIsUploading(false);
