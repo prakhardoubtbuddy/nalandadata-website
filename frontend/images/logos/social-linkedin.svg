@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <!-- LinkedIn profile photo: 400×400, mark centered in circle-safe zone -->
+  <rect width="400" height="400" fill="#0D0D0D"/>
+  <!-- Ascending Steps Mark — centered, scale ~3.9 on viewBox 32×28 -->
+  <!-- Base: x=0 y=19 w=32 h=9 → centered at 200,200; mark total h=28*3.9=109 -->
+  <!-- Mark centered: top-left at (200-62, 200-55) = (138, 145) -->
+  <!-- Base bar: x=138+0 y=145+74 w=125 h=35 -->
+  <rect x="138" y="219" width="125" height="35" fill="#C8A96E"/>
+  <!-- Middle bar: x=138+39 y=145+39 w=86 h=27 -->
+  <rect x="177" y="184" width="86" height="27" fill="#C8A96E"/>
+  <!-- Top bar: x=138+78 y=145+0 w=47 h=31 -->
+  <rect x="216" y="145" width="47" height="31" fill="#C8A96E"/>
+</svg>

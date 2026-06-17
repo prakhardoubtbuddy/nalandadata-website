@@ -200,7 +200,7 @@ export default function SolutionsPage() {
               Ready to bring structured knowledge to your AI?
             </h2>
             <p className="text-gray-400 mb-8">
-              Talk to our team. We'll help you identify the right datasets for your training pipeline and get you a sample within 48 hours.
+              Talk to our team. We'll help you identify the right datasets for your training pipeline and get you a sample.
             </p>
             <Button
               onClick={() => setIsFormOpen(true)}

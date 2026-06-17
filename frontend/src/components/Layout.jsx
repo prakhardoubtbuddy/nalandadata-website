@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import AnnouncementBar from "./AnnouncementBar";
 
 export default function Layout() {
   return (
@@ -11,7 +12,10 @@ export default function Layout() {
       >
         Skip to main content
       </a>
-      <Navbar />
+      <div className="fixed top-0 left-0 right-0 z-50">
+        <AnnouncementBar />
+        <Navbar />
+      </div>
       <main id="main-content" className="flex-1">
         <Outlet />
       </main>

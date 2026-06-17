@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { 
+import {
   Upload,
   FileText,
   Users,
@@ -11,7 +11,11 @@ import {
   X,
   Loader2,
   Database,
-  BarChart3
+  BarChart3,
+  Pencil,
+  Newspaper,
+  Eye,
+  EyeOff
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -43,11 +47,10 @@ import axios from "axios";
 import API from "@/lib/api";
 
 const datasetCategories = [
-  { value: "academic-reasoning", label: "Academic Reasoning" },
-  { value: "stem-datasets", label: "STEM Datasets" },
-  { value: "multilingual-education", label: "Multilingual Education" },
-  { value: "ocr-document-ai", label: "OCR & Document AI" },
-  { value: "speech-audio-learning", label: "Speech & Audio Learning" },
+  { value: "stem-reasoning", label: "A — STEM Reasoning & Problem Solving" },
+  { value: "language-literacy", label: "B — Language, Literacy & Comprehension" },
+  { value: "social-sciences", label: "C — Social Sciences, Civics & General Knowledge" },
+  { value: "higher-education", label: "D — Higher Education & Professional Knowledge" },
 ];
 
 export default function AdminPage() {
@@ -72,6 +75,18 @@ export default function AdminPage() {
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef(null);
 
+  // Blog state
+  const [blogPosts, setBlogPosts] = useState([]);
+  const [isBlogFormOpen, setIsBlogFormOpen] = useState(false);
+  const [editingPost, setEditingPost] = useState(null);
+  const [isSavingPost, setIsSavingPost] = useState(false);
+  const emptyBlogForm = {
+    title: "", slug: "", excerpt: "", content: "",
+    tags: "", category: "Research", author: "Nalanda Data Team",
+    published: false, hf_model_ref: "",
+  };
+  const [blogForm, setBlogForm] = useState(emptyBlogForm);
+
   // Check auth from localStorage
   useEffect(() => {
     const auth = localStorage.getItem("admin_auth");
@@ -90,19 +105,86 @@ export default function AdminPage() {
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      const [filesRes, leadsRes, statsRes] = await Promise.all([
+      const [filesRes, leadsRes, statsRes, blogRes] = await Promise.all([
         axios.get(`${API}/files`),
         axios.get(`${API}/leads`),
-        axios.get(`${API}/stats`)
+        axios.get(`${API}/stats`),
+        axios.get(`${API}/blog/all`),
       ]);
       setFiles(filesRes.data);
       setLeads(leadsRes.data);
       setStats(statsRes.data);
+      setBlogPosts(blogRes.data);
     } catch (error) {
       if (process.env.NODE_ENV === "development") console.error("Error fetching data:", error);
       toast.error("Failed to fetch data");
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const slugify = (text) =>
+    text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+
+  const openNewPost = () => {
+    setEditingPost(null);
+    setBlogForm(emptyBlogForm);
+    setIsBlogFormOpen(true);
+  };
+
+  const openEditPost = (post) => {
+    setEditingPost(post);
+    setBlogForm({
+      title: post.title,
+      slug: post.slug,
+      excerpt: post.excerpt,
+      content: post.content,
+      tags: (post.tags || []).join(", "),
+      category: post.category,
+      author: post.author,
+      published: post.published,
+      hf_model_ref: post.hf_model_ref || "",
+    });
+    setIsBlogFormOpen(true);
+  };
+
+  const handleSavePost = async (e) => {
+    e.preventDefault();
+    if (!blogForm.title || !blogForm.slug || !blogForm.content) {
+      toast.error("Title, slug, and content are required");
+      return;
+    }
+    setIsSavingPost(true);
+    const payload = {
+      ...blogForm,
+      tags: blogForm.tags ? blogForm.tags.split(",").map((t) => t.trim()).filter(Boolean) : [],
+      hf_model_ref: blogForm.hf_model_ref || null,
+    };
+    try {
+      if (editingPost) {
+        await axios.put(`${API}/blog/${editingPost.id}`, payload);
+        toast.success("Post updated");
+      } else {
+        await axios.post(`${API}/blog`, payload);
+        toast.success("Post created");
+      }
+      setIsBlogFormOpen(false);
+      fetchData();
+    } catch (error) {
+      toast.error("Failed to save post");
+    } finally {
+      setIsSavingPost(false);
+    }
+  };
+
+  const handleDeletePost = async (postId) => {
+    if (!window.confirm("Delete this post?")) return;
+    try {
+      await axios.delete(`${API}/blog/${postId}`);
+      toast.success("Post deleted");
+      fetchData();
+    } catch {
+      toast.error("Failed to delete post");
     }
   };
 
@@ -386,6 +468,18 @@ export default function AdminPage() {
             <Users className="w-4 h-4 inline mr-2" />
             Leads
           </button>
+          <button
+            onClick={() => setActiveTab("blog")}
+            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+              activeTab === "blog"
+                ? "bg-white text-black"
+                : "text-gray-400 hover:text-white"
+            }`}
+            data-testid="admin-tab-blog"
+          >
+            <Newspaper className="w-4 h-4 inline mr-2" />
+            Blog
+          </button>
         </div>
 
         {/* Content */}
@@ -522,7 +616,199 @@ export default function AdminPage() {
             )}
           </div>
         )}
+
+        {activeTab === "blog" && (
+          <div className="rounded-xl bg-[#121212] border border-white/5 overflow-hidden">
+            <div className="p-4 border-b border-white/5 flex items-center justify-between">
+              <h2 className="text-lg font-semibold text-white">Blog Posts</h2>
+              <Button onClick={openNewPost} className="btn-primary" data-testid="admin-new-post-btn">
+                <Plus className="w-4 h-4 mr-2" />
+                New Post
+              </Button>
+            </div>
+            {isLoading ? (
+              <div className="p-8 text-center">
+                <Loader2 className="w-8 h-8 animate-spin text-gray-500 mx-auto" />
+              </div>
+            ) : blogPosts.length === 0 ? (
+              <div className="p-8 text-center text-gray-500">No blog posts yet</div>
+            ) : (
+              <Table>
+                <TableHeader>
+                  <TableRow className="border-white/5 hover:bg-transparent">
+                    <TableHead className="text-gray-400">Title</TableHead>
+                    <TableHead className="text-gray-400">Category</TableHead>
+                    <TableHead className="text-gray-400">Status</TableHead>
+                    <TableHead className="text-gray-400">Date</TableHead>
+                    <TableHead className="text-gray-400 text-right">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {blogPosts.map((post) => (
+                    <TableRow key={post.id} className="border-white/5">
+                      <TableCell className="text-white font-medium max-w-xs truncate">
+                        {post.title}
+                      </TableCell>
+                      <TableCell className="text-gray-400">{post.category}</TableCell>
+                      <TableCell>
+                        {post.published ? (
+                          <span className="flex items-center gap-1.5 text-green-400 text-xs font-mono">
+                            <Eye className="w-3 h-3" /> Published
+                          </span>
+                        ) : (
+                          <span className="flex items-center gap-1.5 text-gray-500 text-xs font-mono">
+                            <EyeOff className="w-3 h-3" /> Draft
+                          </span>
+                        )}
+                      </TableCell>
+                      <TableCell className="text-gray-400">
+                        {post.published_at ? formatDate(post.published_at) : formatDate(post.created_at)}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <div className="flex items-center justify-end gap-2">
+                          <Button
+                            onClick={() => openEditPost(post)}
+                            variant="ghost"
+                            size="sm"
+                            className="text-gray-400 hover:text-white"
+                          >
+                            <Pencil className="w-4 h-4" />
+                          </Button>
+                          <Button
+                            onClick={() => handleDeletePost(post.id)}
+                            variant="ghost"
+                            size="sm"
+                            className="text-red-400 hover:text-red-300"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            )}
+          </div>
+        )}
       </div>
+
+      {/* Blog Post Dialog */}
+      <Dialog open={isBlogFormOpen} onOpenChange={setIsBlogFormOpen}>
+        <DialogContent className="bg-[#121212] border-white/10 text-white max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>{editingPost ? "Edit Post" : "New Blog Post"}</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleSavePost} className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2 col-span-2">
+                <Label className="text-gray-300">Title *</Label>
+                <Input
+                  value={blogForm.title}
+                  onChange={(e) => {
+                    const title = e.target.value;
+                    setBlogForm((f) => ({
+                      ...f,
+                      title,
+                      slug: f.slug || slugify(title),
+                    }));
+                  }}
+                  className="bg-black/50 border-white/10 text-white"
+                  placeholder="Post title"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label className="text-gray-300">Slug *</Label>
+                <Input
+                  value={blogForm.slug}
+                  onChange={(e) => setBlogForm((f) => ({ ...f, slug: e.target.value }))}
+                  className="bg-black/50 border-white/10 text-white font-mono text-sm"
+                  placeholder="post-slug"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label className="text-gray-300">Category</Label>
+                <Input
+                  value={blogForm.category}
+                  onChange={(e) => setBlogForm((f) => ({ ...f, category: e.target.value }))}
+                  className="bg-black/50 border-white/10 text-white"
+                  placeholder="Research"
+                />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label className="text-gray-300">Excerpt *</Label>
+              <Textarea
+                value={blogForm.excerpt}
+                onChange={(e) => setBlogForm((f) => ({ ...f, excerpt: e.target.value }))}
+                className="bg-black/50 border-white/10 text-white placeholder:text-gray-600"
+                placeholder="Short summary shown in the blog list…"
+                rows={2}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-gray-300">Content * (Markdown)</Label>
+              <Textarea
+                value={blogForm.content}
+                onChange={(e) => setBlogForm((f) => ({ ...f, content: e.target.value }))}
+                className="bg-black/50 border-white/10 text-white placeholder:text-gray-600 font-mono text-sm"
+                placeholder="Write your post in Markdown…"
+                rows={14}
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label className="text-gray-300">Tags (comma-separated)</Label>
+                <Input
+                  value={blogForm.tags}
+                  onChange={(e) => setBlogForm((f) => ({ ...f, tags: e.target.value }))}
+                  className="bg-black/50 border-white/10 text-white"
+                  placeholder="GRPO, JEE, benchmark"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label className="text-gray-300">Author</Label>
+                <Input
+                  value={blogForm.author}
+                  onChange={(e) => setBlogForm((f) => ({ ...f, author: e.target.value }))}
+                  className="bg-black/50 border-white/10 text-white"
+                />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label className="text-gray-300">Hugging Face ref (optional)</Label>
+              <Input
+                value={blogForm.hf_model_ref}
+                onChange={(e) => setBlogForm((f) => ({ ...f, hf_model_ref: e.target.value }))}
+                className="bg-black/50 border-white/10 text-white font-mono text-sm"
+                placeholder="Nalandadata/nalanda-qwen-7b-grpo or full URL"
+              />
+            </div>
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id="blog_published"
+                checked={blogForm.published}
+                onChange={(e) => setBlogForm((f) => ({ ...f, published: e.target.checked }))}
+                className="w-4 h-4 rounded border-white/10 bg-black/50"
+              />
+              <Label htmlFor="blog_published" className="text-gray-300">
+                Publish immediately
+              </Label>
+            </div>
+            <Button type="submit" disabled={isSavingPost} className="w-full btn-primary">
+              {isSavingPost ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Saving…
+                </>
+              ) : (
+                editingPost ? "Update Post" : "Create Post"
+              )}
+            </Button>
+          </form>
+        </DialogContent>
+      </Dialog>
 
       {/* Upload Dialog */}
       <Dialog open={isUploadOpen} onOpenChange={setIsUploadOpen}>

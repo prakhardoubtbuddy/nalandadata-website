@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import { LeadCaptureForm } from "@/components/LeadCaptureForm";
 
 const footerLinks = {
   datasets: [
@@ -7,157 +9,149 @@ const footerLinks = {
     { name: "Social Sciences", path: "/datasets/social-sciences" },
     { name: "Higher Education", path: "/datasets/higher-education" },
   ],
-  solutions: [
-    { name: "Pretraining Data", path: "/solutions#pretraining" },
-    { name: "Supervised Fine-Tuning", path: "/solutions#sft" },
-    { name: "RLHF / DPO Datasets", path: "/solutions#rlhf" },
-    { name: "Evaluation Benchmarks", path: "/solutions#benchmarks" },
+  services: [
+    { name: "Custom Dataset Development", path: "/solutions" },
+    { name: "AI Factuality Audit", path: "/solutions" },
+    { name: "Data Pipeline Engineering", path: "/solutions" },
+    { name: "India Language Solutions", path: "/solutions" },
   ],
   company: [
-    { name: "About", path: "/about" },
+    { name: "Who We Serve", path: "/industries" },
     { name: "Contact", path: "/contact" },
     { name: "Privacy Policy", path: "/privacy" },
+    { name: "Terms", path: "/privacy" },
   ],
 };
 
 export default function Footer() {
+  const [isFormOpen, setIsFormOpen] = useState(false);
+
   return (
-    <footer className="bg-[#0A0A0A] border-t border-white/5" data-testid="footer">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
-          {/* Brand */}
-          <div className="lg:col-span-2">
-            <Link to="/" className="flex items-center gap-2.5 mb-6" data-testid="footer-logo">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center shadow-lg shadow-blue-900/40" aria-hidden="true">
-                <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                  <circle cx="11" cy="11" r="2.5" fill="white" />
-                  <circle cx="4" cy="5" r="1.8" fill="white" fillOpacity="0.85" />
-                  <circle cx="18" cy="5" r="1.8" fill="white" fillOpacity="0.85" />
-                  <circle cx="4" cy="17" r="1.8" fill="white" fillOpacity="0.85" />
-                  <circle cx="18" cy="17" r="1.8" fill="white" fillOpacity="0.85" />
-                  <line x1="11" y1="11" x2="4" y2="5" stroke="white" strokeWidth="1.2" strokeOpacity="0.6" />
-                  <line x1="11" y1="11" x2="18" y2="5" stroke="white" strokeWidth="1.2" strokeOpacity="0.6" />
-                  <line x1="11" y1="11" x2="4" y2="17" stroke="white" strokeWidth="1.2" strokeOpacity="0.6" />
-                  <line x1="11" y1="11" x2="18" y2="17" stroke="white" strokeWidth="1.2" strokeOpacity="0.6" />
+    <>
+      {/* Cream CTA Section */}
+      <section
+        className="py-16 px-6 lg:px-10"
+        style={{ backgroundColor: "#E8D5A3" }}
+        data-testid="footer-cta"
+      >
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8">
+          <h2
+            className="font-bold leading-tight tracking-tight"
+            style={{ fontSize: "clamp(28px, 4vw, 52px)", color: "#0D0D0D" }}
+          >
+            The data is ready.
+            <br />
+            Is your pipeline?
+          </h2>
+          <div className="flex flex-col sm:flex-row gap-3 flex-shrink-0">
+            <button
+              onClick={() => setIsFormOpen(true)}
+              className="bg-[#0D0D0D] text-[#E8D5A3] font-semibold text-sm px-5 py-2.5 rounded hover:bg-[#1A1A1A] transition-colors"
+            >
+              Request Dataset Access →
+            </button>
+            <button
+              onClick={() => setIsFormOpen(true)}
+              className="border border-[#0D0D0D]/40 text-[#0D0D0D] font-medium text-sm px-5 py-2.5 rounded hover:bg-[#0D0D0D]/10 transition-colors"
+            >
+              Download Catalogue
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-[#0D0D0D] border-t border-[#1A1A1A]" data-testid="footer">
+        <div className="max-w-7xl mx-auto px-6 lg:px-10 py-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+            {/* Brand */}
+            <div className="lg:col-span-1">
+              <Link to="/" className="inline-flex items-center gap-2 mb-3" data-testid="footer-logo">
+                <svg width="18" height="14" viewBox="0 0 48 37" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <rect x="0"  y="27" width="48" height="10" fill="#C8A96E"/>
+                  <rect x="14" y="13" width="34" height="9"  fill="#C8A96E"/>
+                  <rect x="28" y="0"  width="20" height="8"  fill="#C8A96E"/>
                 </svg>
-              </div>
-              <div>
-                <span className="text-white font-bold text-lg tracking-tight leading-none">
-                  Nalanda<span className="text-blue-400">data</span><span className="text-indigo-400">.ai</span>
+                <span className="text-[#F0EBE0] font-bold text-base tracking-tight">
+                  nalandadata<span className="text-[#C8A96E]">.ai</span>
                 </span>
-                <span className="text-gray-500 text-xs block mt-0.5">Powered by S Chand Group</span>
-              </div>
-            </Link>
-            <p className="text-gray-400 text-sm leading-relaxed max-w-sm mb-6">
-              We advance the frontier of artificial intelligence by delivering high-integrity 
-              academic datasets, structured knowledge systems, and post-training intelligence 
-              frameworks that power reliable and trustworthy AI models.
-            </p>
-            <div className="flex items-center gap-4">
-              <a
-                href="https://twitter.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Follow Nalandadata on Twitter"
-                className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
-                data-testid="footer-twitter"
-              >
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                </svg>
-              </a>
-              <a
-                href="https://linkedin.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Follow Nalandadata on LinkedIn"
-                className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
-                data-testid="footer-linkedin"
-              >
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-                </svg>
-              </a>
-              <a
-                href="https://github.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Nalandadata on GitHub"
-                className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
-                data-testid="footer-github"
-              >
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
-                </svg>
-              </a>
+              </Link>
+              <p className="text-[#666] text-xs mb-1">A division of S Chand Group</p>
+              <p className="text-[#666] text-xs font-mono">
+                © {new Date().getFullYear()} &middot; New Delhi, India
+              </p>
+            </div>
+
+            {/* Datasets */}
+            <div>
+              <h4 className="text-[#777] font-mono font-semibold text-[12px] tracking-widest uppercase mb-4">Datasets</h4>
+              <ul className="space-y-2.5">
+                {footerLinks.datasets.map((link) => (
+                  <li key={link.path}>
+                    <Link
+                      to={link.path}
+                      className="text-[#777] text-sm hover:text-[#F0EBE0] transition-colors"
+                      data-testid={`footer-link-${link.name.toLowerCase().replace(/\s+/g, '-')}`}
+                    >
+                      {link.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Services */}
+            <div>
+              <h4 className="text-[#777] font-mono font-semibold text-[12px] tracking-widest uppercase mb-4">Services</h4>
+              <ul className="space-y-2.5">
+                {footerLinks.services.map((link) => (
+                  <li key={link.name}>
+                    <Link
+                      to={link.path}
+                      className="text-[#777] text-sm hover:text-[#F0EBE0] transition-colors"
+                    >
+                      {link.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Company */}
+            <div>
+              <h4 className="text-[#777] font-mono font-semibold text-[12px] tracking-widest uppercase mb-4">Company</h4>
+              <ul className="space-y-2.5">
+                {footerLinks.company.map((link) => (
+                  <li key={link.path + link.name}>
+                    <Link
+                      to={link.path}
+                      className="text-[#777] text-sm hover:text-[#F0EBE0] transition-colors"
+                      data-testid={`footer-link-${link.name.toLowerCase().replace(/\s+/g, '-')}`}
+                    >
+                      {link.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
 
-          {/* Datasets */}
-          <div>
-            <h4 className="text-white font-semibold mb-4">Datasets</h4>
-            <ul className="space-y-3">
-              {footerLinks.datasets.map((link) => (
-                <li key={link.path}>
-                  <Link
-                    to={link.path}
-                    className="text-gray-400 text-sm hover:text-white transition-colors"
-                    data-testid={`footer-link-${link.name.toLowerCase().replace(/\s+/g, '-')}`}
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Solutions */}
-          <div>
-            <h4 className="text-white font-semibold mb-4">Solutions</h4>
-            <ul className="space-y-3">
-              {footerLinks.solutions.map((link) => (
-                <li key={link.path}>
-                  <Link
-                    to={link.path}
-                    className="text-gray-400 text-sm hover:text-white transition-colors"
-                    data-testid={`footer-link-${link.name.toLowerCase().replace(/\s+/g, '-')}`}
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Company */}
-          <div>
-            <h4 className="text-white font-semibold mb-4">Company</h4>
-            <ul className="space-y-3">
-              {footerLinks.company.map((link) => (
-                <li key={link.path}>
-                  <Link
-                    to={link.path}
-                    className="text-gray-400 text-sm hover:text-white transition-colors"
-                    data-testid={`footer-link-${link.name.toLowerCase().replace(/\s+/g, '-')}`}
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+          <div className="border-t border-[#1A1A1A] pt-6 flex flex-col sm:flex-row justify-between items-center gap-3">
+            <p className="text-[#666] text-xs font-mono">
+              © {new Date().getFullYear()} Nalandadata.ai. All rights reserved.
+            </p>
+            <p className="text-[#555] text-xs font-mono">
+              Powered by S Chand Group
+            </p>
           </div>
         </div>
+      </footer>
 
-        {/* Bottom */}
-        <div className="mt-16 pt-8 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p className="text-gray-500 text-sm">
-            © {new Date().getFullYear()} Nalandadata.ai. All rights reserved.
-          </p>
-          <p className="text-gray-600 text-xs font-mono">
-            Powered by S Chand Group
-          </p>
-        </div>
-      </div>
-    </footer>
+      <LeadCaptureForm
+        open={isFormOpen}
+        onOpenChange={setIsFormOpen}
+        downloadFiles={[]}
+      />
+    </>
   );
 }

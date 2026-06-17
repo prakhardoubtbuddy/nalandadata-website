@@ -78,3 +78,8 @@ agenthub/agents/youtube/db
 
 # Mobile development
 android-sdk/ 
+# --- cleanup: secrets & runtime data ---
+.env
+*.env
+backend/.env
+backend/uploads/

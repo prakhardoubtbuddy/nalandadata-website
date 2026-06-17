@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet-async";
 import { 
@@ -82,6 +82,11 @@ export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [errors, setErrors] = useState({});
+  const firstNameRef = useRef(null);
+
+  useEffect(() => {
+    firstNameRef.current?.focus();
+  }, []);
   const [formData, setFormData] = useState({
     full_name: "",
     work_email: "",
@@ -177,7 +182,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="text-white font-medium mb-1">Email</h3>
-                    <p className="text-gray-400">info@nalandadata.ai</p>
+                    <p className="text-gray-400">licensing@nalandadata.ai</p>
                   </div>
                 </div>
 
@@ -197,7 +202,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="text-white font-medium mb-1">Phone</h3>
-                    <p className="text-gray-400">+91 11 4973 1800</p>
+                    <p className="text-gray-400">+91 8882687147</p>
                   </div>
                 </div>
               </div>
@@ -207,8 +212,8 @@ export default function ContactPage() {
                 <p className="text-gray-400 text-sm mb-4">
                   For large-scale data licensing and custom partnerships, contact our enterprise team.
                 </p>
-                <a href="mailto:info@nalandadata.ai" className="text-blue-400 text-sm hover:underline">
-                  info@nalandadata.ai
+                <a href="mailto:licensing@nalandadata.ai" className="text-blue-400 text-sm hover:underline">
+                  licensing@nalandadata.ai
                 </a>
               </div>
             </motion.div>
@@ -259,6 +264,7 @@ export default function ContactPage() {
                       <div className="space-y-2">
                         <Label htmlFor="full_name" className="text-gray-300">Full Name *</Label>
                         <Input
+                          ref={firstNameRef}
                           id="full_name"
                           value={formData.full_name}
                           onChange={(e) => { setFormData({ ...formData, full_name: e.target.value }); setErrors(p => ({ ...p, full_name: "" })); }}

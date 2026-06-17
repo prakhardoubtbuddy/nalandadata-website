@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 40" width="220" height="40">
+  <rect width="220" height="40" fill="#FFFFFF"/>
+  <!-- Ascending Steps Mark — viewBox 48×37 scaled to 22×17 -->
+  <svg x="8" y="11" width="22" height="17" viewBox="0 0 48 37">
+    <rect x="0"  y="27" width="48" height="10" fill="#0D0D0D"/>
+    <rect x="14" y="13" width="34" height="9"  fill="#0D0D0D"/>
+    <rect x="28" y="0"  width="20" height="8"  fill="#0D0D0D"/>
+  </svg>
+  <!-- Wordmark -->
+  <text x="38" y="26" font-family="'Space Grotesk', 'Helvetica Neue', Arial, sans-serif" font-weight="700" font-size="16" fill="#0D0D0D" letter-spacing="-0.3">nalandadata</text>
+  <text x="173" y="26" font-family="'Space Grotesk', 'Helvetica Neue', Arial, sans-serif" font-weight="700" font-size="16" fill="#9A7A2E" letter-spacing="-0.3">.ai</text>
+</svg>

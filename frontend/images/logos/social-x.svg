@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <!-- X (Twitter) profile photo: 400×400, mark centered in circle-safe zone -->
+  <rect width="400" height="400" fill="#0D0D0D"/>
+  <!-- Ascending Steps Mark — same layout as LinkedIn 400×400 -->
+  <!-- Base bar -->
+  <rect x="138" y="219" width="125" height="35" fill="#C8A96E"/>
+  <!-- Middle bar -->
+  <rect x="177" y="184" width="86" height="27" fill="#C8A96E"/>
+  <!-- Top bar -->
+  <rect x="216" y="145" width="47" height="31" fill="#C8A96E"/>
+</svg>

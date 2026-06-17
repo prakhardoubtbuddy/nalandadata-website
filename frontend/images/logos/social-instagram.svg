@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080" width="1080" height="1080">
+  <rect width="1080" height="1080" fill="#0D0D0D"/>
+  <!-- Ascending Steps Mark — centered 400×308, top-left at (340, 386) -->
+  <svg x="340" y="386" width="400" height="308" viewBox="0 0 48 37">
+    <rect x="0"  y="27" width="48" height="10" fill="#C8A96E"/>
+    <rect x="14" y="13" width="34" height="9"  fill="#C8A96E"/>
+    <rect x="28" y="0"  width="20" height="8"  fill="#C8A96E"/>
+  </svg>
+</svg>

@@ -4,7 +4,7 @@ import { BookOpen, Globe2, GraduationCap, Brain, Users, Award } from "lucide-rea
 const stats = [
   { label: "Subjects", value: "15+", icon: BookOpen },
   { label: "Languages", value: "12", icon: Globe2 },
-  { label: "Grades Covered", value: "Class 1 – PG", icon: GraduationCap },
+  { label: "Grades Covered", value: "Pre-primary to Masters", icon: GraduationCap },
   { label: "Years of Publishing", value: "85+", icon: Award },
 ];
 
@@ -84,7 +84,7 @@ export default function AboutPage() {
             className="space-y-8 text-gray-300 text-lg leading-relaxed mb-20"
           >
             <p>
-              <span className="text-white font-semibold">Nalandadata.ai</span> is a leading Indian education content company delivering content, solutions, and
+              <span className="text-white font-semibold">Nalandadata.ai</span> is the digital initiative of S Chand, which is a leading Indian education content company delivering content, solutions, and
               services across the education lifecycle through three business segments —
               Early Learning, K-12, and Higher Education. We have a strong foothold in CBSE/ICSE
               affiliated schools, with increasing presence in state board affiliated schools across India.
@@ -95,11 +95,11 @@ export default function AboutPage() {
               improving our digital offerings across every business segment.
             </p>
             <p>
-              Over the last three years, we have coupled our print content with digital and interactive
+              Over the last decade, we have coupled our print content with digital and interactive
               methods of learning, providing flexibility in the delivery of content to students.
               Our aim is to lead the transition to digital in the knowledge industry. In the K-12 segment,
               we operate through Destination Success (classroom learning), Mystudygear, Intellitab and
-              Ignitor (device-based learning), Smartivity (STEM learning), and Flipclass (tutoring marketplace).
+              Ignitor (device-based learning), and Testcoach Prime.
             </p>
             <p>
               In the higher education segment, our digital efforts are focused on test preparation — an

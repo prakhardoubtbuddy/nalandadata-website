@@ -1,7 +1,6 @@
 import "@/App.css";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { useEffect } from "react";
-import posthog from "posthog-js";
 import { Toaster } from "@/components/ui/sonner";
 import { HelmetProvider } from "react-helmet-async";
 
@@ -27,7 +26,9 @@ function ScrollToTop() {
   const { pathname } = useLocation();
   useEffect(() => {
     window.scrollTo(0, 0);
-    posthog.capture("$pageview");
+    if (window.gtag) {
+      window.gtag("event", "page_view", { page_path: pathname });
+    }
   }, [pathname]);
   return null;
 }
