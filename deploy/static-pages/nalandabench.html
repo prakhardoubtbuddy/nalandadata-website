@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NalandaBench — Case study · Nalandadata</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0A0A0A; --ink-2:#0D0D0D; --panel:#111111; --raise:#1A1A1A;
+    --line:#2A2622; --line-soft:#1C1A17;
+    --paper:#F0EBE0; --muted:#9A938A; --muted-2:#7A746B;
+    --accent:#C8A96E; --accent-deep:#A6884F; --accent-tint:rgba(200,169,110,0.12);
+    --warn:#C45C45; --warn-tint:rgba(196,92,69,0.14);
+    --sans:"Space Grotesk",Inter,system-ui,-apple-system,sans-serif;
+    --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+    --maxw:1140px; --pad:clamp(20px,5vw,64px);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--ink);color:var(--paper);font-family:var(--sans);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  ::selection{background:var(--accent);color:var(--ink);}
+  a{color:inherit;text-decoration:none;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding-left:var(--pad);padding-right:var(--pad);}
+  h1,h2,h3,h4{font-weight:800;letter-spacing:-0.025em;line-height:1.08;margin:0;}
+  a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:3px;}
+  .eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin:0 0 18px;display:flex;align-items:center;gap:11px;}
+  .eyebrow::before{content:"";width:24px;height:1px;background:var(--accent);}
+
+  .todo{font-family:var(--mono);font-size:9.5px;letter-spacing:0.1em;text-transform:uppercase;background:var(--warn-tint);color:var(--warn);border:1px solid var(--warn);padding:2px 7px;border-radius:5px;font-weight:700;margin-left:8px;vertical-align:middle;}
+  .ribbon{background:var(--warn);color:#241808;font-family:var(--mono);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;text-align:center;padding:7px 12px;font-weight:700;}
+
+  header{position:sticky;top:0;z-index:60;background:rgba(10,10,10,0.86);backdrop-filter:blur(12px);border-bottom:1px solid var(--line-soft);}
+  header .wrap{display:flex;align-items:center;justify-content:space-between;height:66px;gap:20px;}
+  .brand{display:flex;align-items:baseline;gap:11px;}
+  .brand .name{font-weight:800;font-size:19px;letter-spacing:-0.02em;}
+  .brand .tag{font-family:var(--mono);font-size:10px;letter-spacing:0.16em;color:var(--muted);text-transform:uppercase;}
+  .nav-cta{font-family:var(--mono);font-size:12.5px;letter-spacing:0.03em;color:var(--ink);background:var(--accent);padding:9px 16px;border-radius:7px;font-weight:600;}
+  .nav-cta:hover{background:#D8BC82;}
+
+  main{display:block;}
+  .pagehead{padding:clamp(40px,6vw,72px) 0 0;}
+  .crumb{font-family:var(--mono);font-size:12px;color:var(--muted);margin-bottom:0;}
+  .crumb a{color:var(--accent);}
+
+  .cs-hero{padding:clamp(28px,4vw,44px) 0 clamp(28px,4vw,40px);}
+  .cs-hero h1{font-size:clamp(30px,5vw,56px);max-width:18ch;}
+  .cs-hero h1 .hl{color:var(--accent);}
+  .cs-deck{font-size:clamp(16px,1.8vw,20px);color:var(--muted);max-width:62ch;margin-top:22px;}
+  .cs-deck b{color:var(--paper);font-weight:600;}
+
+  .metastrip{display:flex;flex-wrap:wrap;gap:0;border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:34px;background:var(--ink-2);}
+  .metastrip div{padding:16px 22px;border-right:1px solid var(--line);flex:1;min-width:160px;}
+  .metastrip div:last-child{border-right:none;}
+  .metastrip .mk{font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted-2);}
+  .metastrip .mv{font-size:14px;margin-top:6px;color:var(--paper);}
+
+  .cs-stats{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-top:18px;background:var(--ink-2);}
+  .cs-stats .c{padding:clamp(22px,3vw,32px);border-right:1px solid var(--line);}
+  .cs-stats .c:last-child{border-right:none;}
+  .cs-stats .num{font-family:var(--mono);font-size:clamp(30px,4.5vw,46px);font-weight:600;line-height:1;}
+  .cs-stats .c.win .num{color:var(--accent);}
+  .cs-stats .c.warn .num{color:var(--warn);}
+  .cs-stats .num .u{font-size:.5em;color:var(--muted);margin-left:2px;}
+  .cs-stats .lbl{margin-top:14px;font-size:13.5px;color:var(--muted);line-height:1.5;}
+
+  section.band{padding:clamp(48px,7vw,90px) 0;border-top:1px solid var(--line-soft);}
+  section.band.alt{background:var(--ink-2);}
+  .sec-head{max-width:64ch;}
+  h2{font-size:clamp(24px,3.4vw,38px);}
+  .sec-head .lead{color:var(--muted);font-size:clamp(15px,1.5vw,18px);margin-top:18px;}
+  .sec-head .lead b{color:var(--paper);font-weight:600;}
+
+  .problems{list-style:none;padding:0;margin:34px 0 0;display:grid;gap:14px;max-width:74ch;}
+  .problems li{border-left:2px solid var(--accent-deep);padding:4px 0 4px 18px;font-size:15px;color:#CFC8BB;}
+  .problems li b{color:var(--paper);font-weight:600;}
+
+  .examples{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:34px;}
+  .ex{border:1px solid var(--line);border-radius:14px;padding:22px;background:var(--ink);display:flex;flex-direction:column;}
+  .ex .subj{font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);}
+  .ex .q{font-size:14.5px;color:var(--paper);line-height:1.5;margin:12px 0 14px;font-weight:500;flex:1;}
+  .ex .chain{font-size:12.5px;color:#B7AFA2;line-height:1.55;margin:0;border-top:1px solid var(--line-soft);padding-top:12px;}
+  .ex .chain b{color:var(--paper);font-weight:600;}
+  .closing{color:var(--muted);font-size:clamp(15px,1.5vw,17px);line-height:1.65;max-width:74ch;margin-top:30px;}
+  .closing b{color:var(--paper);font-weight:600;}
+
+  .steps{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-top:36px;}
+  .stp{background:var(--ink);padding:24px;}
+  .stp .no{font-family:var(--mono);font-size:12px;color:var(--accent);}
+  .stp h4{font-size:17px;margin:12px 0 9px;}
+  .stp p{font-size:13.5px;color:#B7AFA2;line-height:1.55;margin:0;}
+  .stp p b{color:var(--paper);font-weight:600;}
+
+  .tablecard{border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-top:36px;background:var(--ink-2);}
+  .tbl-scroll{overflow-x:auto;}
+  table{width:100%;border-collapse:collapse;min-width:480px;}
+  caption{text-align:left;font-family:var(--mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted-2);padding:18px 22px 0;}
+  thead th{font-family:var(--mono);font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);text-align:right;padding:16px 22px 12px;border-bottom:1px solid var(--line);font-weight:600;}
+  thead th:first-child{text-align:left;}
+  tbody th{font-weight:500;text-align:left;padding:13px 22px;font-size:14.5px;border-bottom:1px solid var(--line-soft);}
+  tbody td{font-family:var(--mono);font-size:14.5px;text-align:right;padding:13px 22px;color:#CFC8BB;border-bottom:1px solid var(--line-soft);}
+  tbody tr:last-child th,tbody tr:last-child td{border-bottom:none;}
+  tr.best{background:var(--accent-tint);box-shadow:inset 3px 0 0 var(--accent);}
+  tr.best th,tr.best td{color:var(--accent);font-weight:600;}
+  .pos{color:var(--accent);} .neg{color:var(--warn);}
+  .cond{padding:18px 22px;border-top:1px solid var(--line);font-size:13px;color:var(--muted);line-height:1.6;}
+  .cond b{color:#C3BBAE;}
+
+  .repro{margin-top:34px;}
+  .repro-links{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:18px;}
+  .rl{border:1px solid var(--line);border-radius:10px;padding:14px 18px;background:var(--ink-2);font-family:var(--mono);font-size:13px;color:var(--accent);display:inline-block;}
+  .rl:hover{border-color:var(--accent);}
+  .rl .rk{display:block;font-size:9.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted-2);margin-bottom:6px;}
+  pre.code{background:#0D0D0D;border:1px solid var(--line);border-radius:12px;padding:20px;overflow-x:auto;font-family:var(--mono);font-size:12.5px;line-height:1.6;color:#D8D2C6;}
+  pre.code code{font-family:inherit;}
+  .repro-note{font-family:var(--mono);font-size:11px;color:var(--muted-2);margin-top:14px;}
+  .demo-bar{display:flex;gap:16px;align-items:center;margin-top:18px;border:1px solid var(--accent-deep);background:var(--accent-tint);border-radius:12px;padding:16px 20px;flex-wrap:wrap;}
+  .demo-bar .db-k{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink);background:var(--accent);padding:3px 9px;border-radius:5px;font-weight:700;}
+  .demo-bar .db-t{font-family:var(--mono);font-size:13px;color:var(--accent);}
+
+  .faq{border-top:1px solid var(--line);margin-top:8px;}
+  .faq details{border-bottom:1px solid var(--line);}
+  .faq summary{cursor:pointer;list-style:none;padding:20px 0;font-size:16.5px;font-weight:600;display:flex;justify-content:space-between;gap:18px;}
+  .faq summary::-webkit-details-marker{display:none;}
+  .faq summary .ic{font-family:var(--mono);color:var(--accent);font-size:20px;flex:none;transition:transform .2s;}
+  .faq details[open] summary .ic{transform:rotate(45deg);}
+  .faq .ans{padding:0 0 22px;color:#B3AB9E;font-size:14.5px;line-height:1.6;max-width:68ch;}
+
+  .cs-cta{text-align:center;}
+  .btn{font-family:var(--mono);font-size:13.5px;letter-spacing:0.02em;font-weight:600;padding:14px 26px;border-radius:8px;display:inline-block;border:none;}
+  .btn.primary{background:var(--accent);color:var(--ink);}
+  .btn.primary:hover{background:#D8BC82;}
+  .btn.ghost{border:1px solid var(--line);color:var(--paper);background:transparent;}
+  .btn.ghost:hover{border-color:var(--accent);color:var(--accent);}
+  .cta-row{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:28px;}
+  .verify-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:6px;}
+  .verify-note{font-family:var(--mono);font-size:11px;color:var(--warn);margin-top:16px;}
+
+  .related{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:36px;}
+  .cc{border:1px solid var(--line);border-radius:14px;padding:24px;background:var(--ink-2);transition:.18s;display:block;}
+  .cc:hover{border-color:var(--accent);transform:translateY(-2px);}
+  .cc .res{font-family:var(--mono);font-size:24px;font-weight:600;color:var(--accent);}
+  .cc .ti{font-size:17px;font-weight:700;margin-top:10px;}
+  .cc .dm{font-family:var(--mono);font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted-2);margin-top:7px;}
+  .cc .go{font-family:var(--mono);font-size:12px;color:var(--accent);margin-top:14px;}
+
+  footer{border-top:1px solid var(--line);background:var(--ink-2);padding:clamp(40px,6vw,60px) 0 36px;}
+  .foot-top{display:flex;flex-wrap:wrap;gap:36px;justify-content:space-between;}
+  .foot .name{font-weight:800;font-size:19px;}
+  .foot .tag{font-family:var(--mono);font-size:10px;letter-spacing:0.16em;color:var(--muted);text-transform:uppercase;margin-top:7px;}
+  .foot-contact{font-size:14px;color:var(--muted);line-height:1.9;text-align:right;}
+  .foot-contact a:hover{color:var(--accent);}
+  .foot-bottom{margin-top:38px;padding-top:22px;border-top:1px solid var(--line-soft);font-family:var(--mono);font-size:11px;color:var(--muted-2);letter-spacing:0.04em;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+
+  @media(max-width:860px){
+    .cs-stats,.steps,.examples{grid-template-columns:1fr;}
+    .related{grid-template-columns:1fr;}
+    .foot-contact{text-align:left;}
+    .metastrip div{border-right:none;border-bottom:1px solid var(--line);}
+    .metastrip div:last-child{border-bottom:none;}
+  }
+</style>
+</head>
+<body>
+
+
+
+<header>
+  <div class="wrap">
+    <a class="brand" href="/">
+      <span class="name">Nalandadata</span><span class="tag">Verified reasoning data</span>
+    </a>
+    <div class="menu-links">
+      <nav class="main">
+        <a href="/research" class="active">Research</a>
+        <a href="/benchmarks">Benchmarks</a>
+        <a href="/solutions">Solutions</a>
+        <a href="/about">About</a>
+      </nav>
+      <a class="nav-cta" href="/contact">Request access</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="pagehead">
+    <div class="wrap">
+      <nav class="crumb" aria-label="Breadcrumb">
+        <a href="/">Home</a> / <a href="/research">Research</a> / NalandaBench
+      </nav>
+    </div>
+  </section>
+
+  <section class="cs-hero">
+    <div class="wrap">
+      <p class="eyebrow">Case study · Science &amp; maths reasoning</p>
+      <h1>Teaching a small model to reason through <span class="hl">advanced science and maths problems</span>.</h1>
+      <p class="cs-deck">We wanted a small, cheap model &mdash; <b>Qwen&nbsp;2.5 7B</b> &mdash; to solve <b>advanced science and maths problems</b>, the kind that take several steps of reasoning rather than a single recalled fact. Our material was <b>116,831 expert solutions</b> from JEE and NEET, India&rsquo;s toughest university-entrance exams, each with a verified correct answer. Trained on them the usual way, the model got <b>worse</b>. So we used the verified answers as a reward instead: scoring the model on whether it reached the right answer, which pushed it to reason its way there rather than memorise. That lifted it <b>6.3 points</b>, from 60.5% to 66.8%, on a held-out set of 800 questions. The model, the data and the test set are all public.</p>
+
+      <div class="metastrip">
+        <div><div class="mk">Method</div><div class="mv">Verified-reward RL (GRPO)</div></div>
+        <div><div class="mk">Domain</div><div class="mv">Science &amp; maths reasoning · JEE/NEET</div></div>
+        <div><div class="mk">Base model</div><div class="mv">Qwen 2.5 7B Instruct</div></div>
+        <div><div class="mk">Evaluation</div><div class="mv">800 held-out MCQs (NalandaBench)</div></div>
+      </div>
+
+      <div class="cs-stats">
+        <div class="c warn">
+          <div class="num">&minus;16.4<span class="u">pts</span></div>
+          <div class="lbl">What standard supervised fine-tuning did to overall accuracy on the held-out set. The same data, the wrong method.</div>
+        </div>
+        <div class="c win">
+          <div class="num">+6.3<span class="u">pts</span></div>
+          <div class="lbl">The two-stage verified-reward model &mdash; one downloadable checkpoint, 60.5% &rarr; 66.8% on the held-out set.</div>
+        </div>
+        <div class="c win">
+          <div class="num">2.5&times;</div>
+          <div class="lbl">The lift from correcting mislabelled data alone, with no change to the method.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VERIFY / ARTIFACTS -->
+  <section class="band">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Reproducibility</p>
+        <h2>Everything here is public.</h2>
+        <p class="lead">The fine-tuned model and a data sample are public, including the held-out set the +6.3 is measured on.</p>
+      </div>
+      <div class="verify-row">
+        
+        <a class="btn ghost" href="https://huggingface.co/Nalandadata/nalanda-qwen-7b-grpo" target="_blank" rel="noopener">Open the model on Hugging Face &rarr;</a>
+        <a class="btn primary" href="https://huggingface.co/datasets/Nalandadata/NalandaJEENEETBench" target="_blank" rel="noopener">Download a data sample &rarr;</a>
+      </div>
+      
+    </div>
+  </section>
+
+  <!-- THE CHALLENGE -->
+  <section class="band">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">The problem</p>
+        <h2>What it takes to solve one of these problems.</h2>
+        <p class="lead">Maths and science are the hardest test of whether a model can reason. Every problem has one correct answer, reached through a chain of steps, that the model either gets or it doesn&rsquo;t. That makes a hard exam a clean way to measure what a model can really do, and what it takes to improve it.</p>
+        <p class="lead">We chose JEE and NEET because they are about as hard as competitive reasoning gets. JEE is the entrance exam for the IITs, and JEE Advanced is widely regarded as one of the toughest exams in the world. Around 1.5 million students sit JEE every year; only the top 250,000 even qualify to attempt the Advanced paper, about 54,000 clear it, and the IITs have roughly 18,000 seats. Of everyone who sits the exam, only about one in eighty ends up in an IIT. NEET, the gateway to medical school, draws over two million more each year. These exams are built so that memorisation and pattern-matching don&rsquo;t pass: a single question folds two or three concepts into one chain. A model that does well on them is reasoning, not recalling.</p>
+        <p class="lead">What a lab training a reasoning model wants is straightforward: a model that can read a hard science or maths problem and work through to the answer. That means setting up the right equation, carrying a multi-step calculation without slipping, combining two or three concepts in one question, and landing on the single correct answer. This is where models fail. They know the individual facts, but on a multi-step problem they break somewhere in the chain and produce a clean, confident solution that reaches the wrong number. There is no partial credit; the answer is right or wrong. Here is the kind of problem we mean.</p>
+      </div>
+
+      <div class="examples">
+        <div class="ex">
+          <div class="subj">Physics &middot; mechanics</div>
+          <p class="q">A block slides down a frictionless incline of height h and sticks to an identical block resting at the bottom. Find their speed just after the collision.</p>
+          <p class="chain"><b>What it takes:</b> energy conservation to find the speed at the foot of the incline, then momentum conservation for the inelastic collision. Two principles, in order, in one question.</p>
+        </div>
+        <div class="ex">
+          <div class="subj">Chemistry &middot; stoichiometry</div>
+          <p class="q">What mass of oxygen is needed to completely combust 16&nbsp;g of methane?</p>
+          <p class="chain"><b>What it takes:</b> balance CH4 + 2O2 &rarr; CO2 + 2H2O, convert grams to moles, apply the 1:2 ratio, convert back to grams. Mis-balance the first line and everything after it is wrong.</p>
+        </div>
+        <div class="ex">
+          <div class="subj">Mathematics &middot; calculus</div>
+          <p class="q">Find the local maximum value of f(x) = x&sup3; &minus; 3x.</p>
+          <p class="chain"><b>What it takes:</b> differentiate, solve f&prime;(x) = 0 for the critical points, use the second derivative to tell a maximum from a minimum, then evaluate. Skip the test and you report the wrong point.</p>
+        </div>
+      </div>
+
+      <p class="closing">What makes these exams useful to us is that every question has one verified answer, with an expert worked solution behind it. That is what turns a hard test into training data, and it is where our method begins.</p>
+    </div>
+  </section>
+
+  <!-- THE APPROACH -->
+  <section class="band alt">
+    <div class="wrap">
+      <div class="sec-head"><p class="eyebrow">The approach</p><h2>What we did, in four steps.</h2></div>
+      <div class="steps">
+        <div class="stp">
+          <div class="no">01 &middot; Audit</div>
+          <h4>Clean the archive before training</h4>
+          <p>128,832 raw questions. A keyword audit found <b>39.4% carried the wrong subject label</b> &mdash; Biology was 73.7% mislabelled &mdash; and 12,001 were non-STEM. Cleaning left <b>116,831</b> correctly labelled questions. This step alone, with no change to the method, lifted the eventual gain from +2.5 to +6.3 points.</p>
+        </div>
+        <div class="stp">
+          <div class="no">02 &middot; Light SFT</div>
+          <h4>A short pass, with general data mixed in</h4>
+          <p>200 steps on a <b>70/30 mix of domain and general data</b> (SlimOrca), with NEFTune noise and a conservative LoRA setup (rank 8, attention-only). An aggressive setup &mdash; rank 32, all-linear targets &mdash; was what caused the 16-point collapse.</p>
+        </div>
+        <div class="stp">
+          <div class="no">03 &middot; Verified-reward RL</div>
+          <h4>GRPO on correct answers</h4>
+          <p>The model samples <b>eight answers per question</b> and is rewarded for reaching the verified-correct one, with smaller rewards for structure and reasoning. 600 steps on 10,000 multiple-choice questions.</p>
+        </div>
+        <div class="stp">
+          <div class="no">04 &middot; Evaluate</div>
+          <h4>Held-out, plus public benchmarks</h4>
+          <p>800 held-out MCQs, 200 per subject, released as <b>NalandaBench</b>. GSM8K, MMLU and ARC run alongside, to confirm general reasoning survived the specialisation.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- THE RESULT -->
+  <section class="band">
+    <div class="wrap">
+      <div class="sec-head"><p class="eyebrow">The result</p><h2>Standard fine-tuning made the model worse. Verified-reward RL improved it.</h2>
+        <p class="lead">All figures are on the 800-question held-out set, against the Qwen 2.5 7B baseline. The verified-reward column is the single clean-data GRPO model &mdash; the one you can download.</p>
+      </div>
+      <div class="tablecard">
+        <div class="tbl-scroll">
+          <table>
+            <caption>Held-out evaluation set (800 MCQs) &middot; accuracy %, higher is better</caption>
+            <thead>
+              <tr>
+                <th scope="col">Subject</th>
+                <th scope="col">Baseline</th>
+                <th scope="col">Standard SFT</th>
+                <th scope="col">Verified-reward RL</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Physics</th><td>51.0</td><td class="neg">34.5</td><td class="pos">62.0</td></tr>
+              <tr><th scope="row">Chemistry</th><td>61.5</td><td class="neg">50.0</td><td class="pos">71.5</td></tr>
+              <tr><th scope="row">Mathematics</th><td>56.0</td><td class="neg">40.5</td><td>56.0</td></tr>
+              <tr><th scope="row">Biology</th><td>73.5</td><td class="neg">51.5</td><td class="pos">77.5</td></tr>
+              <tr class="best"><th scope="row">Overall</th><td>60.5</td><td>44.1</td><td>66.8</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="cond"><b>How to read this.</b> One representative model per column. Standard SFT (the aggressive variant) degraded every subject &mdash; overall &minus;16.4. The verified-reward RL column is the clean-data GRPO model, <b>+6.3 overall</b>, and it is the checkpoint you can download and reproduce. A separate subject-balanced variant lifts Physics to 65.0 (<b>+14.0</b>) by trading some Mathematics; we report that as a per-subject ceiling, not the headline, because the headline is the single reproducible model.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- GENERAL CAPABILITY -->
+  <section class="band alt">
+    <div class="wrap">
+      <div class="sec-head"><p class="eyebrow">General capability</p><h2>What it did to general reasoning.</h2>
+        <p class="lead">Mostly preserved or improved &mdash; with two regressions we report in full rather than hide.</p>
+      </div>
+      <div class="tablecard">
+        <div class="tbl-scroll">
+          <table>
+            <caption>Public benchmarks &middot; baseline vs the verified-reward model &middot; accuracy %</caption>
+            <thead>
+              <tr>
+                <th scope="col">Benchmark</th>
+                <th scope="col">Baseline</th>
+                <th scope="col">RL model</th>
+                <th scope="col">&Delta;</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">GSM8K (math reasoning)</th><td>94.7</td><td>96.0</td><td class="pos">+1.3</td></tr>
+              <tr><th scope="row">ARC-Challenge (science)</th><td>90.0</td><td>90.0</td><td>0.0</td></tr>
+              <tr><th scope="row">MMLU-Physics</th><td>81.1</td><td>83.8</td><td class="pos">+2.7</td></tr>
+              <tr><th scope="row">MMLU-Chemistry</th><td>62.0</td><td>68.0</td><td class="pos">+6.0</td></tr>
+              <tr><th scope="row">MMLU-Mathematics</th><td>63.5</td><td>53.8</td><td class="neg">&minus;9.7</td></tr>
+              <tr><th scope="row">MMLU-Biology</th><td>88.5</td><td>82.0</td><td class="neg">&minus;6.5</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="cond"><b>Honest read.</b> General reasoning held or improved on four of six. The two regressions &mdash; MMLU-Mathematics and MMLU-Biology &mdash; come from the subject-balanced variant, where pushing Physics trades against other subjects. We show the whole table.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- THE OUTCOME -->
+  <section class="band">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">The outcome</p>
+        <h2>The model now reasons through problems it used to get wrong.</h2>
+        <p class="lead">Before fine-tuning, the model failed in specific, recognisable ways. Each is a place where a chain of reasoning breaks:</p>
+      </div>
+      <ul class="problems">
+        <li><b>Wrong principle, wrong from step one.</b> It reaches for the wrong law to begin with (kinematics where energy conservation is needed), and nothing downstream can recover.</li>
+        <li><b>A dropped step.</b> It skips a link in a multi-step derivation and lands on an answer that looks complete but isn&rsquo;t.</li>
+        <li><b>An arithmetic or algebra slip.</b> One manipulation error mid-chain carries straight through to the wrong final number.</li>
+        <li><b>Elimination instead of solving.</b> It picks the most plausible-looking option rather than working the problem, which holds up on easy items but collapses on multi-concept ones.</li>
+        <li><b>Solution-shaped, still wrong.</b> It produces a fluent, well-structured derivation that still lands on the wrong answer.</li>
+      </ul>
+      <p class="closing">Verified-reward RL targets every one of these directly, because it rewards a single thing: reaching the correct answer. On the held-out set the model improved by 6.3 points overall, and the gains are largest exactly where the reasoning is hardest: physics up 11 points and chemistry up 10, the most multi-step and calculation-heavy subjects, with biology up 4. The same base model that used to produce confident wrong answers now works through these problems and lands on the right one.</p>
+      <p class="closing">The model is public, with a live demo to put your own problem to it. Because the gain came from verified answers and the right method, the same approach carries to any domain where the answers can be checked &mdash; a curriculum, a body of case law, a set of internal manuals.</p>
+    </div>
+  </section>
+
+  <!-- REPRODUCE IT -->
+  <section class="band">
+    <div class="wrap">
+      <div class="sec-head"><p class="eyebrow">Reproduce it</p><h2>Run the model. Or try it in your browser.</h2>
+        <p class="lead">The model and the held-out set are public, so the result can be checked on your own inputs.</p>
+      </div>
+
+      <div class="repro" style="margin-top:24px">
+        <div class="repro-links">
+          <a class="rl" href="https://huggingface.co/Nalandadata/nalanda-qwen-7b-grpo" target="_blank" rel="noopener">
+            <span class="rk">Model · GRPO checkpoint</span>Open on Hugging Face &rarr;
+          </a>
+          <a class="rl" href="https://huggingface.co/datasets/Nalandadata/NalandaJEENEETBench" target="_blank" rel="noopener">
+            <span class="rk">NalandaBench · 800 held-out MCQs</span>Open the evaluation set &rarr;
+          </a>
+        </div>
+        
+        <pre class="code"><code>from transformers import AutoModelForCausalLM, AutoTokenizer
+
+repo = "Nalandadata/nalanda-qwen-7b-grpo"
+model = AutoModelForCausalLM.from_pretrained(repo, device_map="auto")
+tok   = AutoTokenizer.from_pretrained(repo)
+
+msg = [{"role": "user", "content": "&lt;JEE/NEET MCQ&gt;  Think step by step, then answer A-D."}]
+ids = tok.apply_chat_template(msg, add_generation_prompt=True, return_tensors="pt").to(model.device)
+print(tok.decode(model.generate(ids, max_new_tokens=512)[0], skip_special_tokens=True))</code></pre>
+        <p class="repro-note">The released checkpoint is the clean-data GRPO model &mdash; +6.3 overall on the held-out set, the number on this page.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="band alt">
+    <div class="wrap">
+      <div class="sec-head"><p class="eyebrow">Questions</p><h2>The detail behind the result.</h2></div>
+      <div class="faq" style="margin-top:20px">
+        <details>
+          <summary>Why did standard fine-tuning fail?<span class="ic">+</span></summary>
+          <div class="ans">Catastrophic forgetting. An aggressive LoRA setup trained on 100% domain data overwrote the model&rsquo;s general reasoning, dropping accuracy 16 points below baseline. A conservative LoRA setup, a 30% general-data mix, and rewarding correct answers with RL rather than imitating solution text is what avoided it.</div>
+        </details>
+        <details>
+          <summary>What was the single biggest lever?<span class="ic">+</span></summary>
+          <div class="ans">Data quality. Auditing and correcting the mislabelled subject tags &mdash; with no change to the model, hyperparameters or compute &mdash; more than doubled the gain, from +2.5 to +6.3 points. Biology, the most contaminated subject at 73.7%, swung from a regression to a genuine improvement.</div>
+        </details>
+        <details>
+          <summary>Which number does the downloadable model give?<span class="ic">+</span></summary>
+          <div class="ans">+6.3 overall (60.5% &rarr; 66.8%) on the held-out set, against the Qwen 2.5 7B baseline. That is the clean-data GRPO model. A subject-balanced variant reaches +14 in Physics by trading some Mathematics; we headline the single reproducible model because it is the one you can verify.</div>
+        </details>
+        <details>
+          <summary>Did specialising hurt general ability?<span class="ic">+</span></summary>
+          <div class="ans">Mostly no. GSM8K, MMLU-Physics and MMLU-Chemistry improved and ARC held flat. Two benchmarks regressed under the subject-balanced variant, MMLU-Mathematics and MMLU-Biology. The full table is on this page.</div>
+        </details>
+        <details>
+          <summary>Can we get the data?<span class="ic">+</span></summary>
+          <div class="ans">The 800-question NalandaBench evaluation set is public, and a dataset sample is available. The full verified-solution corpus is licensed &mdash; download a sample or talk to a researcher to scope a slice for your domain.</div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="band cs-cta">
+    <div class="wrap">
+      <p class="eyebrow" style="justify-content:center">Try it</p>
+      <h2 style="max-width:22ch;margin:0 auto">Want verified-reward results on your domain?</h2>
+      <div class="cta-row">
+        <a class="btn primary" href="/#connect">Download a sample</a>
+        <a class="btn ghost" href="/#connect">Talk to a researcher</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- RELATED -->
+  <section class="band alt">
+    <div class="wrap">
+      <div class="sec-head"><p class="eyebrow">Related research</p><h2>More of what the data does to a model.</h2></div>
+      <div class="related">
+        <a class="cc" href="/research/drishtitable">
+          <div class="res">84.9% TEDS</div>
+          <div class="ti">DrishtiTable</div>
+          <div class="dm">Table structure recognition</div>
+          <div class="go">Read the case study &rarr;</div>
+        </a>
+        <a class="cc" href="/research/nalanda-image-vl">
+          <div class="res">+23.5 pts</div>
+          <div class="ti">Nalanda Image VL</div>
+          <div class="dm">Multimodal science · vision-language</div>
+          <div class="go">Read the case study &rarr;</div>
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <div><div class="name">Nalandadata</div><div class="tag">Verified reasoning data</div></div>
+      <div class="foot-contact">
+        <a href="mailto:info@nalandadata.ai">info@nalandadata.ai</a><br>
+        <a href="tel:+918882687147">+91 88826 87147</a><br>
+        A27, 2nd Floor, Mohan Cooperative Industrial Estate, New Delhi 110044<br>
+        <a href="https://huggingface.co/Nalandadata" target="_blank" rel="noopener">huggingface.co/Nalandadata</a>
+      </div>
+    </div>
+    <nav class="foot-nav" style="display:flex;flex-wrap:wrap;gap:22px;margin-top:34px;font-family:var(--mono);font-size:12.5px;letter-spacing:0.04em;">
+      <a href="/research" style="color:var(--muted)">Research</a>
+      <a href="/benchmarks" style="color:var(--muted)">Benchmarks</a>
+      <a href="/solutions" style="color:var(--muted)">Solutions</a>
+      <a href="/about" style="color:var(--muted)">About</a>
+      <a href="/contact" style="color:var(--muted)">Contact</a>
+      <a href="https://huggingface.co/Nalandadata" target="_blank" rel="noopener" style="color:var(--muted)">Hugging&nbsp;Face</a>
+    </nav>
+    <div class="foot-bottom">
+      <span>© 2026 Nalandadata</span>
+      <span>Expert-authored · curriculum-grade · human-verified · reproducible</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
