@@ -26,6 +26,10 @@ if [ -f "$SCRIPT_DIR/lead-capture.js" ] && [ -d "$BUILD_DIR" ]; then
   chown www-data:www-data "$BUILD_DIR/lead-capture.js" 2>/dev/null || true
   echo "    lead-capture.js -> $BUILD_DIR/lead-capture.js"
 fi
+if [ -d "$SCRIPT_DIR/assets" ] && [ -d "$BUILD_DIR" ]; then
+  cp -rf "$SCRIPT_DIR/assets/." "$BUILD_DIR/"
+  echo "    brand assets -> $BUILD_DIR/"
+fi
 echo "    done."
 
 echo "==> 2. Backing up nginx config -> ${NGINX_CONF}.bak-${TS}"
