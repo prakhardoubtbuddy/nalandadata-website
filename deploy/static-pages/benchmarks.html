@@ -333,9 +333,27 @@
   <div class="wrap">
     <div class="sec-head">
       <p class="eyebrow">Leaderboard &middot; v1</p>
-      <h2>Verified-reward reasoning, scored.</h2>
-      <p class="lead">v1 evaluates on 800 held-out JEE/NEET science &amp; maths MCQs with expert-verified answers. The first published result is below &mdash; the full public, multi-model leaderboard is opening for submissions.</p>
+      <h2>Benchmark results.</h2>
+      <p class="lead">Two held-out benchmarks, independently scored: <b>DrishtiTable</b> for table-structure recognition (image &rarr; HTML, TEDS) and <b>NalandaBench</b> for JEE/NEET reasoning (MCQ accuracy).</p>
     </div>
+    <div class="tablecard" style="margin-bottom:26px">
+      <div class="tbl-scroll">
+        <table>
+          <caption>DrishtiTable &mdash; 135 held-out tables (image &rarr; HTML, TEDS)</caption>
+          <thead><tr><th>Model</th><th>Method</th><th>TEDS</th><th>S-TEDS</th></tr></thead>
+          <tbody>
+            <tr class="best"><th>DrishtiTable-Qwen2.5-VL-7B <span class="badge">ours</span></th><td>Fine-tuned (SFT)</td><td>83.2%</td><td>89.7%</td></tr>
+            <tr><th>Claude Sonnet 4.6</th><td>Zero-shot</td><td>77.3%</td><td>89.2%</td></tr>
+            <tr><th>Claude Opus 4.8</th><td>Zero-shot</td><td>75.5%</td><td>88.2%</td></tr>
+            <tr><th>GPT-4o</th><td>Zero-shot</td><td>71.1%</td><td>84.3%</td></tr>
+            <tr><th>GPT-5.1</th><td>Zero-shot</td><td>69.9%</td><td>83.3%</td></tr>
+            <tr><th>Gemini 3.1 Pro</th><td>Zero-shot</td><td>65.7%</td><td>73.6%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="cond">Image &rarr; HTML table recognition on 135 held-out Indian-textbook tables, ranked by TEDS. The fine-tuned 7B beats the best zero-shot frontier model by <b>+5.9 points</b> (83.2% vs 77.3%). Full 10-model board &amp; methodology: <a href="https://huggingface.co/spaces/nalanda-data/DrishtiTable-Leaderboard" target="_blank" rel="noopener" style="color:var(--accent)">live leaderboard &rarr;</a> &middot; <a href="https://huggingface.co/datasets/Nalandadata/DrishtiTable" target="_blank" rel="noopener" style="color:var(--accent)">benchmark dataset &rarr;</a></div>
+    </div>
+
     <div class="tablecard">
       <div class="tbl-scroll">
         <table>
