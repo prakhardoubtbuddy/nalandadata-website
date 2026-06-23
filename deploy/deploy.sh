@@ -66,7 +66,8 @@ cat > "$SNIPPET" <<'EOF'
         try_files /drishtitable.html =404;
     }
     location = /benchmarks {
-        return 404;
+        root /var/www/nalandadata/static-pages;
+        try_files /benchmarks.html =404;
     }
     location = /about {
         root /var/www/nalandadata/static-pages;
