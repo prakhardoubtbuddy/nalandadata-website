@@ -390,10 +390,10 @@
     </div>
 
     <div class="bench-nav"><div class="bench-tabs">
-      <button class="bench-tab active" onclick="showBench('drishtitable',this)">
+      <button class="bench-tab active" data-bench="drishtitable">
         <span class="tn">DrishtiTable</span><span class="ts">83.2% TEDS &middot; +5.9pp vs best</span>
       </button>
-      <button class="bench-tab" onclick="showBench('nalandabench',this)">
+      <button class="bench-tab" data-bench="nalandabench">
         <span class="tn">NalandaBench V1</span><span class="ts">66.8% accuracy &middot; +6.3pp via GRPO</span>
       </button>
       <button class="bench-tab soon" disabled>
@@ -526,14 +526,6 @@
     </div>
   </div>
 </footer>
-<script>
-  function showBench(id, el){
-    document.querySelectorAll('.bench-tab').forEach(t=>t.classList.remove('active'));
-    document.querySelectorAll('.bench-panel').forEach(p=>p.classList.remove('active'));
-    el.classList.add('active');
-    var panel = document.getElementById('bp-' + id);
-    if (panel) panel.classList.add('active');
-  }
-</script>
+<script src="/bench-tabs.js" defer></script>
 </body>
 </html>
