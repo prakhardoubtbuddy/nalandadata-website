@@ -1,6 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Nalandadata">
-  <rect width="64" height="64" rx="14" fill="#C8A96E"/>
-  <path d="M16.5 17 H25 V47 H16.5 Z" fill="#0A0A0A"/>
-  <path d="M39 17 H47.5 V47 H39 Z" fill="#0A0A0A"/>
-  <path d="M16.5 17 H25 L47.5 47 H39 Z" fill="#0A0A0A"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Dark background tile with rounded corners -->
+  <rect width="64" height="64" rx="12" fill="#0D0D0D"/>
+  <!-- Ascending Steps Mark — three bars, staircase ascending left-to-right -->
+  <!-- Base bar: widest, bottom -->
+  <rect x="8"  y="44" width="48" height="10" fill="#C8A96E"/>
+  <!-- Middle bar -->
+  <rect x="22" y="30" width="34" height="9"  fill="#C8A96E"/>
+  <!-- Top bar: shortest, top -->
+  <rect x="36" y="17" width="20" height="8"  fill="#C8A96E"/>
 </svg>
