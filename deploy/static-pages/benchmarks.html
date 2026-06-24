@@ -439,6 +439,70 @@
         </div>
         <div class="cond">Image &rarr; HTML recognition on 135 held-out Indian-textbook tables, ranked by TEDS. The fine-tuned 7B beats the best zero-shot frontier model by <b>+5.9 points</b> (83.2% vs 77.3%).</div>
       </div>
+
+      <!-- ── Visual charts: TEDS bars + dataset composition (pure CSS/SVG, no JS) ── -->
+      <div class="dt-charts">
+        <style>
+          .dt-charts{margin-top:26px;}
+          .dt-charts .chart-block{border:1px solid var(--line);border-radius:14px;background:var(--ink-2);padding:clamp(18px,2.4vw,26px);margin-bottom:18px;}
+          .dt-charts .cb-eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent);margin:0 0 4px;}
+          .dt-charts .cb-title{font-size:17px;font-weight:600;color:var(--paper);margin:0 0 16px;}
+          .dt-charts .bar-row{display:grid;grid-template-columns:148px 1fr 56px;align-items:center;gap:12px;margin:9px 0;}
+          .dt-charts .bar-label{font-size:13px;color:var(--muted);text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+          .dt-charts .bar-row.ours .bar-label{color:var(--paper);font-weight:600;}
+          .dt-charts .bar-track{height:18px;background:rgba(255,255,255,0.04);border-radius:5px;overflow:hidden;}
+          .dt-charts .bar-fill{height:100%;border-radius:5px;background:var(--accent-deep);}
+          .dt-charts .bar-row.ours .bar-fill{background:var(--accent);}
+          .dt-charts .bar-val{font-family:var(--mono);font-size:12.5px;color:var(--paper);text-align:right;}
+          .dt-charts .cb-note{font-family:var(--mono);font-size:11px;color:var(--muted-2);margin:12px 0 0;}
+          .dt-charts .dist-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;}
+          @media (max-width:560px){.dt-charts .bar-row{grid-template-columns:96px 1fr 48px;gap:8px;}}
+        </style>
+
+        <!-- TEDS by model -->
+        <div class="chart-block">
+          <p class="cb-eyebrow">Figure 1 &middot; Results</p>
+          <h4 class="cb-title">TEDS by model &mdash; 135 held-out tables</h4>
+          <div class="bar-row ours"><span class="bar-label">DrishtiTable (ours)</span><span class="bar-track"><span class="bar-fill" style="width:83.2%"></span></span><span class="bar-val">83.2%</span></div>
+          <div class="bar-row"><span class="bar-label">Claude Sonnet 4.6</span><span class="bar-track"><span class="bar-fill" style="width:77.3%"></span></span><span class="bar-val">77.3%</span></div>
+          <div class="bar-row"><span class="bar-label">Claude Opus 4.8</span><span class="bar-track"><span class="bar-fill" style="width:75.5%"></span></span><span class="bar-val">75.5%</span></div>
+          <div class="bar-row"><span class="bar-label">GPT-4o</span><span class="bar-track"><span class="bar-fill" style="width:71.1%"></span></span><span class="bar-val">71.1%</span></div>
+          <div class="bar-row"><span class="bar-label">GPT-5.1</span><span class="bar-track"><span class="bar-fill" style="width:69.9%"></span></span><span class="bar-val">69.9%</span></div>
+          <div class="bar-row"><span class="bar-label">Gemini 3.1 Pro</span><span class="bar-track"><span class="bar-fill" style="width:65.7%"></span></span><span class="bar-val">65.7%</span></div>
+          <p class="cb-note">TEDS (Tree-Edit-Distance Similarity), 0&ndash;100%. Higher is better.</p>
+        </div>
+
+        <!-- Dataset composition -->
+        <div class="dist-grid">
+          <!-- Table type -->
+          <div class="chart-block">
+            <p class="cb-eyebrow">Figure 2 &middot; Composition</p>
+            <h4 class="cb-title">By table type</h4>
+            <div class="bar-row"><span class="bar-label">Statistical</span><span class="bar-track"><span class="bar-fill" style="width:100%"></span></span><span class="bar-val">684</span></div>
+            <div class="bar-row"><span class="bar-label">Financial</span><span class="bar-track"><span class="bar-fill" style="width:67.1%"></span></span><span class="bar-val">459</span></div>
+            <div class="bar-row"><span class="bar-label">Lookup</span><span class="bar-track"><span class="bar-fill" style="width:31.7%"></span></span><span class="bar-val">217</span></div>
+            <div class="bar-row"><span class="bar-label">Comparison</span><span class="bar-track"><span class="bar-fill" style="width:7.2%"></span></span><span class="bar-val">49</span></div>
+          </div>
+          <!-- Subject -->
+          <div class="chart-block">
+            <p class="cb-eyebrow">Figure 3 &middot; Composition</p>
+            <h4 class="cb-title">By subject</h4>
+            <div class="bar-row"><span class="bar-label">Business Statistics</span><span class="bar-track"><span class="bar-fill" style="width:100%"></span></span><span class="bar-val">535</span></div>
+            <div class="bar-row"><span class="bar-label">Business &amp; Finance</span><span class="bar-track"><span class="bar-fill" style="width:82.1%"></span></span><span class="bar-val">439</span></div>
+            <div class="bar-row"><span class="bar-label">Quant. / OR</span><span class="bar-track"><span class="bar-fill" style="width:36.8%"></span></span><span class="bar-val">197</span></div>
+            <div class="bar-row"><span class="bar-label">Fin. Accounting</span><span class="bar-track"><span class="bar-fill" style="width:32.0%"></span></span><span class="bar-val">171</span></div>
+          </div>
+          <!-- Complexity -->
+          <div class="chart-block">
+            <p class="cb-eyebrow">Figure 4 &middot; Composition</p>
+            <h4 class="cb-title">By complexity</h4>
+            <div class="bar-row"><span class="bar-label">Simple</span><span class="bar-track"><span class="bar-fill" style="width:100%"></span></span><span class="bar-val">1136</span></div>
+            <div class="bar-row"><span class="bar-label">Complex</span><span class="bar-track"><span class="bar-fill" style="width:25.1%"></span></span><span class="bar-val">285</span></div>
+          </div>
+        </div>
+        <p class="cb-note" style="margin-top:4px;">Composition across the full DrishtiTable corpus (1,421 expert-annotated tables).</p>
+      </div>
+
       <p class="selfserve">To run your model on the public test set, use the <a href="https://huggingface.co/datasets/Nalandadata/DrishtiTable" target="_blank" rel="noopener">evaluation script on Hugging Face</a> &mdash; no form required. To submit to the held-out leaderboard, request access below.</p>
     </div>
 
