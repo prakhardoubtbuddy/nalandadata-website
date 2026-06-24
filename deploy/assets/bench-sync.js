@@ -41,11 +41,34 @@
     if (sync) { sync.textContent = '\u25CF live from Hugging Face'; sync.classList.add('live'); }
   }
 
+  function renderBars(rows) {
+    var box = document.getElementById('teds-bars');
+    if (!box || !rows || !rows.length) return;
+    var top = rows.slice(0, 6);          // show up to top 6
+    var max = top[0].teds || 100;        // scale to leader for visual range
+    var html = '';
+    for (var i = 0; i < top.length; i++) {
+      var r = top[i];
+      var ours = (r.category === 'fine-tuned') ||
+                 (r.model && r.model.indexOf('DrishtiTable') !== -1);
+      var pct = Math.max(2, (r.teds / max) * 100);
+      var label = ours ? 'DrishtiTable (ours)' : esc(r.model);
+      html += '<div class="bar-row' + (ours ? ' ours' : '') + '">' +
+        '<span class="bar-label">' + label + '</span>' +
+        '<span class="bar-track"><span class="bar-fill" style="width:' + pct.toFixed(1) + '%"></span></span>' +
+        '<span class="bar-val">' + r.teds.toFixed(1) + '%</span>' +
+      '</div>';
+    }
+    box.innerHTML = html;
+  }
+
   function load() {
     if (!window.fetch) return; // very old browsers: keep fallback
     fetch(ENDPOINT, { headers: { 'Accept': 'application/json' } })
       .then(function (r) { return r.ok ? r.json() : null; })
-      .then(function (data) { if (data && data.rows) render(data.rows); })
+      .then(function (data) {
+        if (data && data.rows) { render(data.rows); renderBars(data.rows); }
+      })
       .catch(function () { /* keep hardcoded fallback */ });
   }
 
