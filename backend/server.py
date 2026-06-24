@@ -646,6 +646,7 @@ async def delete_dataset(dataset_id: str):
 HF_MODEL_ID   = "Nalandadata/nalanda-qwen-7b-grpo"
 HF_DATASET_ID = "Nalandadata/NalandaJEENEETBench"
 DRISHTI_DATASET_ID = "Nalandadata/DrishtiTable"  # holds benchmark/leaderboard.jsonl
+HF_TOKEN = os.environ.get("HF_TOKEN", "")  # needed for gated repos (e.g. DrishtiTable)
 _hf_cache: Dict[str, Any] = {}
 HF_CACHE_TTL = 600  # 10 minutes
 
@@ -718,9 +719,12 @@ async def get_hf_leaderboard():
         if now - ts < HF_CACHE_TTL:
             return data
     url = f"https://huggingface.co/datasets/{DRISHTI_DATASET_ID}/resolve/main/benchmark/leaderboard.jsonl"
+    headers = {"User-Agent": "nalandadata-website/1.0"}
+    if HF_TOKEN:
+        headers["Authorization"] = f"Bearer {HF_TOKEN}"
     try:
-        async with httpx.AsyncClient(timeout=10.0) as client:
-            r = await client.get(url, headers={"User-Agent": "nalandadata-website/1.0"})
+        async with httpx.AsyncClient(timeout=10.0, follow_redirects=True) as client:
+            r = await client.get(url, headers=headers)
             r.raise_for_status()
             rows = []
             for line in r.text.splitlines():
