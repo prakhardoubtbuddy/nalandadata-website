@@ -13,6 +13,13 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 MARK_START="# >>> nalanda-static-pages >>>"
 MARK_END="# <<< nalanda-static-pages <<<"
 
+echo "==> 0. Regenerating leaderboard fallback from live Hugging Face data"
+# Keeps the hardcoded fallback rows in benchmarks.html in sync with HF (no drift).
+# Non-fatal: if HF is unreachable, the existing fallback is left as-is.
+if command -v python3 >/dev/null 2>&1; then
+  python3 "$SCRIPT_DIR/regen_fallback.py" || echo "    (regen skipped - HF unreachable; using existing fallback)"
+fi
+
 echo "==> 1. Placing static files in $STATIC_DIR"
 mkdir -p "$STATIC_DIR"
 cp "$SCRIPT_DIR/static-pages/"*.html "$STATIC_DIR/"
