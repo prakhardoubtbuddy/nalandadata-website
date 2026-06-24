@@ -68,6 +68,17 @@
     if (!box || !obj) return;
     var keys = Object.keys(obj);
     if (!keys.length) return;
+    // sort high -> low; cap at 6 bars (group the rest into Other) so charts never overflow
+    keys.sort(function (a, b) { return obj[b] - obj[a]; });
+    if (keys.length > 6) {
+      var head = keys.slice(0, 5), tail = keys.slice(5), otherSum = 0;
+      for (var t = 0; t < tail.length; t++) otherSum += obj[tail[t]];
+      var capped = {};
+      for (var h = 0; h < head.length; h++) capped[head[h]] = obj[head[h]];
+      capped['Other'] = otherSum;
+      obj = capped;
+      keys = Object.keys(obj);
+    }
     var max = 0;
     for (var k = 0; k < keys.length; k++) if (obj[keys[k]] > max) max = obj[keys[k]];
     if (!max) return;
