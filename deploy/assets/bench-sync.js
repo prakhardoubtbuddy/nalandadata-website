@@ -11,6 +11,9 @@
       .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   }
   function fmt(n) { return (typeof n === 'number') ? n.toFixed(1) + '%' : '—'; }
+  function notifySynced() {
+    try { document.dispatchEvent(new CustomEvent('bench:synced')); } catch (e) {}
+  }
 
   function render(rows) {
     var body = document.getElementById('drishti-lb-body');
@@ -39,6 +42,7 @@
 
     var sync = document.getElementById('lb-sync');
     if (sync) { sync.textContent = '\u25CF live from Hugging Face'; sync.classList.add('live'); }
+    notifySynced();
   }
 
   function renderBars(rows) {
@@ -131,6 +135,7 @@
     body.innerHTML = html;
     var sync = document.getElementById('nb-sync');
     if (sync) { sync.textContent = '\u25CF live from Hugging Face'; sync.classList.add('live'); }
+    notifySynced();
   }
 
   function loadNalandaBench() {

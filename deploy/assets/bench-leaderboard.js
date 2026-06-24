@@ -50,13 +50,20 @@
     var thead = table.tHead, tb = table.tBodies[0];
     if (!thead || !tb || !thead.rows[0]) return;
     var hrow = thead.rows[0];
+    // Idempotency guard: if already enhanced (header has the rank col), only
+    // re-enhance the BODY (rank/org cells), don't re-insert header columns.
+    var alreadyEnhanced = hrow.querySelector && hrow.querySelector('.lb-rank');
     var rows = Array.prototype.slice.call(tb.rows);
     if (rows.length < 2) return;
-    var rkH = document.createElement('th'); rkH.className = 'lb-rank'; rkH.textContent = '#';
-    hrow.insertBefore(rkH, hrow.firstChild);
-    var orgH = document.createElement('th'); orgH.textContent = 'Org';
-    hrow.insertBefore(orgH, hrow.cells[2]);
+    if (!alreadyEnhanced) {
+      var rkH = document.createElement('th'); rkH.className = 'lb-rank'; rkH.textContent = '#';
+      hrow.insertBefore(rkH, hrow.firstChild);
+      var orgH = document.createElement('th'); orgH.textContent = 'Org';
+      hrow.insertBefore(orgH, hrow.cells[2]);
+    }
     rows.forEach(function (r) {
+      if (r.querySelector && r.querySelector('.lb-rank')) return; // row already has rank/org
+
       var ours = r.classList.contains('best');
       var model = r.cells[0] ? r.cells[0].textContent : '';
       var rc = document.createElement('td'); rc.className = 'lb-rank';
@@ -145,13 +152,18 @@
     }
     draw();
   }
-  function init() {
+  function enhanceAll() {
     try {
-      injectCss();
       var tables = document.querySelectorAll('.bench-panel .tablecard table');
       Array.prototype.forEach.call(tables, enhance);
     } catch (e) { /* leave static tables intact */ }
   }
+  function init() {
+    try { injectCss(); } catch (e) {}
+    enhanceAll();
+  }
+  // Re-enhance when bench-sync replaces table bodies with live HF data.
+  document.addEventListener('bench:synced', enhanceAll);
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
 })();
