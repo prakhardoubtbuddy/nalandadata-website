@@ -329,6 +329,8 @@
     .hero-cta{flex-wrap:wrap;}
     .hero-cta .btn{flex:1 1 auto;text-align:center;}
   }
+  .lb-sync{font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--muted-2);text-transform:none;margin-left:8px;}
+  .lb-sync.live{color:var(--accent);}
 </style>
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -454,9 +456,9 @@
       <div class="tablecard">
         <div class="tbl-scroll">
           <table>
-            <caption>DrishtiTable &mdash; 135 held-out tables (image &rarr; HTML, TEDS)</caption>
+            <caption>DrishtiTable &mdash; 135 held-out tables (image &rarr; HTML, TEDS) <span id="lb-sync" class="lb-sync"></span></caption>
             <thead><tr><th>Model</th><th>Method</th><th style="text-align:right">TEDS</th><th style="text-align:right">S-TEDS</th><th style="text-align:right">&Delta; vs #1</th></tr></thead>
-            <tbody>
+            <tbody id="drishti-lb-body" data-fallback="1">
               <tr class="best"><th>DrishtiTable-Qwen2.5-VL-7B <span class="badge">ours</span></th><td>Fine-tuned (SFT)</td><td style="text-align:right">83.2%</td><td style="text-align:right">89.7%</td><td style="text-align:right">&mdash;</td></tr>
               <tr><th>Claude Sonnet 4.6</th><td>Zero-shot</td><td style="text-align:right">77.3%</td><td style="text-align:right">89.2%</td><td style="text-align:right" class="dneg">&minus;5.9</td></tr>
               <tr><th>Claude Opus 4.8</th><td>Zero-shot</td><td style="text-align:right">75.5%</td><td style="text-align:right">88.2%</td><td style="text-align:right" class="dneg">&minus;7.7</td></tr>
@@ -627,6 +629,7 @@
   </div>
 </footer>
 <script src="/bench-tabs.js" defer></script>
+<script src="/bench-sync.js" defer></script>
 <script src="/bench-leaderboard.js" defer></script>
 <script src="/menu.js" defer></script>
 </body>

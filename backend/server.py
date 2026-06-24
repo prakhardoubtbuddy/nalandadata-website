@@ -18,6 +18,7 @@ logger = logging.getLogger(__name__)
 
 # ── STANDARD IMPORTS ───────────────────────────────────────────────────────────
 import asyncio
+import json
 import os
 import shutil
 import time
@@ -644,6 +645,7 @@ async def delete_dataset(dataset_id: str):
 
 HF_MODEL_ID   = "Nalandadata/nalanda-qwen-7b-grpo"
 HF_DATASET_ID = "Nalandadata/NalandaJEENEETBench"
+DRISHTI_DATASET_ID = "Nalandadata/DrishtiTable"  # holds benchmark/leaderboard.jsonl
 _hf_cache: Dict[str, Any] = {}
 HF_CACHE_TTL = 600  # 10 minutes
 
@@ -702,6 +704,61 @@ async def get_hf_dataset():
         "last_modified": raw.get("lastModified", ""),
         "url": f"https://huggingface.co/datasets/{HF_DATASET_ID}",
     }
+
+
+@api_router.get("/hf/leaderboard")
+async def get_hf_leaderboard():
+    """Live DrishtiTable leaderboard, fetched from leaderboard.jsonl on the HF dataset.
+    Cached 10 min; serves stale on error. Used by the public /benchmarks page to
+    keep the leaderboard auto-synced with Hugging Face."""
+    now = time.monotonic()
+    cache_key = "hf_leaderboard"
+    if cache_key in _hf_cache:
+        data, ts = _hf_cache[cache_key]
+        if now - ts < HF_CACHE_TTL:
+            return data
+    url = f"https://huggingface.co/datasets/{DRISHTI_DATASET_ID}/resolve/main/benchmark/leaderboard.jsonl"
+    try:
+        async with httpx.AsyncClient(timeout=10.0) as client:
+            r = await client.get(url, headers={"User-Agent": "nalandadata-website/1.0"})
+            r.raise_for_status()
+            rows = []
+            for line in r.text.splitlines():
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    rows.append(json.loads(line))
+                except json.JSONDecodeError:
+                    continue
+    except Exception as exc:
+        logger.warning("HF leaderboard fetch failed: %s", exc)
+        if cache_key in _hf_cache:
+            return _hf_cache[cache_key][0]  # serve stale
+        raise HTTPException(status_code=502, detail="Failed to reach Hugging Face")
+
+    # Keep only the fields the frontend needs; sort by TEDS desc
+    clean = [
+        {
+            "model": x.get("model"),
+            "org": x.get("org"),
+            "method": x.get("method"),
+            "category": x.get("category"),
+            "teds": x.get("teds"),
+            "steds": x.get("steds"),
+            "n_samples": x.get("n_samples"),
+            "verified": x.get("verified", False),
+        }
+        for x in rows if x.get("teds") is not None
+    ]
+    clean.sort(key=lambda r: r["teds"], reverse=True)
+    result = {
+        "source": f"https://huggingface.co/datasets/{DRISHTI_DATASET_ID}",
+        "count": len(clean),
+        "rows": clean,
+    }
+    _hf_cache[cache_key] = (result, now)
+    return result
 
 
 # ── BLOG ROUTES ────────────────────────────────────────────────────────────────
