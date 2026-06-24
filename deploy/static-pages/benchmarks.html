@@ -320,7 +320,8 @@
     .statband > div:last-child{border-bottom:none;}
     h1{font-size:clamp(28px,8vw,40px) !important;}
     .hero .lede,.lede{font-size:16px !important;}
-    table{display:block;overflow-x:auto;}
+    /* tighten table cell padding on phones (tables already scroll via .tbl-scroll) */
+    thead th,tbody th,tbody td{padding-left:14px;padding-right:14px;}
     /* benchmark tabs: compact + clearly scrollable on phones */
     .bench-tab{min-width:auto;padding:12px 14px;}
     .bench-tab .tn{font-size:12.5px;}
