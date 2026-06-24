@@ -518,26 +518,32 @@
           <div class="chart-block">
             <p class="cb-eyebrow">Figure 2 &middot; Composition</p>
             <h4 class="cb-title">By table type</h4>
+            <div id="comp-table_type">
             <div class="bar-row"><span class="bar-label">Statistical</span><span class="bar-track"><span class="bar-fill w-100"></span></span><span class="bar-val">684</span></div>
             <div class="bar-row"><span class="bar-label">Financial</span><span class="bar-track"><span class="bar-fill w-671"></span></span><span class="bar-val">459</span></div>
             <div class="bar-row"><span class="bar-label">Lookup</span><span class="bar-track"><span class="bar-fill w-317"></span></span><span class="bar-val">217</span></div>
             <div class="bar-row"><span class="bar-label">Comparison</span><span class="bar-track"><span class="bar-fill w-72"></span></span><span class="bar-val">49</span></div>
+            </div>
           </div>
           <!-- Subject -->
           <div class="chart-block">
             <p class="cb-eyebrow">Figure 3 &middot; Composition</p>
             <h4 class="cb-title">By subject</h4>
+            <div id="comp-subject">
             <div class="bar-row"><span class="bar-label">Business Statistics</span><span class="bar-track"><span class="bar-fill w-100"></span></span><span class="bar-val">535</span></div>
             <div class="bar-row"><span class="bar-label">Business &amp; Finance</span><span class="bar-track"><span class="bar-fill w-821"></span></span><span class="bar-val">439</span></div>
             <div class="bar-row"><span class="bar-label">Quant. / OR</span><span class="bar-track"><span class="bar-fill w-368"></span></span><span class="bar-val">197</span></div>
             <div class="bar-row"><span class="bar-label">Fin. Accounting</span><span class="bar-track"><span class="bar-fill w-320"></span></span><span class="bar-val">171</span></div>
+            </div>
           </div>
           <!-- Complexity -->
           <div class="chart-block">
             <p class="cb-eyebrow">Figure 4 &middot; Composition</p>
             <h4 class="cb-title">By complexity</h4>
+            <div id="comp-complexity">
             <div class="bar-row"><span class="bar-label">Simple</span><span class="bar-track"><span class="bar-fill w-100"></span></span><span class="bar-val">1136</span></div>
             <div class="bar-row"><span class="bar-label">Complex</span><span class="bar-track"><span class="bar-fill w-251"></span></span><span class="bar-val">285</span></div>
+            </div>
           </div>
         </div>
         <p class="cb-note mt4">Composition across the full DrishtiTable corpus (1,421 expert-annotated tables).</p>
@@ -570,9 +576,9 @@
       <div class="tablecard">
         <div class="tbl-scroll">
           <table>
-            <caption>NalandaBench v1 &mdash; 800 held-out MCQs (JEE/NEET, science &amp; maths)</caption>
+            <caption>NalandaBench v1 &mdash; 800 held-out MCQs (JEE/NEET, science &amp; maths) <span id="nb-sync" class="lb-sync"></span></caption>
             <thead><tr><th>Model</th><th>Method</th><th style="text-align:right">Accuracy</th><th style="text-align:right">vs base</th></tr></thead>
-            <tbody>
+            <tbody id="nalandabench-lb-body">
               <tr class="best"><th>Nalanda Qwen 7B GRPO <span class="badge">ours</span></th><td>Verified-reward RL</td><td style="text-align:right">66.8%</td><td style="text-align:right" class="dpos">+6.3</td></tr>
               <tr><th>Qwen 2.5 7B Instruct <span class="who2">baseline</span></th><td>Base model</td><td style="text-align:right">60.5%</td><td style="text-align:right">&mdash;</td></tr>
             </tbody>

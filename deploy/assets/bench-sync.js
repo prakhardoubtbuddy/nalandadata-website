@@ -62,6 +62,73 @@
     box.innerHTML = html;
   }
 
+  // ---- composition charts (by table type / subject / complexity) ----
+  function renderDist(boxId, obj) {
+    var box = document.getElementById(boxId);
+    if (!box || !obj) return;
+    var keys = Object.keys(obj);
+    if (!keys.length) return;
+    var max = 0;
+    for (var k = 0; k < keys.length; k++) if (obj[keys[k]] > max) max = obj[keys[k]];
+    if (!max) return;
+    var html = '';
+    for (var i = 0; i < keys.length; i++) {
+      var label = keys[i], val = obj[label];
+      var pct = Math.max(1, (val / max) * 100);
+      html += '<div class="bar-row">' +
+        '<span class="bar-label">' + esc(label) + '</span>' +
+        '<span class="bar-track"><span class="bar-fill" style="width:' + pct.toFixed(1) + '%"></span></span>' +
+        '<span class="bar-val">' + val + '</span>' +
+      '</div>';
+    }
+    box.innerHTML = html;
+  }
+
+  function loadComposition() {
+    fetch('/api/hf/composition', { headers: { 'Accept': 'application/json' } })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) {
+        if (!d || !d.full) return;
+        renderDist('comp-table_type', d.full.table_type);
+        renderDist('comp-subject', d.full.subject);
+        renderDist('comp-complexity', d.full.complexity);
+      })
+      .catch(function () { /* keep fallback */ });
+  }
+
+  // ---- NalandaBench leaderboard table ----
+  function renderNB(rows) {
+    var body = document.getElementById('nalandabench-lb-body');
+    if (!body || !rows || !rows.length) return;
+    var html = '';
+    for (var i = 0; i < rows.length; i++) {
+      var r = rows[i];
+      var ours = (r.category === 'fine-tuned') ||
+                 (r.model && r.model.indexOf('Nalanda') !== -1 && r.category !== 'baseline');
+      var base = (r.category === 'baseline');
+      var nameExtra = ours ? ' <span class="badge">ours</span>' : (base ? ' <span class="who2">baseline</span>' : '');
+      var vb = (r.vs_base === 0 || r.vs_base == null)
+        ? '&mdash;'
+        : '<span class="dpos">+' + r.vs_base + '</span>';
+      html += '<tr' + (ours ? ' class="best"' : '') + '>' +
+        '<th>' + esc(r.model) + nameExtra + '</th>' +
+        '<td>' + esc(r.method || '') + '</td>' +
+        '<td style="text-align:right">' + fmt(r.accuracy) + '</td>' +
+        '<td style="text-align:right">' + vb + '</td>' +
+      '</tr>';
+    }
+    body.innerHTML = html;
+    var sync = document.getElementById('nb-sync');
+    if (sync) { sync.textContent = '\u25CF live from Hugging Face'; sync.classList.add('live'); }
+  }
+
+  function loadNalandaBench() {
+    fetch('/api/hf/nalandabench-leaderboard', { headers: { 'Accept': 'application/json' } })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) { if (d && d.rows) renderNB(d.rows); })
+      .catch(function () { /* keep fallback */ });
+  }
+
   function load() {
     if (!window.fetch) return; // very old browsers: keep fallback
     fetch(ENDPOINT, { headers: { 'Accept': 'application/json' } })
@@ -70,6 +137,8 @@
         if (data && data.rows) { render(data.rows); renderBars(data.rows); }
       })
       .catch(function () { /* keep hardcoded fallback */ });
+    loadComposition();
+    loadNalandaBench();
   }
 
   if (document.readyState === 'loading') {

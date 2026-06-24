@@ -765,6 +765,76 @@ async def get_hf_leaderboard():
     return result
 
 
+async def _fetch_hf_file(url: str, cache_key: str) -> str:
+    """Fetch a (possibly gated) raw file from HF as text. Cached; stale on error."""
+    now = time.monotonic()
+    if cache_key in _hf_cache:
+        data, ts = _hf_cache[cache_key]
+        if now - ts < HF_CACHE_TTL:
+            return data
+    headers = {"User-Agent": "nalandadata-website/1.0"}
+    if HF_TOKEN:
+        headers["Authorization"] = f"Bearer {HF_TOKEN}"
+    try:
+        async with httpx.AsyncClient(timeout=10.0, follow_redirects=True) as client:
+            r = await client.get(url, headers=headers)
+            r.raise_for_status()
+            text = r.text
+    except Exception as exc:
+        logger.warning("HF file fetch failed (%s): %s", url, exc)
+        if cache_key in _hf_cache:
+            return _hf_cache[cache_key][0]
+        raise HTTPException(status_code=502, detail="Failed to reach Hugging Face")
+    _hf_cache[cache_key] = (text, now)
+    return text
+
+
+@api_router.get("/hf/composition")
+async def get_hf_composition():
+    """Live DrishtiTable dataset composition, from benchmark/composition.json on HF."""
+    url = f"https://huggingface.co/datasets/{DRISHTI_DATASET_ID}/resolve/main/benchmark/composition.json"
+    text = await _fetch_hf_file(url, "hf_composition")
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError:
+        raise HTTPException(status_code=502, detail="Invalid composition.json from HF")
+
+
+@api_router.get("/hf/nalandabench-leaderboard")
+async def get_hf_nalandabench_leaderboard():
+    """Live NalandaBench leaderboard, from benchmark/leaderboard.jsonl on the HF dataset."""
+    url = f"https://huggingface.co/datasets/{HF_DATASET_ID}/resolve/main/benchmark/leaderboard.jsonl"
+    text = await _fetch_hf_file(url, "hf_nalandabench_lb")
+    rows = []
+    for line in text.splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            rows.append(json.loads(line))
+        except json.JSONDecodeError:
+            continue
+    clean = [
+        {
+            "model": x.get("model"),
+            "org": x.get("org"),
+            "method": x.get("method"),
+            "category": x.get("category"),
+            "accuracy": x.get("accuracy"),
+            "vs_base": x.get("vs_base"),
+            "n_samples": x.get("n_samples"),
+            "verified": x.get("verified", False),
+        }
+        for x in rows if x.get("accuracy") is not None
+    ]
+    clean.sort(key=lambda r: r["accuracy"], reverse=True)
+    return {
+        "source": f"https://huggingface.co/datasets/{HF_DATASET_ID}",
+        "count": len(clean),
+        "rows": clean,
+    }
+
+
 # ── BLOG ROUTES ────────────────────────────────────────────────────────────────
 
 @api_router.get("/blog/all", response_model=List[BlogPost])
