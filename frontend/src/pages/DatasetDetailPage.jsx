@@ -6,6 +6,7 @@ import {
   Database,
   Globe2,
   FileText,
+  Table2,
   ArrowRight,
   ArrowLeft,
   Download,
@@ -13,11 +14,127 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LeadCaptureForm } from "@/components/LeadCaptureForm";
+import { BenchmarkCharts } from "@/components/BenchmarkCharts";
 import { Helmet } from "react-helmet-async";
 import axios from "axios";
 import API from "@/lib/api";
 
 const datasetConfigs = {
+  "table-recognition": {
+    icon: Table2,
+    title: "DrishtiTable — Table Structure Recognition",
+    subtitle: "Image-to-HTML Benchmark for Indian Academic Tables",
+    overview:
+      "DrishtiTable is a benchmark for Table Structure Recognition (TSR): converting a table image into clean, machine-readable HTML — rows, columns, headers, and merged cells. It comprises 1,421 expert-annotated tables from S. Chand academic textbooks across statistics, finance, accounting, quantitative techniques and engineering. A 7B vision-language model fine-tuned on this data outperforms zero-shot GPT-4o by +12.1 TEDS points.",
+    useCases: [
+      "Document AI & intelligent document processing",
+      "Table extraction from textbooks and reports",
+      "Fine-tuning vision-language models for TSR",
+      "Benchmark evaluation of multimodal models",
+      "Financial statement and ledger digitization",
+    ],
+    structure: [
+      { field: "table_id", description: "Unique identifier per table" },
+      { field: "image_path", description: "Source table image" },
+      { field: "html", description: "Ground-truth HTML (thead/tbody, colspan/rowspan)" },
+      { field: "subject_domain", description: "Statistics / Finance / Accounting / OR / etc." },
+      { field: "table_type", description: "Statistical / Financial / Lookup / Comparison" },
+      { field: "is_complex", description: "Complexity flag (merged cells, multi-level headers)" },
+      { field: "hierarchy_levels", description: "Flat vs. multi-level header hierarchy" },
+    ],
+    stats: {
+      "Total Tables": "1,421",
+      "Train / Val / Test": "1,141 / 145 / 135",
+      "Best Model (TEDS)": "83.2%",
+      "vs GPT-4o": "+12.1 pts",
+      "Subjects": "6 families",
+      "Source Books": "9 (S. Chand)",
+    },
+    // Live SWE-bench++-style charts — all values from real annotated data
+    // (results/split_composition.json, full corpus = 1,421 tables).
+    benchmark: {
+      metricLabel: "TEDS",
+      oursLabel: "DrishtiTable (Ours)",
+      headline:
+        "Evaluated on a held-out test set with TEDS (Tree-Edit-Distance Similarity, 0–100%). A fine-tuned 7B open model beats every zero-shot frontier model. Distribution charts below reflect the full 1,421-table annotated corpus.",
+      models: [
+        { name: "DrishtiTable (Ours)", score: 83.2 },
+        { name: "GPT-4o", score: 71.1 },
+        { name: "GPT-4.1", score: 68.0 },
+        { name: "o4-mini", score: 61.4 },
+        { name: "Qwen2.5-VL-7B (base)", score: 58.8 },
+      ],
+      distributions: [
+        {
+          title: "Table-Type Distribution",
+          caption: "Full corpus (1,421 tables) by table type.",
+          colorful: true,
+          data: [
+            { name: "Statistical", value: 684 },
+            { name: "Financial", value: 459 },
+            { name: "Lookup", value: 217 },
+            { name: "Comparison", value: 49 },
+            { name: "Calculation", value: 6 },
+          ],
+        },
+        {
+          title: "Subject Distribution",
+          caption: "Full corpus by subject family.",
+          colorful: true,
+          data: [
+            { name: "Business Statistics", value: 535 },
+            { name: "Business & Finance", value: 439 },
+            { name: "Quant. Techniques / OR", value: 197 },
+            { name: "Financial Accounting", value: 171 },
+            { name: "Engineering / Science", value: 38 },
+            { name: "Ethics / Humanities", value: 33 },
+          ],
+        },
+        {
+          title: "Complexity Distribution",
+          caption: "Simple vs. complex tables across the full corpus.",
+          data: [
+            { name: "Simple", value: 1136 },
+            { name: "Complex", value: 285 },
+          ],
+        },
+        {
+          title: "Structural Features",
+          caption: "Tables exhibiting each structural feature (full corpus).",
+          data: [
+            { name: "Empty cells", value: 773 },
+            { name: "Complex", value: 285 },
+            { name: "Merged cells", value: 200 },
+            { name: "No grid lines", value: 174 },
+            { name: "Colored", value: 164 },
+            { name: "Multi-page", value: 64 },
+          ],
+        },
+      ],
+      source:
+        "Source: DrishtiTable corpus (1,421 expert-annotated tables). Metric: TEDS on the 135-table held-out test set.",
+    },
+    sampleData: [
+      {
+        tableType: "Financial — Trial Balance",
+        subject: "Financial Accounting",
+        structure: "Multi-level header, merged cells, 2 hierarchy levels",
+        html: "<table><thead><tr><th rowspan='2'>Particulars</th><th colspan='2'>Amount (Rs.)</th></tr><tr><th>Debit</th><th>Credit</th></tr></thead><tbody>…</tbody></table>",
+      },
+      {
+        tableType: "Statistical — Frequency Distribution",
+        subject: "Business Statistics",
+        structure: "Flat header, empty cells, no merged cells",
+        html: "<table><thead><tr><th>Class Interval</th><th>Frequency</th><th>Cumulative</th></tr></thead><tbody>…</tbody></table>",
+      },
+      {
+        tableType: "Lookup — Steam Table",
+        subject: "Engineering / Science",
+        structure: "Multi-column reference, numeric, no grid lines",
+        html: "<table><thead><tr><th>Temp (°C)</th><th>Pressure</th><th>h<sub>f</sub></th><th>h<sub>g</sub></th></tr></thead><tbody>…</tbody></table>",
+      },
+    ],
+  },
   "stem-reasoning": {
     icon: Brain,
     title: "STEM Reasoning & Problem Solving",
@@ -347,6 +464,15 @@ export default function DatasetDetailPage() {
           </motion.div>
         </div>
       </section>
+
+      {/* Benchmark & Composition charts (SWE-bench++-style) — only when present */}
+      {dataset.benchmark && (
+        <section className="py-12 border-t border-white/5">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <BenchmarkCharts benchmark={dataset.benchmark} />
+          </div>
+        </section>
+      )}
 
       {/* Main Content */}
       <section className="py-12">

@@ -17,8 +17,23 @@ function getTagClass(tag) {
 
 const sections = [
   {
+    id: "table-recognition",
+    label: "A — DOCUMENT AI & TABLE RECOGNITION",
+    slug: "table-recognition",
+    datasets: [
+      {
+        tag: "Benchmark / Vision-Language",
+        title: "DrishtiTable — Table Structure Recognition",
+        description: "1,421 expert-annotated tables from S. Chand academic textbooks for image-to-HTML Table Structure Recognition (TSR). A fine-tuned 7B vision-language model beats zero-shot GPT-4o by +12.1 TEDS points. Includes a held-out benchmark with TEDS scoring and full composition breakdowns.",
+        size: "1,421 tables",
+        format: "Image + HTML + metadata",
+        language: "English",
+      },
+    ],
+  },
+  {
     id: "stem-reasoning",
-    label: "A — STEM REASONING & PROBLEM SOLVING",
+    label: "B — STEM REASONING & PROBLEM SOLVING",
     slug: "stem-reasoning",
     datasets: [
       {
