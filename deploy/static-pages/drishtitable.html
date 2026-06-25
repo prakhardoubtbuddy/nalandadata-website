@@ -232,23 +232,23 @@
     <div class="wrap">
       <p class="eyebrow">Case study · Reading tables from images</p>
       <h1>Teaching a small model to read tables <span class="hl">better than the frontier</span>.</h1>
-      <p class="cs-deck">A table packs data into rows, columns and merged headers, and to use any of it a model has to rebuild that structure exactly, every cell in the right place. Get one wrong and the data is wrong. We took <b>1,421 tables</b> spanning subjects like accounting, statistics and operations research, each labelled by hand with its correct structure, and fine-tuned small open models that can read images, training them to turn a table picture into clean, machine-readable HTML. The best, an 8B model, scores <b>84.9% on TEDS</b>, a standard measure of how closely the output matches the real table. That&rsquo;s ahead of every big cloud model we tested, including GPT-5.5 and Gemini 3 Pro. The released 7B model is right behind, and the model and a data sample are public.</p>
+      <p class="cs-deck">A table packs data into rows, columns and merged headers, and to use any of it a model has to rebuild that structure exactly, every cell in the right place. Get one wrong and the data is wrong. We took <b>1,421 tables</b> spanning subjects like accounting, statistics and operations research, each labelled by hand with its correct structure, and fine-tuned a small open vision-language model to turn a table picture into clean, machine-readable HTML. The released model scores <b>83.2% on TEDS</b>, a standard measure of how closely the output matches the real table &mdash; ahead of every big cloud model we tested, including GPT-4o, GPT-5.1 and Gemini 3.1 Pro. The model and a data sample are public.</p>
 
       <div class="metastrip">
         <div><div class="mk">Method</div><div class="mv">Supervised fine-tuning (QLoRA)</div></div>
         <div><div class="mk">Domain</div><div class="mv">Table structure recognition</div></div>
-        <div><div class="mk">Base models</div><div class="mv">Qwen2.5-VL-7B / Qwen3-VL-8B</div></div>
+        <div><div class="mk">Base model</div><div class="mv">Qwen2.5-VL-7B</div></div>
         <div><div class="mk">Evaluation</div><div class="mv">135 held-out tables · TEDS / S-TEDS</div></div>
       </div>
 
       <div class="cs-stats">
         <div class="c win">
-          <div class="num">84.9<span class="u">% TEDS</span></div>
-          <div class="lbl">The best fine-tuned model on the 135-table held-out set &mdash; the top score of every system we tested.</div>
+          <div class="num">83.2<span class="u">% TEDS</span></div>
+          <div class="lbl">The released fine-tuned model on the 135-table held-out set &mdash; the top score of every system we tested.</div>
         </div>
         <div class="c">
-          <div class="num">+7.3<span class="u">pts</span></div>
-          <div class="lbl">TEDS margin over the strongest frontier cloud model, GPT-5.5, on the same tables.</div>
+          <div class="num">+5.9<span class="u">pts</span></div>
+          <div class="lbl">TEDS margin over the strongest frontier cloud model, Claude Sonnet 4.6, on the same tables.</div>
         </div>
         <div class="c">
           <div class="num">1,421</div>
@@ -326,7 +326,7 @@
         <div class="stp">
           <div class="no">03 &middot; Fine-tune</div>
           <h4>Efficient adaptation (QLoRA)</h4>
-          <p>Supervised fine-tuning of two open vision-language models, <b>Qwen2.5-VL-7B and Qwen3-VL-8B</b>, with LoRA adapters on the vision and language layers under 4-bit quantisation. Rank 32, three epochs, on the 1,141-table training split. Modest compute.</p>
+          <p>Supervised fine-tuning of an open vision-language model, <b>Qwen2.5-VL-7B</b>, with LoRA adapters on the vision and language layers under 4-bit quantisation. Rank 32, three epochs, on the 1,141-table training split. Modest compute &mdash; about 35 minutes on a single A100.</p>
         </div>
         <div class="stp">
           <div class="no">04 &middot; Evaluate</div>
@@ -340,32 +340,72 @@
   <!-- THE RESULT -->
   <section class="band">
     <div class="wrap">
-      <div class="sec-head"><p class="eyebrow">The result</p><h2>A fine-tuned 8B model tops every frontier system we tested.</h2>
-        <p class="lead">All scores are TEDS and S-TEDS on the same 135-table held-out set. The fine-tuned models are specialised on the domain; the cloud models are general-purpose, prompted zero-shot with the identical instruction.</p>
+      <div class="sec-head"><p class="eyebrow">The result</p><h2>The released fine-tuned model tops every frontier system we tested.</h2>
+        <p class="lead">All scores are TEDS and S-TEDS on the same 135-table held-out set. The fine-tuned model is specialised on the domain; the cloud models are general-purpose, prompted zero-shot with the identical instruction.</p>
       </div>
       <div class="tablecard">
         <div class="tbl-scroll">
           <table>
-            <caption>DrishtiTable test set (135 tables) &middot; higher is better</caption>
+            <caption>DrishtiTable test set (135 tables) &middot; higher is better <span id="cs-lb-sync" class="cs-sync"></span></caption>
             <thead>
               <tr>
                 <th scope="col">Model</th>
-                <th scope="col">TEDS (%)</th>
-                <th scope="col">S-TEDS (%)</th>
+                <th scope="col">Method</th>
+                <th scope="col" style="text-align:right">TEDS (%)</th>
+                <th scope="col" style="text-align:right">S-TEDS (%)</th>
               </tr>
             </thead>
-            <tbody>
-              <tr class="best"><th scope="row">Qwen3-VL-8B <span style="font-weight:400;color:var(--muted)">&middot; fine-tuned</span></th><td class="pos">84.89</td><td>90.43</td></tr>
-              <tr><th scope="row">Qwen2.5-VL-7B <span style="font-weight:400;color:var(--muted)">&middot; fine-tuned, released</span></th><td class="pos">83.20</td><td>89.70</td></tr>
-              <tr><th scope="row">GPT-5.5</th><td>77.58</td><td>89.86</td></tr>
-              <tr><th scope="row">GPT-5.4</th><td>73.64</td><td>85.66</td></tr>
-              <tr><th scope="row">Gemini 3 Pro Preview</th><td>67.95</td><td>77.03</td></tr>
-              <tr><th scope="row">Gemini 3.1 Pro Preview</th><td>66.96</td><td>76.62</td></tr>
-              <tr><th scope="row">Claude Sonnet 4.6</th><td>53.53</td><td>61.83</td></tr>
+            <tbody id="cs-lb-body" data-fallback="1">
+              <tr class="best"><th scope="row">DrishtiTable-Qwen2.5-VL-7B <span style="font-weight:400;color:var(--muted)">&middot; released</span></th><td>Fine-tuned (SFT)</td><td class="pos" style="text-align:right">83.2</td><td style="text-align:right">89.7</td></tr>
+              <tr><th scope="row">Claude Sonnet 4.6</th><td>Zero-shot</td><td style="text-align:right">77.3</td><td style="text-align:right">89.2</td></tr>
+              <tr><th scope="row">Claude Opus 4.8</th><td>Zero-shot</td><td style="text-align:right">75.5</td><td style="text-align:right">88.2</td></tr>
+              <tr><th scope="row">GPT-4o</th><td>Zero-shot</td><td style="text-align:right">71.1</td><td style="text-align:right">84.3</td></tr>
+              <tr><th scope="row">GPT-5.1</th><td>Zero-shot</td><td style="text-align:right">69.9</td><td style="text-align:right">83.3</td></tr>
+              <tr><th scope="row">Gemini 3.1 Pro</th><td>Zero-shot</td><td style="text-align:right">65.7</td><td style="text-align:right">73.6</td></tr>
             </tbody>
           </table>
         </div>
-        <p class="cond"><b>How to read this.</b> The fine-tuned models are specialised on the target domain and evaluated on a held-out set; the cloud models are general-purpose, prompted zero-shot with the same instruction. This measures in-domain table structure recognition, not general capability. The two metrics differ on purpose: full TEDS scores content and structure together, where the 8B fine-tune leads by 7.3 points; structure-only S-TEDS is closer at the top, so the fine-tune&rsquo;s clearest advantage is getting the whole table right, cells and all. The publicly released checkpoint is the Qwen2.5-VL-7B at 83.2 TEDS, itself ahead of every cloud model tested; the 84.9 headline is the Qwen3-VL-8B variant.</p>
+        <p class="cond"><b>How to read this.</b> The fine-tuned model is specialised on the target domain and evaluated on a held-out set; the cloud models are general-purpose, prompted zero-shot with the same instruction. This measures in-domain table structure recognition, not general capability. The publicly released checkpoint is the Qwen2.5-VL-7B at 83.2 TEDS &mdash; ahead of every cloud model tested. Scores are kept in sync with the <a href="https://huggingface.co/datasets/Nalandadata/DrishtiTable" target="_blank" rel="noopener" style="color:var(--accent)">live leaderboard on Hugging Face</a>.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- DATASET COMPOSITION (live-synced from HF) -->
+  <section class="band">
+    <div class="wrap">
+      <div class="sec-head"><p class="eyebrow">Composition</p><h2>What&rsquo;s in the dataset.</h2>
+        <p class="lead">The full 1,421-table corpus by table type, subject and complexity. Over 80% are real exam/textbook tables with non-trivial structure. <span id="cs-comp-sync" class="cs-sync"></span></p>
+      </div>
+      <style>
+        .cs-dist-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:8px;}
+        @media(max-width:820px){.cs-dist-grid{grid-template-columns:1fr;}}
+        .cs-dist{border:1px solid var(--line);border-radius:14px;background:var(--ink-2);padding:24px;}
+        .cs-dist h4{font-size:15px;text-align:center;margin:0 0 18px;color:var(--paper);font-weight:600;}
+        .cs-bar{display:grid;grid-template-columns:118px 1fr 44px;align-items:center;gap:9px;margin:9px 0;}
+        .cs-bar .l{font-size:12px;color:var(--muted);text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+        .cs-bar .t{height:16px;background:rgba(255,255,255,.04);border-radius:5px;overflow:hidden;}
+        .cs-bar .f{display:block;height:16px;border-radius:5px;background:var(--accent-deep);}
+        .cs-bar .v{font-family:var(--mono);font-size:12px;color:var(--paper);text-align:right;}
+        .cs-sync{font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--muted-2);text-transform:none;}
+        .cs-sync.live{color:var(--accent);}
+      </style>
+      <div class="cs-dist-grid">
+        <div class="cs-dist"><h4>By table type</h4><div id="cs-comp-table_type">
+          <div class="cs-bar"><span class="l">Statistical</span><span class="t"><span class="f" style="width:100%"></span></span><span class="v">684</span></div>
+          <div class="cs-bar"><span class="l">Financial</span><span class="t"><span class="f" style="width:67.1%"></span></span><span class="v">459</span></div>
+          <div class="cs-bar"><span class="l">Lookup</span><span class="t"><span class="f" style="width:31.7%"></span></span><span class="v">217</span></div>
+          <div class="cs-bar"><span class="l">Comparison</span><span class="t"><span class="f" style="width:7.2%"></span></span><span class="v">49</span></div>
+        </div></div>
+        <div class="cs-dist"><h4>By subject</h4><div id="cs-comp-subject">
+          <div class="cs-bar"><span class="l">Bus. Statistics</span><span class="t"><span class="f" style="width:100%"></span></span><span class="v">535</span></div>
+          <div class="cs-bar"><span class="l">Bus. &amp; Finance</span><span class="t"><span class="f" style="width:82.1%"></span></span><span class="v">439</span></div>
+          <div class="cs-bar"><span class="l">Quant / OR</span><span class="t"><span class="f" style="width:36.8%"></span></span><span class="v">197</span></div>
+          <div class="cs-bar"><span class="l">Fin. Accounting</span><span class="t"><span class="f" style="width:32%"></span></span><span class="v">171</span></div>
+        </div></div>
+        <div class="cs-dist"><h4>By complexity</h4><div id="cs-comp-complexity">
+          <div class="cs-bar"><span class="l">Simple</span><span class="t"><span class="f" style="width:100%"></span></span><span class="v">1136</span></div>
+          <div class="cs-bar"><span class="l">Complex</span><span class="t"><span class="f" style="width:25.1%"></span></span><span class="v">285</span></div>
+        </div></div>
       </div>
     </div>
   </section>
@@ -384,7 +424,7 @@
         <li><b>A dropped or invented column.</b> A column missed entirely, or a phantom one added, so every row after it sits one place off.</li>
         <li><b>Right text, wrong place.</b> The words read correctly but land in the wrong cell. The content is there; the structure is not.</li>
       </ul>
-      <p class="closing">Fine-tuning on gold-annotated tables fixes these directly, because the model is trained to reproduce the exact structure, cell for cell. On the held-out tables the best fine-tuned model reaches 84.9% TEDS, ahead of every frontier cloud model tested and 7.3 points clear of the strongest, GPT-5.5. The publicly released 7B model is right behind at 83.2, itself ahead of every cloud system. The tables that general models mangle now come back as clean, faithful HTML.</p>
+      <p class="closing">Fine-tuning on gold-annotated tables fixes these directly, because the model is trained to reproduce the exact structure, cell for cell. On the held-out tables the released fine-tuned model reaches 83.2% TEDS, ahead of every frontier cloud model tested and 5.9 points clear of the strongest, Claude Sonnet 4.6. The tables that general models mangle now come back as clean, faithful HTML.</p>
       <p class="closing">The model and a dataset sample are public. And because the gain came from a small set of gold-annotated tables and an efficient fine-tune, the same recipe carries to any document domain where the structure has to be right &mdash; financial statements, regulatory filings, forms, scientific tables.</p>
     </div>
   </section>
@@ -415,7 +455,7 @@ processor = AutoProcessor.from_pretrained(repo)
 inputs = processor(images=table_image, text="Convert this table to HTML.",
                    return_tensors="pt").to(model.device)
 print(processor.decode(model.generate(**inputs)[0], skip_special_tokens=True))</code></pre>
-        <p class="repro-note">The released checkpoint is the Qwen2.5-VL-7B fine-tune &mdash; 83.2% TEDS, itself ahead of every cloud model tested. The 84.9% headline is the Qwen3-VL-8B variant.</p>
+        <p class="repro-note">The released checkpoint is the Qwen2.5-VL-7B fine-tune &mdash; 83.2% TEDS, ahead of every cloud model tested. A larger Qwen3-VL-8B variant is in progress.</p>
       </div>
     </div>
   </section>
@@ -435,7 +475,7 @@ print(processor.decode(model.generate(**inputs)[0], skip_special_tokens=True))</
         </details>
         <details>
           <summary>Which model is released?<span class="ic">+</span></summary>
-          <div class="ans">The Qwen2.5-VL-7B fine-tune, at 83.2% TEDS &mdash; already ahead of every cloud model tested. The 84.9% headline is the larger Qwen3-VL-8B variant, which needs more training data to realise its edge.</div>
+          <div class="ans">The Qwen2.5-VL-7B fine-tune, at 83.2% TEDS &mdash; ahead of every cloud model tested. A larger Qwen3-VL-8B variant is in progress and will be published once its evaluation is finalised.</div>
         </details>
         <details>
           <summary>What about structure-only scores?<span class="ic">+</span></summary>
@@ -510,5 +550,6 @@ print(processor.decode(model.generate(**inputs)[0], skip_special_tokens=True))</
 </footer>
 
 <script src="/menu.js" defer></script>
+<script src="/cs-sync.js" defer></script>
 </body>
 </html>
