@@ -3,15 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DrishtiTable — Table Structure Recognition · Nalandadata</title>
-<meta name="description" content="DrishtiTable: a benchmark and fine-tuned vision-language model that converts table images into clean HTML. A domain-fine-tuned 7B model leads every frontier model on held-out Indian-textbook tables.">
-<meta property="og:title" content="DrishtiTable — Table Structure Recognition · Nalandadata">
-<meta property="og:description" content="A domain-fine-tuned 7B model leads every frontier model on Indian-textbook table structure recognition (TEDS). Open dataset + model on Hugging Face.">
-<link rel="icon" href="/favicon.ico" sizes="any">
-<link rel="icon" type="image/svg+xml" href="/favicon.svg">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<title>DrishtiTable — Case study · Nalandadata</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -21,34 +13,30 @@
     --line:#2A2622; --line-soft:#1C1A17;
     --paper:#F0EBE0; --muted:#9A938A; --muted-2:#7A746B;
     --accent:#C8A96E; --accent-deep:#A6884F; --accent-tint:rgba(200,169,110,0.12);
-    --sans:"Space Grotesk",Inter,system-ui,sans-serif;
-    --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+    --warn:#C45C45; --warn-tint:rgba(196,92,69,0.14);
+    --sans:"Space Grotesk",Inter,system-ui,-apple-system,sans-serif;
+    --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
     --maxw:1140px; --pad:clamp(20px,5vw,64px);
   }
   *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
   body{margin:0;background:var(--ink);color:var(--paper);font-family:var(--sans);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;}
   ::selection{background:var(--accent);color:var(--ink);}
-  a{color:inherit;text-decoration:none;cursor:pointer;}
-  h1,h2,h3,h4{font-weight:800;letter-spacing:-0.025em;line-height:1.1;margin:0;}
-  a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:3px;}
+  a{color:inherit;text-decoration:none;}
   .wrap{max-width:var(--maxw);margin:0 auto;padding-left:var(--pad);padding-right:var(--pad);}
-  .band{padding:clamp(48px,7vw,90px) 0;border-top:1px solid var(--line-soft);}
-  .band.alt{background:var(--ink-2);}
-  .eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin:0 0 16px;display:flex;align-items:center;gap:11px;justify-content:center;}
+  h1,h2,h3,h4{font-weight:800;letter-spacing:-0.025em;line-height:1.08;margin:0;}
+  a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:3px;}
+  .eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin:0 0 18px;display:flex;align-items:center;gap:11px;}
   .eyebrow::before{content:"";width:24px;height:1px;background:var(--accent);}
-  .sec-head{text-align:center;max-width:64ch;margin:0 auto 40px;}
-  .sec-head h2{font-size:clamp(28px,4vw,42px);}
-  .sec-head p{color:var(--muted);margin-top:16px;font-size:clamp(15px,1.6vw,18px);}
+
+  .todo{font-family:var(--mono);font-size:9.5px;letter-spacing:0.1em;text-transform:uppercase;background:var(--warn-tint);color:var(--warn);border:1px solid var(--warn);padding:2px 7px;border-radius:5px;font-weight:700;margin-left:8px;vertical-align:middle;}
+  .ribbon{background:var(--warn);color:#241808;font-family:var(--mono);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;text-align:center;padding:7px 12px;font-weight:700;}
 
   header{position:sticky;top:0;z-index:60;background:rgba(10,10,10,0.86);backdrop-filter:blur(12px);border-bottom:1px solid var(--line-soft);}
   header .wrap{display:flex;align-items:center;justify-content:space-between;height:66px;gap:20px;position:relative;}
   .brand{display:flex;align-items:baseline;gap:11px;}
   .brand .name{font-weight:800;font-size:19px;letter-spacing:-0.02em;}
   .brand .tag{font-family:var(--mono);font-size:10px;letter-spacing:0.16em;color:var(--muted);text-transform:uppercase;}
-  nav.main{display:flex;align-items:center;gap:26px;}
-  nav.main a{font-size:14.5px;color:var(--muted);transition:color .15s;}
-  nav.main a:hover,nav.main a.active{color:var(--paper);}
-  nav.main a.active{color:var(--accent);}
   .nav-cta{font-family:var(--mono);font-size:12.5px;letter-spacing:0.03em;color:var(--ink);background:var(--accent);padding:9px 16px;border-radius:7px;font-weight:600;}
   .nav-cta:hover{background:#D8BC82;}
   .menu-links{display:flex;align-items:center;gap:26px;}
@@ -63,98 +51,154 @@
     .menu-links .nav-cta{margin:12px var(--pad);text-align:center;}
   }
 
-  .sync-strip{background:var(--ink-2);border-bottom:1px solid var(--line-soft);font-family:var(--mono);font-size:11px;color:var(--muted);text-align:center;padding:7px;}
-  .sync-strip b{color:var(--accent);}
+  main{display:block;}
+  .pagehead{padding:clamp(40px,6vw,72px) 0 0;}
+  .crumb{font-family:var(--mono);font-size:12px;color:var(--muted);margin-bottom:0;}
+  .crumb a{color:var(--accent);}
 
-  .hero{padding:clamp(56px,8vw,104px) 0 clamp(36px,5vw,60px);position:relative;overflow:hidden;}
-  .hero-grid{position:absolute;inset:0;background-image:linear-gradient(var(--line-soft) 1px,transparent 1px),linear-gradient(90deg,var(--line-soft) 1px,transparent 1px);background-size:60px 60px;-webkit-mask-image:radial-gradient(115% 85% at 80% 8%,#000,transparent 60%);mask-image:radial-gradient(115% 85% at 80% 8%,#000,transparent 60%);opacity:.5;}
-  .hero .wrap{position:relative;}
-  .hero h1{font-size:clamp(34px,6vw,62px);max-width:18ch;}
-  .hero h1 .hl{color:var(--accent);}
-  .hero .lede{font-size:clamp(16px,1.9vw,20px);color:var(--muted);max-width:62ch;margin-top:24px;}
-  .hero .lede b{color:var(--paper);font-weight:600;}
-  .tags{display:flex;gap:10px;margin-top:26px;flex-wrap:wrap;}
-  .tag{font-family:var(--mono);font-size:12px;border:1px solid var(--accent-deep);color:var(--accent);border-radius:20px;padding:5px 14px;}
-  .hero-links{display:flex;gap:14px;margin-top:24px;flex-wrap:wrap;}
-  .hero-links a{font-family:var(--mono);font-size:13px;color:var(--muted);border:1px solid var(--line);padding:9px 16px;border-radius:8px;transition:.15s;}
-  .hero-links a:hover{border-color:var(--accent);color:var(--accent);}
+  .cs-hero{padding:clamp(28px,4vw,44px) 0 clamp(28px,4vw,40px);}
+  .cs-hero h1{font-size:clamp(30px,5vw,56px);max-width:18ch;}
+  .cs-hero h1 .hl{color:var(--accent);}
+  .cs-deck{font-size:clamp(16px,1.8vw,20px);color:var(--muted);max-width:62ch;margin-top:22px;}
+  .cs-deck b{color:var(--paper);font-weight:600;}
 
-  .lb-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
-  @media(max-width:860px){.lb-grid{grid-template-columns:1fr;}}
-  .lb-card{border:1px solid var(--line);border-radius:16px;background:var(--ink-2);padding:clamp(20px,2.4vw,28px);}
-  .lb-card h3{font-size:17px;margin-bottom:4px;}
-  .lb-card .sub{font-family:var(--mono);font-size:11px;color:var(--muted-2);text-transform:uppercase;letter-spacing:.1em;margin-bottom:18px;}
-  .row{display:grid;grid-template-columns:158px 1fr 50px;align-items:center;gap:10px;margin:8px 0;}
-  .row .lab{font-size:12.5px;color:var(--muted);text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .row.win .lab{color:var(--paper);font-weight:600;}
-  .track{height:18px;background:rgba(255,255,255,.04);border-radius:5px;overflow:hidden;}
-  .fill{display:block;height:18px;border-radius:5px;background:var(--accent-deep);}
-  .row.win .fill{background:var(--accent);}
-  .val{font-family:var(--mono);font-size:12px;text-align:right;}
-  @media(max-width:480px){.row{grid-template-columns:118px 1fr 44px;}}
+  .metastrip{display:flex;flex-wrap:wrap;gap:0;border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:34px;background:var(--ink-2);}
+  .metastrip div{padding:16px 22px;border-right:1px solid var(--line);flex:1;min-width:160px;}
+  .metastrip div:last-child{border-right:none;}
+  .metastrip .mk{font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted-2);}
+  .metastrip .mv{font-size:14px;margin-top:6px;color:var(--paper);}
 
-  .feat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;}
-  @media(max-width:900px){.feat-grid{grid-template-columns:1fr 1fr;}}
-  @media(max-width:520px){.feat-grid{grid-template-columns:1fr;}}
-  .feat{border:1px solid var(--line);border-radius:14px;background:var(--panel);padding:26px;transition:.2s;}
-  .feat:hover{border-color:var(--accent-deep);}
-  .feat .ic{font-family:var(--mono);color:var(--accent);font-size:12px;letter-spacing:.1em;margin-bottom:14px;}
-  .feat h3{font-size:16px;margin-bottom:10px;}
-  .feat p{font-size:14px;color:var(--muted);margin:0;}
+  .cs-stats{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-top:18px;background:var(--ink-2);}
+  .cs-stats .c{padding:clamp(22px,3vw,32px);border-right:1px solid var(--line);}
+  .cs-stats .c:last-child{border-right:none;}
+  .cs-stats .num{font-family:var(--mono);font-size:clamp(30px,4.5vw,46px);font-weight:600;line-height:1;}
+  .cs-stats .c.win .num{color:var(--accent);}
+  .cs-stats .c.warn .num{color:var(--warn);}
+  .cs-stats .num .u{font-size:.5em;color:var(--muted);margin-left:2px;}
+  .cs-stats .lbl{margin-top:14px;font-size:13.5px;color:var(--muted);line-height:1.5;}
 
-  .toggle{display:flex;gap:10px;justify-content:center;margin:0 0 30px;}
-  .toggle button{-webkit-appearance:none;appearance:none;font-family:var(--mono);font-size:12.5px;color:var(--muted);background:transparent;border:1px solid var(--line);border-radius:20px;padding:8px 22px;cursor:pointer;transition:.15s;}
-  .toggle button.active{color:var(--ink);background:var(--accent);border-color:var(--accent);font-weight:600;}
-  .toggle button:hover:not(.active){border-color:var(--accent);color:var(--accent);}
-  .dist-set{display:none;} .dist-set.active{display:block;}
-  .set-meta{text-align:center;font-family:var(--mono);font-size:11px;color:var(--muted-2);margin-bottom:18px;}
-  .dist-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
-  @media(max-width:820px){.dist-grid{grid-template-columns:1fr;}}
-  .dist-card{border:1px solid var(--line);border-radius:14px;background:var(--ink-2);padding:24px;}
-  .dist-card h4{font-size:15px;text-align:center;margin-bottom:18px;}
-  .drow{display:grid;grid-template-columns:104px 1fr 40px;align-items:center;gap:8px;margin:8px 0;}
-  .drow .lab{font-size:12px;color:var(--muted);text-align:right;}
-  .drow .val{font-size:12px;font-family:var(--mono);}
+  section.band{padding:clamp(48px,7vw,90px) 0;border-top:1px solid var(--line-soft);}
+  section.band.alt{background:var(--ink-2);}
+  .sec-head{max-width:64ch;}
+  h2{font-size:clamp(24px,3.4vw,38px);}
+  .sec-head .lead{color:var(--muted);font-size:clamp(15px,1.5vw,18px);margin-top:18px;}
+  .sec-head .lead b{color:var(--paper);font-weight:600;}
 
-  .steps{display:flex;flex-direction:column;gap:14px;max-width:860px;margin:0 auto;}
-  .step{display:grid;grid-template-columns:48px 1fr;gap:16px;border:1px solid var(--line);border-radius:14px;background:var(--ink-2);padding:20px 24px;}
-  .step .num{width:34px;height:34px;border-radius:50%;background:var(--accent-tint);color:var(--accent);font-family:var(--mono);font-weight:700;display:flex;align-items:center;justify-content:center;font-size:14px;}
-  .step h3{font-size:16px;margin-bottom:6px;}
-  .step p{font-size:14px;color:var(--muted);margin:0;}
+  .problems{list-style:none;padding:0;margin:34px 0 0;display:grid;gap:14px;max-width:74ch;}
+  .problems li{border-left:2px solid var(--accent-deep);padding:4px 0 4px 18px;font-size:15px;color:#CFC8BB;}
+  .problems li b{color:var(--paper);font-weight:600;}
 
-  .access-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;max-width:920px;margin:0 auto;}
-  @media(max-width:700px){.access-grid{grid-template-columns:1fr;}}
-  .access{border:1px solid var(--line);border-radius:16px;background:var(--ink-2);padding:30px;}
-  .access .pill{display:inline-block;font-family:var(--mono);font-size:11px;border:1px solid var(--accent-deep);color:var(--accent);border-radius:20px;padding:4px 14px;margin-bottom:16px;}
-  .access h3{font-size:18px;margin-bottom:8px;}
-  .access p{color:var(--muted);font-size:14.5px;margin:0 0 18px;}
-  .access a.cta{font-family:var(--mono);font-size:13px;color:var(--accent);}
-  .note{text-align:center;font-family:var(--mono);font-size:11px;color:var(--muted-2);margin-top:30px;}
-  .live-tag{font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--muted-2);text-transform:none;}
-  .live-tag.live{color:var(--accent);}
+  .examples{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:34px;}
+  .ex{border:1px solid var(--line);border-radius:14px;padding:22px;background:var(--ink);display:flex;flex-direction:column;}
+  .ex .subj{font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);}
+  .ex .q{font-size:14.5px;color:var(--paper);line-height:1.5;margin:12px 0 14px;font-weight:500;flex:1;}
+  .ex .chain{font-size:12.5px;color:#B7AFA2;line-height:1.55;margin:0;border-top:1px solid var(--line-soft);padding-top:12px;}
+  .ex .chain b{color:var(--paper);font-weight:600;}
+  .closing{color:var(--muted);font-size:clamp(15px,1.5vw,17px);line-height:1.65;max-width:74ch;margin-top:30px;}
+  .closing b{color:var(--paper);font-weight:600;}
 
-  .tv-sel{font-family:var(--mono);font-size:13px;color:var(--paper);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 14px;}
-  .tvb{font-family:var(--mono);font-size:12px;width:30px;height:30px;border-radius:6px;border:1px solid var(--line);background:transparent;color:var(--muted);cursor:pointer;}
-  .tvb.active{background:var(--accent);color:var(--ink);border-color:var(--accent);font-weight:700;}
-  .tvbox{border:1px solid var(--line);border-radius:12px;background:var(--panel);padding:18px;}
-  .tvbox h5{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin:0 0 12px;}
-  .imgph{width:100%;height:160px;border-radius:8px;background:repeating-linear-gradient(0deg,#15130f,#15130f 24px,#1c1a16 24px,#1c1a16 48px);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;color:var(--muted-2);text-align:center;}
-  .code{font-family:var(--mono);font-size:11.5px;color:var(--muted);white-space:pre-wrap;line-height:1.55;margin:0;}
+  .steps{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-top:36px;}
+  .stp{background:var(--ink);padding:24px;}
+  .stp .no{font-family:var(--mono);font-size:12px;color:var(--accent);}
+  .stp h4{font-size:17px;margin:12px 0 9px;}
+  .stp p{font-size:13.5px;color:#B7AFA2;line-height:1.55;margin:0;}
+  .stp p b{color:var(--paper);font-weight:600;}
 
-  footer{background:var(--ink-2);border-top:1px solid var(--line);padding:48px 0 30px;}
-  .foot-top{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap;align-items:flex-start;}
-  .foot-top .name{font-weight:700;font-size:18px;}
-  .foot-top .tag2{font-family:var(--mono);font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;}
-  .foot-contact{font-size:13px;color:var(--muted);line-height:1.9;}
-  .foot-contact a{color:var(--muted);}
-  .foot-social{display:flex;gap:12px;margin-top:14px;}
-  .foot-social a{width:34px;height:34px;border:1px solid var(--line);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-family:var(--mono);font-size:11px;transition:.15s;}
-  .foot-social a:hover{border-color:var(--accent);color:var(--accent);}
-  .foot-bottom{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:34px;padding-top:20px;border-top:1px solid var(--line-soft);font-family:var(--mono);font-size:11px;color:var(--muted-2);}
-  .soc-badge{width:54px;height:54px;border-radius:50%;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:9px;color:var(--muted-2);text-align:center;line-height:1.2;}
+  .tablecard{border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-top:36px;background:var(--ink-2);}
+  .tbl-scroll{overflow-x:auto;}
+  table{width:100%;border-collapse:collapse;min-width:480px;}
+  caption{text-align:left;font-family:var(--mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted-2);padding:18px 22px 0;}
+  thead th{font-family:var(--mono);font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);text-align:right;padding:16px 22px 12px;border-bottom:1px solid var(--line);font-weight:600;}
+  thead th:first-child{text-align:left;}
+  tbody th{font-weight:500;text-align:left;padding:13px 22px;font-size:14.5px;border-bottom:1px solid var(--line-soft);}
+  tbody td{font-family:var(--mono);font-size:14.5px;text-align:right;padding:13px 22px;color:#CFC8BB;border-bottom:1px solid var(--line-soft);}
+  tbody tr:last-child th,tbody tr:last-child td{border-bottom:none;}
+  tr.best{background:var(--accent-tint);box-shadow:inset 3px 0 0 var(--accent);}
+  tr.best th,tr.best td{color:var(--accent);font-weight:600;}
+  .pos{color:var(--accent);} .neg{color:var(--warn);}
+  .cond{padding:18px 22px;border-top:1px solid var(--line);font-size:13px;color:var(--muted);line-height:1.6;}
+  .cond b{color:#C3BBAE;}
+
+  .repro{margin-top:34px;}
+  .repro-links{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:18px;}
+  .rl{border:1px solid var(--line);border-radius:10px;padding:14px 18px;background:var(--ink-2);font-family:var(--mono);font-size:13px;color:var(--accent);display:inline-block;}
+  .rl:hover{border-color:var(--accent);}
+  .rl .rk{display:block;font-size:9.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted-2);margin-bottom:6px;}
+  pre.code{background:#0D0D0D;border:1px solid var(--line);border-radius:12px;padding:20px;overflow-x:auto;font-family:var(--mono);font-size:12.5px;line-height:1.6;color:#D8D2C6;}
+  pre.code code{font-family:inherit;}
+  .repro-note{font-family:var(--mono);font-size:11px;color:var(--muted-2);margin-top:14px;}
+  .demo-bar{display:flex;gap:16px;align-items:center;margin-top:18px;border:1px solid var(--accent-deep);background:var(--accent-tint);border-radius:12px;padding:16px 20px;flex-wrap:wrap;}
+  .demo-bar .db-k{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink);background:var(--accent);padding:3px 9px;border-radius:5px;font-weight:700;}
+  .demo-bar .db-t{font-family:var(--mono);font-size:13px;color:var(--accent);}
+
+  .faq{border-top:1px solid var(--line);margin-top:8px;}
+  .faq details{border-bottom:1px solid var(--line);}
+  .faq summary{cursor:pointer;list-style:none;padding:20px 0;font-size:16.5px;font-weight:600;display:flex;justify-content:space-between;gap:18px;}
+  .faq summary::-webkit-details-marker{display:none;}
+  .faq summary .ic{font-family:var(--mono);color:var(--accent);font-size:20px;flex:none;transition:transform .2s;}
+  .faq details[open] summary .ic{transform:rotate(45deg);}
+  .faq .ans{padding:0 0 22px;color:#B3AB9E;font-size:14.5px;line-height:1.6;max-width:68ch;}
+
+  .cs-cta{text-align:center;}
+  .btn{font-family:var(--mono);font-size:13.5px;letter-spacing:0.02em;font-weight:600;padding:14px 26px;border-radius:8px;display:inline-block;border:none;}
+  .btn.primary{background:var(--accent);color:var(--ink);}
+  .btn.primary:hover{background:#D8BC82;}
+  .btn.ghost{border:1px solid var(--line);color:var(--paper);background:transparent;}
+  .btn.ghost:hover{border-color:var(--accent);color:var(--accent);}
+  .cta-row{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:28px;}
+  .verify-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:6px;}
+  .verify-note{font-family:var(--mono);font-size:11px;color:var(--warn);margin-top:16px;}
+
+  .related{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:36px;}
+  .cc{border:1px solid var(--line);border-radius:14px;padding:24px;background:var(--ink-2);transition:.18s;display:block;}
+  .cc:hover{border-color:var(--accent);transform:translateY(-2px);}
+  .cc .res{font-family:var(--mono);font-size:24px;font-weight:600;color:var(--accent);}
+  .cc .ti{font-size:17px;font-weight:700;margin-top:10px;}
+  .cc .dm{font-family:var(--mono);font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted-2);margin-top:7px;}
+  .cc .go{font-family:var(--mono);font-size:12px;color:var(--accent);margin-top:14px;}
+
+  footer{border-top:1px solid var(--line);background:var(--ink-2);padding:clamp(40px,6vw,60px) 0 36px;}
+  .foot-top{display:flex;flex-wrap:wrap;gap:36px;justify-content:space-between;}
+  .foot .name{font-weight:800;font-size:19px;}
+  .foot .tag{font-family:var(--mono);font-size:10px;letter-spacing:0.16em;color:var(--muted);text-transform:uppercase;margin-top:7px;}
+  .foot-contact{font-size:14px;color:var(--muted);line-height:1.9;text-align:right;}
+  .foot-contact a:hover{color:var(--accent);}
+  .foot-bottom{margin-top:38px;padding-top:22px;border-top:1px solid var(--line-soft);font-family:var(--mono);font-size:11px;color:var(--muted-2);letter-spacing:0.04em;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+
+  @media(max-width:860px){
+    .cs-stats,.steps,.examples{grid-template-columns:1fr;}
+    .related{grid-template-columns:1fr;}
+    .foot-contact{text-align:left;}
+    .metastrip div{border-right:none;border-bottom:1px solid var(--line);}
+    .metastrip div:last-child{border-bottom:none;}
+  }
+
+  @media(max-width:560px){
+    /* collapse real multi-column grids to one column on phones */
+    .statband,.casecards,.cat,.cs-stats,.examples,.proofgrid,.related,.segs,.steps,
+    .verify,.dt-charts .dist-grid,.feat-grid,.lb-grid,.dist-grid,.access-grid{
+      grid-template-columns:1fr !important;
+    }
+    .statband > div{border-right:none !important;border-bottom:1px solid var(--line);}
+    .statband > div:last-child{border-bottom:none;}
+    h1{font-size:clamp(28px,8vw,40px) !important;}
+    .hero .lede,.lede{font-size:16px !important;}
+    /* tighten table cell padding on phones (tables already scroll via .tbl-scroll) */
+    thead th,tbody th,tbody td{padding-left:14px;padding-right:14px;}
+  }
 </style>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#0A0A0A">
+<style>.brand{align-items:center}.brand-mark{width:26px;height:20px;align-self:center;display:block;flex:0 0 auto}.foot-mark{width:31px;height:24px;display:block;margin-bottom:12px}</style>
 </head>
 <body>
+
+
 
 <header>
   <div class="wrap">
@@ -175,218 +219,337 @@
   </div>
 </header>
 
-<div class="sync-strip">Data synced live from Hugging Face &mdash; <b>Nalandadata/DrishtiTable</b> &middot; verified leaderboard</div>
-
-<!-- 1. HERO -->
-<section class="hero">
-  <div class="hero-grid" aria-hidden="true"></div>
-  <div class="wrap">
-    <p class="eyebrow" style="justify-content:flex-start">DrishtiTable Research</p>
-    <h1>Beyond OCR: <span class="hl">structure-aware table recognition</span> for Indian academic documents.</h1>
-    <p class="lede"><b>DrishtiTable</b> is a benchmark and fine-tuned model for converting table images into clean, machine-readable HTML. A domain-fine-tuned 7B model leads <b>every frontier model</b> tested on held-out Indian-textbook tables.</p>
-    <div class="tags"><span class="tag">Vision-Language</span><span class="tag">Benchmark</span><span class="tag">Document AI</span><span class="tag">Apache-2.0</span></div>
-    <div class="hero-links">
-      <a href="https://huggingface.co/datasets/Nalandadata/DrishtiTable" target="_blank" rel="noopener">&#129303; Dataset</a>
-      <a href="https://huggingface.co/Nalandadata/DrishtiTable-Qwen2.5-VL-7B" target="_blank" rel="noopener">&#129303; Model</a>
-      <a href="https://huggingface.co/spaces/nalanda-data/DrishtiTable-Leaderboard" target="_blank" rel="noopener">&#9733; Live leaderboard</a>
+<main>
+  <section class="pagehead">
+    <div class="wrap">
+      <nav class="crumb" aria-label="Breadcrumb">
+        <a href="/">Home</a> / <a href="/research">Research</a> / DrishtiTable
+      </nav>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- 2. DUAL LEADERBOARD (live-synced) -->
-<section class="band alt">
-  <div class="wrap">
-    <div class="sec-head"><p class="eyebrow">Results</p><h2>Benchmark results.</h2><p>Image &rarr; HTML recognition on the 135-table held-out set, ranked by TEDS. Numbers sync live from the Hugging Face leaderboard. <span id="lb-sync" class="live-tag"></span></p></div>
-    <div class="lb-grid">
-      <div class="lb-card">
-        <h3>TEDS &mdash; structure + content</h3>
-        <div class="sub">135 held-out tables</div>
-        <div id="lb-teds">
-        <div class="row win"><span class="lab">DrishtiTable (ours)</span><span class="track"><span class="fill" style="width:100%"></span></span><span class="val">83.2</span></div>
-        <div class="row"><span class="lab">Claude Sonnet 4.6</span><span class="track"><span class="fill" style="width:92.9%"></span></span><span class="val">77.4</span></div>
-        <div class="row"><span class="lab">Claude Opus 4.8</span><span class="track"><span class="fill" style="width:90.7%"></span></span><span class="val">75.5</span></div>
-        <div class="row"><span class="lab">GPT-4o</span><span class="track"><span class="fill" style="width:85.5%"></span></span><span class="val">71.1</span></div>
-        <div class="row"><span class="lab">GPT-5.1</span><span class="track"><span class="fill" style="width:84%"></span></span><span class="val">69.9</span></div>
-        <div class="row"><span class="lab">GPT-4.1</span><span class="track"><span class="fill" style="width:81.7%"></span></span><span class="val">68.0</span></div>
-        </div>
+  <section class="cs-hero">
+    <div class="wrap">
+      <p class="eyebrow">Case study · Reading tables from images</p>
+      <h1>Teaching a small model to read tables <span class="hl">better than the frontier</span>.</h1>
+      <p class="cs-deck">A table packs data into rows, columns and merged headers, and to use any of it a model has to rebuild that structure exactly, every cell in the right place. Get one wrong and the data is wrong. We took <b>1,421 tables</b> spanning subjects like accounting, statistics and operations research, each labelled by hand with its correct structure, and fine-tuned a small open vision-language model to turn a table picture into clean, machine-readable HTML. The released model scores <b>83.2% on TEDS</b>, a standard measure of how closely the output matches the real table &mdash; ahead of every big cloud model we tested, including GPT-4o, GPT-5.1 and Gemini 3.1 Pro. The model and a data sample are public.</p>
+
+      <div class="metastrip">
+        <div><div class="mk">Method</div><div class="mv">Supervised fine-tuning (QLoRA)</div></div>
+        <div><div class="mk">Domain</div><div class="mv">Table structure recognition</div></div>
+        <div><div class="mk">Base model</div><div class="mv">Qwen2.5-VL-7B</div></div>
+        <div><div class="mk">Evaluation</div><div class="mv">135 held-out tables · TEDS / S-TEDS</div></div>
       </div>
-      <div class="lb-card">
-        <h3>S-TEDS &mdash; structure only</h3>
-        <div class="sub">layout / grid accuracy</div>
-        <div id="lb-steds">
-        <div class="row win"><span class="lab">DrishtiTable (ours)</span><span class="track"><span class="fill" style="width:100%"></span></span><span class="val">89.7</span></div>
-        <div class="row"><span class="lab">Claude Sonnet 4.6</span><span class="track"><span class="fill" style="width:99.5%"></span></span><span class="val">89.2</span></div>
-        <div class="row"><span class="lab">Claude Opus 4.8</span><span class="track"><span class="fill" style="width:98.3%"></span></span><span class="val">88.2</span></div>
-        <div class="row"><span class="lab">GPT-4o</span><span class="track"><span class="fill" style="width:94%"></span></span><span class="val">84.3</span></div>
-        <div class="row"><span class="lab">GPT-5.1</span><span class="track"><span class="fill" style="width:92.9%"></span></span><span class="val">83.3</span></div>
-        <div class="row"><span class="lab">GPT-4.1</span><span class="track"><span class="fill" style="width:90.1%"></span></span><span class="val">80.8</span></div>
+
+      <div class="cs-stats">
+        <div class="c win">
+          <div class="num">83.2<span class="u">% TEDS</span></div>
+          <div class="lbl">The released fine-tuned model on the 135-table held-out set &mdash; the top score of every system we tested.</div>
+        </div>
+        <div class="c">
+          <div class="num">+5.9<span class="u">pts</span></div>
+          <div class="lbl">TEDS margin over the strongest frontier cloud model, Claude Sonnet 4.6, on the same tables.</div>
+        </div>
+        <div class="c">
+          <div class="num">1,421</div>
+          <div class="lbl">Tables in the whole dataset. Specialisation, not scale, drives the result.</div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- 3. OVERVIEW + FEATURE CARDS -->
-<section class="band">
-  <div class="wrap">
-    <div class="sec-head"><p class="eyebrow">Overview</p><h2>Overview</h2><p>DrishtiTable is built on 1,421 expert-annotated tables from 9 S. Chand academic textbooks, spanning statistics, finance, accounting, and engineering. It targets what frontier models miss on domain-specific, structurally complex tables.</p></div>
-    <div class="feat-grid">
-      <div class="feat"><div class="ic">01</div><h3>Expert Annotation</h3><p>1,421 tables hand-annotated to ground-truth HTML &mdash; headers, merged cells, hierarchy &mdash; by domain experts.</p></div>
-      <div class="feat"><div class="ic">02</div><h3>Domain Diversity</h3><p>9 source books, 6 subject families, 5 table types &mdash; from simple grids to complex financial statements.</p></div>
-      <div class="feat"><div class="ic">03</div><h3>Held-out Benchmark</h3><p>135-table frozen test set, never seen in training, scored with the standard TEDS metric. Verified, public.</p></div>
-      <div class="feat"><div class="ic">04</div><h3>Open &amp; Reproducible</h3><p>Public sample + eval script on Hugging Face (Apache-2.0). Run any model on the test set &mdash; no form required.</p></div>
+  <!-- VERIFY / ARTIFACTS -->
+  <section class="band">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Reproducibility</p>
+        <h2>Everything here is public.</h2>
+        <p class="lead">The fine-tuned model and a dataset sample are public, and the held-out tables are the same ones every model in the comparison was scored on.</p>
+      </div>
+      <div class="verify-row">
+        
+        <a class="btn ghost" href="https://huggingface.co/Nalandadata/DrishtiTable-Qwen2.5-VL-7B" target="_blank" rel="noopener">Open the model on Hugging Face &rarr;</a>
+        <a class="btn primary" href="https://huggingface.co/datasets/Nalandadata/DrishtiTable" target="_blank" rel="noopener">Download a data sample &rarr;</a>
+      </div>
+      
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- 4. DISTRIBUTIONS WITH TOGGLE (live-synced) -->
-<section class="band alt">
-  <div class="wrap">
-    <div class="sec-head"><p class="eyebrow">Composition</p><h2>Dataset distributions.</h2><p>Over 80% are real exam/textbook tables with non-trivial structure. Toggle between the full corpus and the held-out test set. <span id="comp-sync" class="live-tag"></span></p></div>
-    <div class="toggle">
-      <button class="active" data-set="full">Full corpus (1,421)</button>
-      <button data-set="test">Test set (135)</button>
-    </div>
-    <div class="dist-set active" id="set-full">
-      <p class="set-meta"># tables: 1,421 (train + val + test)</p>
-      <div class="dist-grid">
-        <div class="dist-card"><h4>By Table Type</h4><div id="comp-full-table_type">
-          <div class="drow"><span class="lab">Statistical</span><span class="track"><span class="fill" style="width:100%"></span></span><span class="val">684</span></div>
-          <div class="drow"><span class="lab">Financial</span><span class="track"><span class="fill" style="width:67.1%"></span></span><span class="val">459</span></div>
-          <div class="drow"><span class="lab">Lookup</span><span class="track"><span class="fill" style="width:31.7%"></span></span><span class="val">217</span></div>
-          <div class="drow"><span class="lab">Comparison</span><span class="track"><span class="fill" style="width:7.2%"></span></span><span class="val">49</span></div>
-        </div></div>
-        <div class="dist-card"><h4>By Subject</h4><div id="comp-full-subject">
-          <div class="drow"><span class="lab">Bus. Statistics</span><span class="track"><span class="fill" style="width:100%"></span></span><span class="val">535</span></div>
-          <div class="drow"><span class="lab">Bus. &amp; Finance</span><span class="track"><span class="fill" style="width:82.1%"></span></span><span class="val">439</span></div>
-          <div class="drow"><span class="lab">Quant / OR</span><span class="track"><span class="fill" style="width:36.8%"></span></span><span class="val">197</span></div>
-          <div class="drow"><span class="lab">Fin. Accounting</span><span class="track"><span class="fill" style="width:32%"></span></span><span class="val">171</span></div>
-        </div></div>
-        <div class="dist-card"><h4>By Complexity</h4><div id="comp-full-complexity">
-          <div class="drow"><span class="lab">Simple</span><span class="track"><span class="fill" style="width:100%"></span></span><span class="val">1136</span></div>
-          <div class="drow"><span class="lab">Complex</span><span class="track"><span class="fill" style="width:25.1%"></span></span><span class="val">285</span></div>
-        </div></div>
+  <!-- THE CHALLENGE -->
+  <section class="band">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">The problem</p>
+        <h2>What it takes to read a table correctly.</h2>
+        <p class="lead">A table is one of the densest ways a document stores information, and to use any of it you have to recover the structure exactly: which value sits in which row and column, which header spans which cells, how the nesting works. Get one cell wrong and the data it carries is wrong.</p>
+        <p class="lead">Frontier vision-language models handle generic web tables well. They struggle on the tables that matter most in practice: the dense, multi-level layouts in financial statements, statistical tables and engineering references, where headers span several rows, cells merge, and columns nest. Those are exactly the tables in Indian academic textbooks, which is why we built the dataset from them: nine textbooks across six subjects, from financial accounting to operations research.</p>
+        <p class="lead">What anyone digitising documents wants is plain: hand the model a picture of a table and get back its exact structure as HTML, every cell in the right row and column, every merged header preserved, ready to query. This is where general models break. They read the words but lose the structure, collapsing a multi-row header into one line, merging cells that should stay separate, or dropping a column, returning HTML that looks like a table but no longer matches the one in the image. Here is the kind of table we mean.</p>
       </div>
-    </div>
-    <div class="dist-set" id="set-test">
-      <p class="set-meta"># tables: 135 (held-out test split)</p>
-      <div class="dist-grid">
-        <div class="dist-card"><h4>By Table Type</h4><div id="comp-test-table_type">
-          <div class="drow"><span class="lab">Statistical</span><span class="track"><span class="fill" style="width:100%"></span></span><span class="val">72</span></div>
-          <div class="drow"><span class="lab">Financial</span><span class="track"><span class="fill" style="width:61.1%"></span></span><span class="val">44</span></div>
-          <div class="drow"><span class="lab">Lookup</span><span class="track"><span class="fill" style="width:20.8%"></span></span><span class="val">15</span></div>
-          <div class="drow"><span class="lab">Comparison</span><span class="track"><span class="fill" style="width:4.2%"></span></span><span class="val">3</span></div>
-        </div></div>
-        <div class="dist-card"><h4>By Subject</h4><div id="comp-test-subject">
-          <div class="drow"><span class="lab">Bus. Statistics</span><span class="track"><span class="fill" style="width:100%"></span></span><span class="val">53</span></div>
-          <div class="drow"><span class="lab">Bus. &amp; Finance</span><span class="track"><span class="fill" style="width:81.1%"></span></span><span class="val">43</span></div>
-          <div class="drow"><span class="lab">Quant / OR</span><span class="track"><span class="fill" style="width:37.7%"></span></span><span class="val">20</span></div>
-          <div class="drow"><span class="lab">Fin. Accounting</span><span class="track"><span class="fill" style="width:28.3%"></span></span><span class="val">15</span></div>
-        </div></div>
-        <div class="dist-card"><h4>By Complexity</h4><div id="comp-test-complexity">
-          <div class="drow"><span class="lab">Simple</span><span class="track"><span class="fill" style="width:100%"></span></span><span class="val">110</span></div>
-          <div class="drow"><span class="lab">Complex</span><span class="track"><span class="fill" style="width:22.7%"></span></span><span class="val">25</span></div>
-        </div></div>
-      </div>
-    </div>
-  </div>
-</section>
 
-<!-- 5. METHODOLOGY -->
-<section class="band">
-  <div class="wrap">
-    <div class="sec-head"><p class="eyebrow">The approach</p><h2>Methodology.</h2><p>How DrishtiTable was built and the model trained &mdash; four reproducible steps.</p></div>
-    <div class="steps">
-      <div class="step"><div class="num">1</div><div><h3>Curate &amp; annotate</h3><p>1,421 tables sourced from 9 S. Chand textbooks, each manually annotated to ground-truth HTML with semantic structure (thead/tbody, colspan/rowspan, formatting).</p></div></div>
-      <div class="step"><div class="num">2</div><div><h3>Split &amp; freeze</h3><p>Split 1,141 train / 145 val / 135 test. The test set is content-hashed and held private to prevent contamination.</p></div></div>
-      <div class="step"><div class="num">3</div><div><h3>Fine-tune (QLoRA)</h3><p>Qwen2.5-VL-7B fine-tuned with 4-bit QLoRA via Unsloth on a single A100 &mdash; about 35 minutes of compute.</p></div></div>
-      <div class="step"><div class="num">4</div><div><h3>Evaluate (TEDS)</h3><p>Every model scored with the canonical TEDS scorer against expert ground truth. Top failure modes for frontier models: content divergence, row-count mismatch, and flattened merged headers.</p></div></div>
-    </div>
-  </div>
-</section>
+      <div class="examples">
+        <div class="ex">
+          <div class="subj">Financial &middot; multi-row header</div>
+          <p class="q">A ledger with a two- or three-row header &mdash; Particulars, then Debit and Credit, then sub-columns &mdash; above rows that each align to the deepest heading.</p>
+          <p class="chain"><b>What it takes:</b> hold the whole header hierarchy and map every figure to the right leaf column. Flatten the header and every number lands under the wrong heading.</p>
+        </div>
+        <div class="ex">
+          <div class="subj">Statistical &middot; merged cells</div>
+          <p class="q">A frequency table where one class label spans several rows, or a single heading spans several columns.</p>
+          <p class="chain"><b>What it takes:</b> detect each span and reproduce it with the right row and column attributes. Miss a span and every row below shifts out of alignment.</p>
+        </div>
+        <div class="ex">
+          <div class="subj">Lookup &middot; dense grid</div>
+          <p class="q">A reference grid &mdash; interest factors, conversion values &mdash; that is mostly numbers under thin headers.</p>
+          <p class="chain"><b>What it takes:</b> keep every cell in its exact row and column across a large grid. Drop or shift one and the lookup returns the wrong value.</p>
+        </div>
+      </div>
 
-<!-- 6. RECOGNITION VIEWER (illustrative) -->
-<section class="band alt">
-  <div class="wrap">
-    <div class="sec-head"><p class="eyebrow">See it work</p><h2>Table recognition viewer.</h2><p>Step through how the model turns a table image into structured HTML. <span style="color:var(--accent)">Illustrative example of the pipeline.</span></p></div>
-    <div style="border:1px solid var(--line);border-radius:16px;background:var(--ink-2);padding:clamp(20px,2.4vw,28px);max-width:980px;margin:0 auto;">
-      <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:18px;">
-        <div><b style="font-size:16px">Example</b> &nbsp;<select class="tv-sel"><option>Financial — Trial Balance</option></select></div>
-        <div style="font-family:var(--mono);font-size:12px;color:var(--muted)">Model: DrishtiTable-Qwen2.5-VL-7B</div>
-      </div>
-      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px;" id="tvsteps">
-        <button class="tvb active" data-step="0">1</button>
-        <button class="tvb" data-step="1">2</button>
-        <button class="tvb" data-step="2">3</button>
-        <button class="tvb" data-step="3">4</button>
-      </div>
-      <div class="tvp" data-step="0" style="display:grid;grid-template-columns:1fr 1fr;gap:18px;">
-        <div class="tvbox"><h5>Step 1 &middot; Input image</h5><div class="imgph">[ trial-balance table image &mdash;<br>merged header, Debit/Credit cols ]</div></div>
-        <div class="tvbox"><h5>What the model sees</h5><p class="code">A scanned trial-balance: a "Particulars" header spanning two rows, an "Amount (Rs.)" header spanning two columns (Debit / Credit), 14 ledger rows.</p></div>
-      </div>
-      <div class="tvp" data-step="1" style="display:none;grid-template-columns:1fr 1fr;gap:18px;">
-        <div class="tvbox"><h5>Step 2 &middot; Predicted HTML</h5><pre class="code">&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th rowspan="2"&gt;Particulars&lt;/th&gt;
-      &lt;th colspan="2"&gt;Amount (Rs.)&lt;/th&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;&lt;th&gt;Debit&lt;/th&gt;&lt;th&gt;Credit&lt;/th&gt;&lt;/tr&gt;
-  &lt;/thead&gt; &hellip;
-&lt;/table&gt;</pre></div>
-        <div class="tvbox"><h5>Notes</h5><p class="code">Correctly recovers <b style="color:var(--accent)">rowspan=2</b> and <b style="color:var(--accent)">colspan=2</b> &mdash; the exact structure frontier models flatten on Financial tables.</p></div>
-      </div>
-      <div class="tvp" data-step="2" style="display:none;grid-template-columns:1fr 1fr;gap:18px;">
-        <div class="tvbox"><h5>Step 3 &middot; Rendered output</h5><div class="imgph">[ rendered HTML &mdash; matches original ]</div></div>
-        <div class="tvbox"><h5>Ground truth</h5><div class="imgph">[ expert-annotated reference ]</div></div>
-      </div>
-      <div class="tvp" data-step="3" style="display:none;grid-template-columns:1fr 1fr;gap:18px;">
-        <div class="tvbox"><h5>Step 4 &middot; Score</h5><div style="font-family:var(--mono);font-size:13px;margin-bottom:10px;">TEDS: <b style="color:var(--accent)">0.94</b> &nbsp; S-TEDS: <b style="color:var(--accent)">0.97</b></div><p class="code">Structure fully recovered; minor content differences in two numeric cells.</p></div>
-        <div class="tvbox"><h5>vs GPT-4o (same table)</h5><div style="font-family:var(--mono);font-size:13px;margin-bottom:10px;">TEDS: <b style="color:var(--muted)">0.78</b></div><p class="code">GPT-4o flattened the merged "Amount" header into one column &mdash; the classic Financial-table failure.</p></div>
+      <p class="closing">What makes these tables trainable is that the correct structure is unambiguous: there is one right HTML for each, written and checked by an expert. That gold structure is what we fine-tune on, and it is where the approach begins.</p>
+    </div>
+  </section>
+
+  <!-- THE APPROACH -->
+  <section class="band alt">
+    <div class="wrap">
+      <div class="sec-head"><p class="eyebrow">The approach</p><h2>What we did, in four steps.</h2></div>
+      <div class="steps">
+        <div class="stp">
+          <div class="no">01 &middot; Curate</div>
+          <h4>Real tables, hard layouts</h4>
+          <p><b>1,421 tables</b> from nine Indian academic textbooks across six subjects &mdash; financial accounting, business statistics, quantitative techniques, operations research, engineering references and ethics &mdash; chosen for the multi-row headers, merged cells and nesting that generic data lacks.</p>
+        </div>
+        <div class="stp">
+          <div class="no">02 &middot; Annotate</div>
+          <h4>Gold-standard structure</h4>
+          <p>Each table annotated as <b>ground-truth HTML</b> with semantic tags and merged-cell attributes, plus a metadata record of domain, table type and structure. Every annotation human-verified.</p>
+        </div>
+        <div class="stp">
+          <div class="no">03 &middot; Fine-tune</div>
+          <h4>Efficient adaptation (QLoRA)</h4>
+          <p>Supervised fine-tuning of an open vision-language model, <b>Qwen2.5-VL-7B</b>, with LoRA adapters on the vision and language layers under 4-bit quantisation. Rank 32, three epochs, on the 1,141-table training split. Modest compute &mdash; about 35 minutes on a single A100.</p>
+        </div>
+        <div class="stp">
+          <div class="no">04 &middot; Evaluate</div>
+          <h4>Held-out, like-for-like</h4>
+          <p>TEDS and S-TEDS on a <b>135-table held-out set</b>. Every frontier cloud model was run on the same tables, prompted zero-shot with the identical instruction, so the comparison is like-for-like in-domain.</p>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- 7. DATA ACCESS -->
-<section class="band">
-  <div class="wrap">
-    <div class="sec-head"><p class="eyebrow">Get the data</p><h2>Data access.</h2></div>
-    <div class="access-grid">
-      <div class="access"><span class="pill">Public</span><h3>Sample dataset &amp; eval</h3><p>A public sample of DrishtiTable is on Hugging Face (Apache-2.0) with the evaluation script. Run any model on the test set &mdash; no form required.</p><a class="cta" href="https://huggingface.co/datasets/Nalandadata/DrishtiTable" target="_blank" rel="noopener">&#129303; Hugging Face &rarr;</a></div>
-      <div class="access"><span class="pill">Full corpus</span><h3>License the dataset</h3><p>Reach out for the full 1,421-table annotated corpus and commercial licensing.</p><a class="cta" href="/contact">Contact us &rarr;</a></div>
+  <!-- THE RESULT -->
+  <section class="band">
+    <div class="wrap">
+      <div class="sec-head"><p class="eyebrow">The result</p><h2>The released fine-tuned model tops every frontier system we tested.</h2>
+        <p class="lead">All scores are TEDS and S-TEDS on the same 135-table held-out set. The fine-tuned model is specialised on the domain; the cloud models are general-purpose, prompted zero-shot with the identical instruction.</p>
+      </div>
+      <div class="tablecard">
+        <div class="tbl-scroll">
+          <table>
+            <caption>DrishtiTable test set (135 tables) &middot; higher is better <span id="cs-lb-sync" class="cs-sync"></span></caption>
+            <thead>
+              <tr>
+                <th scope="col">Model</th>
+                <th scope="col">Method</th>
+                <th scope="col" style="text-align:right">TEDS (%)</th>
+                <th scope="col" style="text-align:right">S-TEDS (%)</th>
+              </tr>
+            </thead>
+            <tbody id="cs-lb-body" data-fallback="1">
+              <tr class="best"><th scope="row">DrishtiTable-Qwen2.5-VL-7B <span style="font-weight:400;color:var(--muted)">&middot; released</span></th><td>Fine-tuned (SFT)</td><td class="pos" style="text-align:right">83.2</td><td style="text-align:right">89.7</td></tr>
+              <tr><th scope="row">Claude Sonnet 4.6</th><td>Zero-shot</td><td style="text-align:right">77.3</td><td style="text-align:right">89.2</td></tr>
+              <tr><th scope="row">Claude Opus 4.8</th><td>Zero-shot</td><td style="text-align:right">75.5</td><td style="text-align:right">88.2</td></tr>
+              <tr><th scope="row">GPT-4o</th><td>Zero-shot</td><td style="text-align:right">71.1</td><td style="text-align:right">84.3</td></tr>
+              <tr><th scope="row">GPT-5.1</th><td>Zero-shot</td><td style="text-align:right">69.9</td><td style="text-align:right">83.3</td></tr>
+              <tr><th scope="row">Gemini 3.1 Pro</th><td>Zero-shot</td><td style="text-align:right">65.7</td><td style="text-align:right">73.6</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="cond"><b>How to read this.</b> The fine-tuned model is specialised on the target domain and evaluated on a held-out set; the cloud models are general-purpose, prompted zero-shot with the same instruction. This measures in-domain table structure recognition, not general capability. The publicly released checkpoint is the Qwen2.5-VL-7B at 83.2 TEDS &mdash; ahead of every cloud model tested. Scores are kept in sync with the <a href="https://huggingface.co/datasets/Nalandadata/DrishtiTable" target="_blank" rel="noopener" style="color:var(--accent)">live leaderboard on Hugging Face</a>.</p>
+      </div>
     </div>
-    <p class="note">All results synced from Hugging Face &mdash; Nalandadata/DrishtiTable. Metric: TEDS on the 135-table held-out test set.</p>
-  </div>
-</section>
+  </section>
 
-<!-- FOOTER -->
+  <!-- DATASET COMPOSITION (live-synced from HF) -->
+  <section class="band">
+    <div class="wrap">
+      <div class="sec-head"><p class="eyebrow">Composition</p><h2>What&rsquo;s in the dataset.</h2>
+        <p class="lead">The full 1,421-table corpus by table type, subject and complexity. Over 80% are real exam/textbook tables with non-trivial structure. <span id="cs-comp-sync" class="cs-sync"></span></p>
+      </div>
+      <style>
+        .cs-dist-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:8px;}
+        @media(max-width:820px){.cs-dist-grid{grid-template-columns:1fr;}}
+        .cs-dist{border:1px solid var(--line);border-radius:14px;background:var(--ink-2);padding:24px;}
+        .cs-dist h4{font-size:15px;text-align:center;margin:0 0 18px;color:var(--paper);font-weight:600;}
+        .cs-bar{display:grid;grid-template-columns:118px 1fr 44px;align-items:center;gap:9px;margin:9px 0;}
+        .cs-bar .l{font-size:12px;color:var(--muted);text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+        .cs-bar .t{height:16px;background:rgba(255,255,255,.04);border-radius:5px;overflow:hidden;}
+        .cs-bar .f{display:block;height:16px;border-radius:5px;background:var(--accent-deep);}
+        .cs-bar .v{font-family:var(--mono);font-size:12px;color:var(--paper);text-align:right;}
+        .cs-sync{font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--muted-2);text-transform:none;}
+        .cs-sync.live{color:var(--accent);}
+      </style>
+      <div class="cs-dist-grid">
+        <div class="cs-dist"><h4>By table type</h4><div id="cs-comp-table_type">
+          <div class="cs-bar"><span class="l">Statistical</span><span class="t"><span class="f" style="width:100%"></span></span><span class="v">684</span></div>
+          <div class="cs-bar"><span class="l">Financial</span><span class="t"><span class="f" style="width:67.1%"></span></span><span class="v">459</span></div>
+          <div class="cs-bar"><span class="l">Lookup</span><span class="t"><span class="f" style="width:31.7%"></span></span><span class="v">217</span></div>
+          <div class="cs-bar"><span class="l">Comparison</span><span class="t"><span class="f" style="width:7.2%"></span></span><span class="v">49</span></div>
+        </div></div>
+        <div class="cs-dist"><h4>By subject</h4><div id="cs-comp-subject">
+          <div class="cs-bar"><span class="l">Bus. Statistics</span><span class="t"><span class="f" style="width:100%"></span></span><span class="v">535</span></div>
+          <div class="cs-bar"><span class="l">Bus. &amp; Finance</span><span class="t"><span class="f" style="width:82.1%"></span></span><span class="v">439</span></div>
+          <div class="cs-bar"><span class="l">Quant / OR</span><span class="t"><span class="f" style="width:36.8%"></span></span><span class="v">197</span></div>
+          <div class="cs-bar"><span class="l">Fin. Accounting</span><span class="t"><span class="f" style="width:32%"></span></span><span class="v">171</span></div>
+        </div></div>
+        <div class="cs-dist"><h4>By complexity</h4><div id="cs-comp-complexity">
+          <div class="cs-bar"><span class="l">Simple</span><span class="t"><span class="f" style="width:100%"></span></span><span class="v">1136</span></div>
+          <div class="cs-bar"><span class="l">Complex</span><span class="t"><span class="f" style="width:25.1%"></span></span><span class="v">285</span></div>
+        </div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- THE OUTCOME -->
+  <section class="band alt">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">The outcome</p>
+        <h2>The model now recovers the structure the frontier loses.</h2>
+        <p class="lead">Before fine-tuning, general models failed on these tables in specific, recognisable ways. Each is a place where the structure breaks:</p>
+      </div>
+      <ul class="problems">
+        <li><b>Collapsed headers.</b> A multi-row header flattened into a single line, so every figure below it lands under the wrong heading.</li>
+        <li><b>Mis-merged cells.</b> Cells that should span several rows or columns split apart, or separate cells fused, shifting the whole grid out of alignment.</li>
+        <li><b>A dropped or invented column.</b> A column missed entirely, or a phantom one added, so every row after it sits one place off.</li>
+        <li><b>Right text, wrong place.</b> The words read correctly but land in the wrong cell. The content is there; the structure is not.</li>
+      </ul>
+      <p class="closing">Fine-tuning on gold-annotated tables fixes these directly, because the model is trained to reproduce the exact structure, cell for cell. On the held-out tables the released fine-tuned model reaches 83.2% TEDS, ahead of every frontier cloud model tested and 5.9 points clear of the strongest, Claude Sonnet 4.6. The tables that general models mangle now come back as clean, faithful HTML.</p>
+      <p class="closing">The model and a dataset sample are public. And because the gain came from a small set of gold-annotated tables and an efficient fine-tune, the same recipe carries to any document domain where the structure has to be right &mdash; financial statements, regulatory filings, forms, scientific tables.</p>
+    </div>
+  </section>
+
+  <!-- REPRODUCE IT -->
+  <section class="band">
+    <div class="wrap">
+      <div class="sec-head"><p class="eyebrow">Reproduce it</p><h2>Run it on your own tables.</h2>
+        <p class="lead">The fine-tuned model and a dataset sample are public, so the result can be checked on tables of your own.</p>
+      </div>
+
+      <div class="repro">
+        <div class="repro-links">
+          <a class="rl" href="https://huggingface.co/Nalandadata/DrishtiTable-Qwen2.5-VL-7B" target="_blank" rel="noopener">
+            <span class="rk">Model · released 7B checkpoint</span>Open on Hugging Face &rarr;
+          </a>
+          <a class="rl" href="https://huggingface.co/datasets/Nalandadata/DrishtiTable" target="_blank" rel="noopener">
+            <span class="rk">Dataset · 20-table public sample</span>Open the dataset &rarr;
+          </a>
+        </div>
+        
+        <pre class="code"><code>from transformers import AutoProcessor, AutoModelForImageTextToText
+
+repo = "Nalandadata/DrishtiTable-Qwen2.5-VL-7B"
+model = AutoModelForImageTextToText.from_pretrained(repo, device_map="auto")
+processor = AutoProcessor.from_pretrained(repo)
+
+inputs = processor(images=table_image, text="Convert this table to HTML.",
+                   return_tensors="pt").to(model.device)
+print(processor.decode(model.generate(**inputs)[0], skip_special_tokens=True))</code></pre>
+        <p class="repro-note">The released checkpoint is the Qwen2.5-VL-7B fine-tune &mdash; 83.2% TEDS, ahead of every cloud model tested. A larger Qwen3-VL-8B variant is in progress.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="band alt">
+    <div class="wrap">
+      <div class="sec-head"><p class="eyebrow">Questions</p><h2>The detail behind the result.</h2></div>
+      <div class="faq" style="margin-top:20px">
+        <details>
+          <summary>How were the cloud models evaluated?<span class="ic">+</span></summary>
+          <div class="ans">Each cloud model was given the same instruction used to fine-tune our models and scored with TEDS and S-TEDS on the identical 135-table held-out set. The fine-tuned models are domain-specialised; the cloud models are general-purpose. The result reflects in-domain table structure recognition, not overall capability.</div>
+        </details>
+        <details>
+          <summary>Why only about 1,400 tables?<span class="ic">+</span></summary>
+          <div class="ans">Because quality is the constraint, not quantity. The model specialises from a small set of gold-annotated examples. The point of the work is that the right thousand-odd tables beat a general model trained on far more.</div>
+        </details>
+        <details>
+          <summary>Which model is released?<span class="ic">+</span></summary>
+          <div class="ans">The Qwen2.5-VL-7B fine-tune, at 83.2% TEDS &mdash; ahead of every cloud model tested. A larger Qwen3-VL-8B variant is in progress and will be published once its evaluation is finalised.</div>
+        </details>
+        <details>
+          <summary>What about structure-only scores?<span class="ic">+</span></summary>
+          <div class="ans">On S-TEDS, which scores structure alone and ignores cell content, the strongest cloud model is close. The fine-tune&rsquo;s clearest advantage is on full TEDS, getting the whole table right, content and structure together. Both columns are on this page.</div>
+        </details>
+        <details>
+          <summary>Can we get the data, or data for our own domain?<span class="ic">+</span></summary>
+          <div class="ans">Yes. A 20-table sample is public, and the curate-annotate-fine-tune pipeline extends to other structured-document domains. Download a sample, or talk to a researcher to scope it.</div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="band cs-cta">
+    <div class="wrap">
+      <p class="eyebrow" style="justify-content:center">Try it</p>
+      <h2 style="max-width:26ch;margin:0 auto">Want this accuracy on your own document tables?</h2>
+      <div class="cta-row">
+        <a class="btn primary" href="/#connect">Download a sample</a>
+        <a class="btn ghost" href="/#connect">Talk to a researcher</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- RELATED -->
+  <section class="band alt">
+    <div class="wrap">
+      <div class="sec-head"><p class="eyebrow">Related research</p><h2>More of what the data does to a model.</h2></div>
+      <div class="related">
+        <a class="cc" href="/research/nalandabench">
+          <div class="res">+6.3 pts</div>
+          <div class="ti">NalandaBench</div>
+          <div class="dm">JEE &amp; NEET reasoning · RLVR</div>
+          <div class="go">Read the case study &rarr;</div>
+        </a>
+        <a class="cc" href="/research/nalanda-image-vl">
+          <div class="res">+23.5 pts</div>
+          <div class="ti">Nalanda Image VL</div>
+          <div class="dm">Multimodal science · vision-language</div>
+          <div class="go">Read the case study &rarr;</div>
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
 <footer>
   <div class="wrap">
     <div class="foot-top">
-      <div>
-        <div class="name">Nalandadata</div>
-        <div class="tag2">Verified reasoning data</div>
-        <div class="foot-social">
-          <a href="#" title="Facebook">f</a><a href="#" title="X">X</a><a href="#" title="LinkedIn">in</a><a href="#" title="Instagram">ig</a><a href="#" title="YouTube">yt</a>
-        </div>
-      </div>
+      <div><img class="foot-mark" src="/logo-mark.svg" alt="" width="31" height="24" aria-hidden="true"><div class="name">Nalandadata</div><div class="tag">Verified reasoning data</div></div>
       <div class="foot-contact">
         <a href="mailto:info@nalandadata.ai">info@nalandadata.ai</a><br>
         <a href="tel:+918882687147">+91 88826 87147</a><br>
         A27, 2nd Floor, Mohan Cooperative Industrial Estate, New Delhi 110044<br>
         <a href="https://huggingface.co/Nalandadata" target="_blank" rel="noopener">huggingface.co/Nalandadata</a>
       </div>
-      <div class="soc-badge">AICPA<br>SOC</div>
     </div>
-    <nav style="display:flex;flex-wrap:wrap;gap:22px;margin-top:34px;font-family:var(--mono);font-size:12.5px;">
-      <a href="/research" style="color:var(--muted)">Research</a><a href="/benchmarks" style="color:var(--muted)">Benchmarks</a><a href="/solutions" style="color:var(--muted)">Solutions</a><a href="/about" style="color:var(--muted)">About</a><a href="/contact" style="color:var(--muted)">Contact</a>
+    <nav class="foot-nav" style="display:flex;flex-wrap:wrap;gap:22px;margin-top:34px;font-family:var(--mono);font-size:12.5px;letter-spacing:0.04em;">
+      <a href="/research" style="color:var(--muted)">Research</a>
+      <a href="/benchmarks" style="color:var(--muted)">Benchmarks</a>
+      <a href="/solutions" style="color:var(--muted)">Solutions</a>
+      <a href="/about" style="color:var(--muted)">About</a>
+      <a href="/contact" style="color:var(--muted)">Contact</a>
+      <a href="https://huggingface.co/Nalandadata" target="_blank" rel="noopener" style="color:var(--muted)">Hugging&nbsp;Face</a>
     </nav>
-    <div class="foot-bottom"><span>&copy; 2026 Nalandadata</span><span>Expert-authored &middot; curriculum-grade &middot; human-verified &middot; reproducible</span></div>
+    <div class="foot-bottom">
+      <span>© 2026 Nalandadata</span>
+      <span>Expert-authored · curriculum-grade · human-verified · reproducible</span>
+    </div>
   </div>
 </footer>
 
 <script src="/menu.js" defer></script>
-<script src="/drishti-page.js" defer></script>
+<script src="/cs-sync.js" defer></script>
 </body>
 </html>

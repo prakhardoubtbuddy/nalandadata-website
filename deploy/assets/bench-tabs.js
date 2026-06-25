@@ -1,5 +1,5 @@
 (function () {
-  function init() {
+  function initTabs() {
     var tabs = document.querySelectorAll('.bench-tab[data-bench]');
     for (var i = 0; i < tabs.length; i++) {
       tabs[i].addEventListener('click', function () {
@@ -13,6 +13,22 @@
       });
     }
   }
+  // Recognition-viewer step tabs (DrishtiTable panel)
+  function initViewer() {
+    var btns = document.querySelectorAll('#dt-vsteps .dt-vb[data-vstep]');
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].addEventListener('click', function () {
+        var n = this.getAttribute('data-vstep');
+        var panels = document.querySelectorAll('.dt-vp');
+        for (var j = 0; j < panels.length; j++) panels[j].classList.remove('active');
+        var el = document.querySelector('.dt-vp[data-vstep="' + n + '"]');
+        if (el) el.classList.add('active');
+        for (var k = 0; k < btns.length; k++) btns[k].classList.remove('active');
+        this.classList.add('active');
+      });
+    }
+  }
+  function init() { initTabs(); initViewer(); }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
 })();

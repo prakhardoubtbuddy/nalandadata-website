@@ -447,6 +447,24 @@
         <h4>Methodology</h4>
         <p>135 held-out Indian-textbook tables, never seen during training. Each table is provided as an image; models output the HTML table structure. Evaluated using TEDS against expert-verified ground-truth HTML. The fine-tuned model was trained on the DrishtiTable dataset &mdash; a domain-specific corpus of Indian educational tables. <a href="https://huggingface.co/datasets/Nalandadata/DrishtiTable" target="_blank" rel="noopener">Full methodology &amp; dataset on Hugging Face &rarr;</a></p>
       </div>
+
+      <!-- Feature cards (from mockup-v2) -->
+      <div class="dt-feat-grid">
+        <style>
+          .dt-feat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:26px 0;}
+          @media(max-width:900px){.dt-feat-grid{grid-template-columns:1fr 1fr;}}
+          @media(max-width:520px){.dt-feat-grid{grid-template-columns:1fr;}}
+          .dt-feat{border:1px solid var(--line);border-radius:14px;background:var(--panel);padding:22px;transition:.2s;}
+          .dt-feat:hover{border-color:var(--accent-deep);}
+          .dt-feat .ic{font-family:var(--mono);color:var(--accent);font-size:12px;letter-spacing:.1em;margin-bottom:12px;}
+          .dt-feat h4{font-size:15px;margin:0 0 9px;color:var(--paper);font-weight:600;}
+          .dt-feat p{font-size:13.5px;color:var(--muted);margin:0;line-height:1.55;}
+        </style>
+        <div class="dt-feat"><div class="ic">01</div><h4>Expert Annotation</h4><p>1,421 tables hand-annotated to ground-truth HTML &mdash; headers, merged cells, hierarchy &mdash; by domain experts.</p></div>
+        <div class="dt-feat"><div class="ic">02</div><h4>Domain Diversity</h4><p>9 source books, 6 subject families, 5 table types &mdash; from simple grids to complex financial statements.</p></div>
+        <div class="dt-feat"><div class="ic">03</div><h4>Held-out Benchmark</h4><p>135-table frozen test set, never seen in training, scored with the standard TEDS metric.</p></div>
+        <div class="dt-feat"><div class="ic">04</div><h4>Open &amp; Reproducible</h4><p>Public sample + eval script on Hugging Face (Apache-2.0). Run any model on the test set &mdash; no form required.</p></div>
+      </div>
       <div class="lb-meta">
         <span class="lm">DrishtiTable &middot; 135 held-out tables &middot; 6 models</span>
         <span class="ll">
@@ -552,6 +570,67 @@
           </div>
         </div>
         <p class="cb-note mt4">Composition across the full DrishtiTable corpus (1,421 expert-annotated tables).</p>
+      </div>
+
+      <!-- Recognition viewer (illustrative, from mockup-v2) -->
+      <div class="dt-viewer">
+        <style>
+          .dt-viewer{margin:34px 0 8px;}
+          .dt-viewer .vh{font-size:17px;font-weight:600;color:var(--paper);margin:0 0 4px;}
+          .dt-viewer .vsub{font-size:13px;color:var(--muted);margin:0 0 18px;}
+          .dt-viewer .vsub b{color:var(--accent);font-weight:500;}
+          .dt-vcard{border:1px solid var(--line);border-radius:14px;background:var(--ink-2);padding:clamp(18px,2.2vw,24px);}
+          .dt-vtop{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:16px;}
+          .dt-vsel{font-family:var(--mono);font-size:12.5px;color:var(--paper);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:7px 12px;}
+          .dt-vsteps{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;}
+          .dt-vb{font-family:var(--mono);font-size:12px;width:30px;height:30px;border-radius:6px;border:1px solid var(--line);background:transparent;color:var(--muted);cursor:pointer;}
+          .dt-vb.active{background:var(--accent);color:var(--ink);border-color:var(--accent);font-weight:700;}
+          .dt-vp{display:none;grid-template-columns:1fr 1fr;gap:16px;}
+          .dt-vp.active{display:grid;}
+          @media(max-width:700px){.dt-vp.active{grid-template-columns:1fr;}}
+          .dt-vbox{border:1px solid var(--line);border-radius:12px;background:var(--panel);padding:16px;}
+          .dt-vbox h5{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin:0 0 11px;}
+          .dt-imgph{width:100%;height:150px;border-radius:8px;background:repeating-linear-gradient(0deg,#15130f,#15130f 24px,#1c1a16 24px,#1c1a16 48px);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;color:var(--muted-2);text-align:center;}
+          .dt-code{font-family:var(--mono);font-size:11.5px;color:var(--muted);white-space:pre-wrap;line-height:1.55;margin:0;}
+        </style>
+        <p class="vh">Table recognition viewer</p>
+        <p class="vsub">Step through how the model turns a table image into structured HTML. <b>Illustrative example of the pipeline.</b></p>
+        <div class="dt-vcard">
+          <div class="dt-vtop">
+            <div style="font-family:var(--mono);font-size:13px;color:var(--paper)"><b>Example:</b> <select class="dt-vsel"><option>Financial — Trial Balance</option></select></div>
+            <div style="font-family:var(--mono);font-size:11.5px;color:var(--muted)">Model: DrishtiTable-Qwen2.5-VL-7B</div>
+          </div>
+          <div class="dt-vsteps" id="dt-vsteps">
+            <button class="dt-vb active" data-vstep="0">1</button>
+            <button class="dt-vb" data-vstep="1">2</button>
+            <button class="dt-vb" data-vstep="2">3</button>
+            <button class="dt-vb" data-vstep="3">4</button>
+          </div>
+          <div class="dt-vp active" data-vstep="0">
+            <div class="dt-vbox"><h5>Step 1 &middot; Input image</h5><div class="dt-imgph">[ trial-balance table image &mdash;<br>merged header, Debit/Credit cols ]</div></div>
+            <div class="dt-vbox"><h5>What the model sees</h5><p class="dt-code">A scanned trial-balance: a "Particulars" header spanning two rows, an "Amount (Rs.)" header spanning two columns (Debit / Credit), 14 ledger rows.</p></div>
+          </div>
+          <div class="dt-vp" data-vstep="1">
+            <div class="dt-vbox"><h5>Step 2 &middot; Predicted HTML</h5><pre class="dt-code">&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th rowspan="2"&gt;Particulars&lt;/th&gt;
+      &lt;th colspan="2"&gt;Amount (Rs.)&lt;/th&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;&lt;th&gt;Debit&lt;/th&gt;&lt;th&gt;Credit&lt;/th&gt;&lt;/tr&gt;
+  &lt;/thead&gt; &hellip;
+&lt;/table&gt;</pre></div>
+            <div class="dt-vbox"><h5>Notes</h5><p class="dt-code">Correctly recovers <b style="color:var(--accent)">rowspan=2</b> and <b style="color:var(--accent)">colspan=2</b> &mdash; the exact structure frontier models flatten on Financial tables.</p></div>
+          </div>
+          <div class="dt-vp" data-vstep="2">
+            <div class="dt-vbox"><h5>Step 3 &middot; Rendered output</h5><div class="dt-imgph">[ rendered HTML &mdash; matches original ]</div></div>
+            <div class="dt-vbox"><h5>Ground truth</h5><div class="dt-imgph">[ expert-annotated reference ]</div></div>
+          </div>
+          <div class="dt-vp" data-vstep="3">
+            <div class="dt-vbox"><h5>Step 4 &middot; Score</h5><div style="font-family:var(--mono);font-size:13px;margin-bottom:9px;">TEDS: <b style="color:var(--accent)">0.94</b> &nbsp; S-TEDS: <b style="color:var(--accent)">0.97</b></div><p class="dt-code">Structure fully recovered; minor content differences in two numeric cells.</p></div>
+            <div class="dt-vbox"><h5>vs GPT-4o (same table)</h5><div style="font-family:var(--mono);font-size:13px;margin-bottom:9px;">TEDS: <b style="color:var(--muted)">0.78</b></div><p class="dt-code">GPT-4o flattened the merged "Amount" header into one column &mdash; the classic Financial-table failure.</p></div>
+          </div>
+        </div>
       </div>
 
       <p class="selfserve">To run your model on the public test set, use the <a href="https://huggingface.co/datasets/Nalandadata/DrishtiTable" target="_blank" rel="noopener">evaluation script on Hugging Face</a> &mdash; no form required. To submit to the held-out leaderboard, request access below.</p>
