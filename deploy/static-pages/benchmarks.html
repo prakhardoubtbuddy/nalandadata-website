@@ -370,7 +370,7 @@
     <h1>The independent benchmark for <span class="hl">Indian domain AI.</span></h1>
     <p class="lede"><b>NalandaBench</b> scores models on verified, curriculum-grade reasoning &mdash; expert-authored ground truth with clean IP, built to be reproduced and cited. Independent by design: no lab owns the scorekeeper.</p>
     <p class="audience">NalandaBench is the standard evaluation for AI models trained or evaluated on Indian curriculum and domain content. Submit your model to appear on the leaderboard.</p>
-    <div class="pull-quote"><p>A fine-tuned 7B model leads every frontier model on Indian table recognition &mdash; <span>+5.9 points over the best</span> (Claude Sonnet 4.6). Domain-specific training beats scale.</p></div>
+    <div class="pull-quote"><p>A fine-tuned 8B model leads every frontier model on Indian table recognition &mdash; <span>+7.5 points over the best</span> (Claude Sonnet 4.6); the released 7B is right behind. Domain-specific training beats scale.</p></div>
     <div class="hero-cta">
       <a class="btn primary" href="/contact">License the dataset &rarr;</a>
       <a class="btn ghost" href="https://huggingface.co/Nalandadata" target="_blank" rel="noopener">Browse on Hugging Face &rarr;</a>
@@ -423,7 +423,7 @@
 
     <div class="bench-nav"><div class="bench-tabs">
       <button class="bench-tab active" data-bench="drishtitable">
-        <span class="tn">DrishtiTable</span><span class="ts">83.2% TEDS &middot; +5.9pp vs best</span>
+        <span class="tn">DrishtiTable</span><span class="ts">84.9% TEDS &middot; +7.5pp vs best frontier</span>
       </button>
       <button class="bench-tab" data-bench="nalandabench">
         <span class="tn">NalandaBench V1</span><span class="ts">66.8% accuracy &middot; +6.3pp via GRPO</span>
@@ -466,7 +466,7 @@
         <div class="dt-feat"><div class="ic">04</div><h4>Open &amp; Reproducible</h4><p>Public sample + eval script on Hugging Face (Apache-2.0). Run any model on the test set &mdash; no form required.</p></div>
       </div>
       <div class="lb-meta">
-        <span class="lm">DrishtiTable &middot; 135 held-out tables &middot; 6 models</span>
+        <span class="lm">DrishtiTable &middot; 135 held-out tables &middot; 11 models</span>
         <span class="ll">
           <a href="https://huggingface.co/datasets/Nalandadata/DrishtiTable" target="_blank" rel="noopener">&#8599; HF dataset</a>
           <a href="https://huggingface.co/spaces/nalanda-data/DrishtiTable-Leaderboard" target="_blank" rel="noopener">&#8599; Eval script</a>
@@ -478,16 +478,17 @@
             <caption>DrishtiTable &mdash; 135 held-out tables (image &rarr; HTML, TEDS) <span id="lb-sync" class="lb-sync"></span></caption>
             <thead><tr><th>Model</th><th>Method</th><th style="text-align:right">TEDS</th><th style="text-align:right">S-TEDS</th><th style="text-align:right">&Delta; vs #1</th></tr></thead>
             <tbody id="drishti-lb-body" data-fallback="1">
-              <tr class="best"><th>DrishtiTable-Qwen2.5-VL-7B <span class="badge">ours</span></th><td>SFT (QLoRA)</td><td style="text-align:right">83.2%</td><td style="text-align:right">89.7%</td><td style="text-align:right">&mdash;</td></tr>
-              <tr><th>Claude Sonnet 4.6</th><td>Zero-shot</td><td style="text-align:right">77.3%</td><td style="text-align:right">89.2%</td><td style="text-align:right"><span class="dneg">&minus;5.9</span></td></tr>
-              <tr><th>Claude Opus 4.8</th><td>Zero-shot</td><td style="text-align:right">75.5%</td><td style="text-align:right">88.2%</td><td style="text-align:right"><span class="dneg">&minus;7.7</span></td></tr>
-              <tr><th>GPT-4o</th><td>Zero-shot</td><td style="text-align:right">71.1%</td><td style="text-align:right">84.3%</td><td style="text-align:right"><span class="dneg">&minus;12.1</span></td></tr>
-              <tr><th>GPT-5.1</th><td>Zero-shot</td><td style="text-align:right">69.9%</td><td style="text-align:right">83.3%</td><td style="text-align:right"><span class="dneg">&minus;13.3</span></td></tr>
-              <tr><th>GPT-4.1</th><td>Zero-shot</td><td style="text-align:right">68.0%</td><td style="text-align:right">80.8%</td><td style="text-align:right"><span class="dneg">&minus;15.2</span></td></tr>
-              <tr><th>Gemini 3.1 Pro</th><td>Zero-shot</td><td style="text-align:right">65.7%</td><td style="text-align:right">73.6%</td><td style="text-align:right"><span class="dneg">&minus;17.5</span></td></tr>
-              <tr><th>GPT-5 mini</th><td>Zero-shot</td><td style="text-align:right">62.2%</td><td style="text-align:right">72.7%</td><td style="text-align:right"><span class="dneg">&minus;21.0</span></td></tr>
-              <tr><th>o4-mini</th><td>Zero-shot</td><td style="text-align:right">61.4%</td><td style="text-align:right">70.0%</td><td style="text-align:right"><span class="dneg">&minus;21.8</span></td></tr>
-              <tr><th>Qwen2.5-VL-7B</th><td>Zero-shot</td><td style="text-align:right">58.8%</td><td style="text-align:right">74.0%</td><td style="text-align:right"><span class="dneg">&minus;24.4</span></td></tr>
+              <tr class="best"><th>DrishtiTable-Qwen3-VL-8B <span class="badge">ours &middot; research</span></th><td>Fine-tuned (SFT, research)</td><td style="text-align:right">84.9%</td><td style="text-align:right">90.4%</td><td style="text-align:right">&mdash;</td></tr>
+              <tr class="best"><th>DrishtiTable-Qwen2.5-VL-7B <span class="badge">ours &middot; released</span></th><td>SFT (QLoRA)</td><td style="text-align:right">83.2%</td><td style="text-align:right">89.7%</td><td style="text-align:right"><span class="dneg">&minus;1.7</span></td></tr>
+              <tr><th>Claude Sonnet 4.6</th><td>Zero-shot</td><td style="text-align:right">77.3%</td><td style="text-align:right">89.2%</td><td style="text-align:right"><span class="dneg">&minus;7.6</span></td></tr>
+              <tr><th>Claude Opus 4.8</th><td>Zero-shot</td><td style="text-align:right">75.5%</td><td style="text-align:right">88.2%</td><td style="text-align:right"><span class="dneg">&minus;9.4</span></td></tr>
+              <tr><th>GPT-4o</th><td>Zero-shot</td><td style="text-align:right">71.1%</td><td style="text-align:right">84.3%</td><td style="text-align:right"><span class="dneg">&minus;13.8</span></td></tr>
+              <tr><th>GPT-5.1</th><td>Zero-shot</td><td style="text-align:right">69.9%</td><td style="text-align:right">83.3%</td><td style="text-align:right"><span class="dneg">&minus;15.0</span></td></tr>
+              <tr><th>GPT-4.1</th><td>Zero-shot</td><td style="text-align:right">68.0%</td><td style="text-align:right">80.8%</td><td style="text-align:right"><span class="dneg">&minus;16.9</span></td></tr>
+              <tr><th>Gemini 3.1 Pro</th><td>Zero-shot</td><td style="text-align:right">65.7%</td><td style="text-align:right">73.6%</td><td style="text-align:right"><span class="dneg">&minus;19.2</span></td></tr>
+              <tr><th>GPT-5 mini</th><td>Zero-shot</td><td style="text-align:right">62.2%</td><td style="text-align:right">72.7%</td><td style="text-align:right"><span class="dneg">&minus;22.7</span></td></tr>
+              <tr><th>o4-mini</th><td>Zero-shot</td><td style="text-align:right">61.4%</td><td style="text-align:right">70.0%</td><td style="text-align:right"><span class="dneg">&minus;23.5</span></td></tr>
+              <tr><th>Qwen2.5-VL-7B</th><td>Zero-shot</td><td style="text-align:right">58.8%</td><td style="text-align:right">74.0%</td><td style="text-align:right"><span class="dneg">&minus;26.1</span></td></tr>
             </tbody>
           </table>
         </div>
