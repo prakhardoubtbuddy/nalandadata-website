@@ -32,11 +32,12 @@
     s.textContent =
       '.lb-controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:0 0 14px}' +
       '.lb-filter{display:flex;gap:6px;flex-wrap:wrap}' +
-      '.lb-filter button{font:inherit;font-size:11.5px;font-family:var(--mono,monospace);letter-spacing:.04em;color:var(--muted,#9a9a9a);background:transparent;border:1px solid var(--line,#2a2a2a);border-radius:20px;padding:5px 13px;cursor:pointer;transition:.15s}' +
-      '.lb-filter button:hover{color:var(--paper,#eee);border-color:var(--muted-2,#666)}' +
-      '.lb-filter button.on{background:var(--accent-tint,rgba(200,169,110,.14));color:var(--accent,#C8A96E);border-color:var(--accent,#C8A96E)}' +
-      '.lb-search{margin-left:auto;font:inherit;font-size:12.5px;color:var(--paper,#eee);background:var(--ink,#0f0f0f);border:1px solid var(--line,#2a2a2a);border-radius:6px;padding:6px 11px;min-width:150px}' +
-      '.lb-search::placeholder{color:var(--muted-2,#666)}' +
+      '.lb-filter button{-webkit-appearance:none;appearance:none;font:inherit;font-size:11.5px;font-family:"JetBrains Mono",var(--mono,monospace);letter-spacing:.04em;color:#9A938A;background:transparent;border:1px solid #2A2622;border-radius:20px;padding:6px 14px;cursor:pointer;transition:.15s;line-height:1.2}' +
+      '.lb-filter button:hover{color:#F0EBE0;border-color:#A6884F}' +
+      '.lb-filter button.on{background:rgba(200,169,110,.14);color:#C8A96E;border-color:#C8A96E}' +
+      '.lb-search{-webkit-appearance:none;appearance:none;margin-left:auto;font:inherit;font-size:12.5px;font-family:"JetBrains Mono",var(--mono,monospace);color:#F0EBE0;background:#0D0D0D;border:1px solid #2A2622;border-radius:8px;padding:7px 12px;min-width:160px;outline:none}' +
+      '.lb-search:focus{border-color:#C8A96E}' +
+      '.lb-search::placeholder{color:#6B655C}' +
       'table th.lb-sort{cursor:pointer;user-select:none;white-space:nowrap}' +
       'table th.lb-sort:hover{color:var(--accent,#C8A96E)}' +
       'table th.lb-sort .ar{opacity:.35;font-size:9px;margin-left:4px}' +
