@@ -535,7 +535,36 @@
           <p class="cb-note">TEDS (Tree-Edit-Distance Similarity), 0&ndash;100%. Higher is better.</p>
         </div>
 
-        <!-- Dataset composition -->
+        <!-- S-TEDS (structure only) — mockup-v2 dual leaderboard -->
+        <div class="chart-block">
+          <p class="cb-eyebrow">Figure 1b &middot; Structure only</p>
+          <h4 class="cb-title">S-TEDS by model &mdash; layout / grid accuracy</h4>
+          <div id="steds-bars">
+          <div class="bar-row ours"><span class="bar-label">DrishtiTable (ours)</span><span class="bar-track"><span class="bar-fill" style="width:100.0%"></span></span><span class="bar-val">89.7%</span></div>
+          <div class="bar-row"><span class="bar-label">Claude Sonnet 4.6</span><span class="bar-track"><span class="bar-fill" style="width:99.5%"></span></span><span class="bar-val">89.2%</span></div>
+          <div class="bar-row"><span class="bar-label">Claude Opus 4.8</span><span class="bar-track"><span class="bar-fill" style="width:98.3%"></span></span><span class="bar-val">88.2%</span></div>
+          <div class="bar-row"><span class="bar-label">GPT-4o</span><span class="bar-track"><span class="bar-fill" style="width:94.0%"></span></span><span class="bar-val">84.3%</span></div>
+          <div class="bar-row"><span class="bar-label">GPT-5.1</span><span class="bar-track"><span class="bar-fill" style="width:92.9%"></span></span><span class="bar-val">83.3%</span></div>
+          <div class="bar-row"><span class="bar-label">GPT-4.1</span><span class="bar-track"><span class="bar-fill" style="width:90.1%"></span></span><span class="bar-val">80.8%</span></div>
+          </div>
+          <p class="cb-note">S-TEDS scores layout/structure only. The fine-tuned model leads on getting the whole grid right.</p>
+        </div>
+
+        <!-- Composition toggle -->
+        <div class="dt-toggle">
+          <style>
+            .dt-toggle{display:flex;gap:10px;justify-content:center;margin:4px 0 22px;}
+            .dt-toggle button{-webkit-appearance:none;appearance:none;font-family:var(--mono);font-size:12px;color:var(--muted);background:transparent;border:1px solid var(--line);border-radius:20px;padding:7px 18px;cursor:pointer;transition:.15s;}
+            .dt-toggle button.active{color:var(--ink);background:var(--accent);border-color:var(--accent);font-weight:600;}
+            .dt-toggle button:hover:not(.active){border-color:var(--accent);color:var(--accent);}
+            .dt-cset{display:none;} .dt-cset.active{display:block;}
+          </style>
+          <button class="active" data-cset="full">Full corpus (1,421)</button>
+          <button data-cset="test">Test set (135)</button>
+        </div>
+
+        <!-- Dataset composition (full corpus) -->
+        <div class="dt-cset active" id="dt-cset-full">
         <div class="dist-grid">
           <!-- Table type -->
           <div class="chart-block">
@@ -570,6 +599,87 @@
           </div>
         </div>
         <p class="cb-note mt4">Composition across the full DrishtiTable corpus (1,421 expert-annotated tables).</p>
+        </div><!-- /dt-cset-full -->
+
+        <!-- Dataset composition (test set) -->
+        <div class="dt-cset" id="dt-cset-test">
+        <div class="dist-grid">
+          <div class="chart-block">
+            <p class="cb-eyebrow">Figure 2 &middot; Composition</p>
+            <h4 class="cb-title">By table type</h4>
+            <div id="comp-test-table_type">
+            <div class="bar-row"><span class="bar-label">Statistical</span><span class="bar-track"><span class="bar-fill w-100"></span></span><span class="bar-val">72</span></div>
+            <div class="bar-row"><span class="bar-label">Financial</span><span class="bar-track"><span class="bar-fill" style="width:61.1%"></span></span><span class="bar-val">44</span></div>
+            <div class="bar-row"><span class="bar-label">Lookup</span><span class="bar-track"><span class="bar-fill" style="width:20.8%"></span></span><span class="bar-val">15</span></div>
+            <div class="bar-row"><span class="bar-label">Comparison</span><span class="bar-track"><span class="bar-fill" style="width:4.2%"></span></span><span class="bar-val">3</span></div>
+            </div>
+          </div>
+          <div class="chart-block">
+            <p class="cb-eyebrow">Figure 3 &middot; Composition</p>
+            <h4 class="cb-title">By subject</h4>
+            <div id="comp-test-subject">
+            <div class="bar-row"><span class="bar-label">Business Statistics</span><span class="bar-track"><span class="bar-fill w-100"></span></span><span class="bar-val">53</span></div>
+            <div class="bar-row"><span class="bar-label">Business &amp; Finance</span><span class="bar-track"><span class="bar-fill" style="width:81.1%"></span></span><span class="bar-val">43</span></div>
+            <div class="bar-row"><span class="bar-label">Quant. / OR</span><span class="bar-track"><span class="bar-fill" style="width:37.7%"></span></span><span class="bar-val">20</span></div>
+            <div class="bar-row"><span class="bar-label">Fin. Accounting</span><span class="bar-track"><span class="bar-fill" style="width:28.3%"></span></span><span class="bar-val">15</span></div>
+            </div>
+          </div>
+          <div class="chart-block">
+            <p class="cb-eyebrow">Figure 4 &middot; Composition</p>
+            <h4 class="cb-title">By complexity</h4>
+            <div id="comp-test-complexity">
+            <div class="bar-row"><span class="bar-label">Simple</span><span class="bar-track"><span class="bar-fill w-100"></span></span><span class="bar-val">110</span></div>
+            <div class="bar-row"><span class="bar-label">Complex</span><span class="bar-track"><span class="bar-fill" style="width:22.7%"></span></span><span class="bar-val">25</span></div>
+            </div>
+          </div>
+        </div>
+        <p class="cb-note mt4">Composition of the 135-table held-out test split.</p>
+        </div><!-- /dt-cset-test -->
+
+        <!-- Per-type breakdown (where models break) -->
+        <div class="chart-block" style="margin-top:18px;">
+          <p class="cb-eyebrow">Figure 5 &middot; Where models break</p>
+          <h4 class="cb-title">TEDS by table type</h4>
+          <div style="overflow-x:auto;">
+            <table class="ptype-tbl">
+              <thead><tr><th>Model</th><th>Statistical</th><th>Financial</th><th>Lookup</th><th>Comparison</th></tr></thead>
+              <tbody>
+                <tr class="best"><th>DrishtiTable (ours)</th><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td></tr>
+                <tr><th>Claude Sonnet 4.6</th><td>81.8</td><td>66.9</td><td>85.3</td><td>94.6</td></tr>
+                <tr><th>Claude Opus 4.8</th><td>81.2</td><td>63.4</td><td>80.0</td><td>94.7</td></tr>
+                <tr><th>GPT-5.1</th><td>77.4</td><td>56.0</td><td>74.6</td><td>75.6</td></tr>
+                <tr><th>Gemini 3.1 Pro</th><td>73.8</td><td>53.5</td><td>61.6</td><td>88.4</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <style>
+            .ptype-tbl{width:100%;border-collapse:collapse;font-size:13px;min-width:520px;}
+            .ptype-tbl th,.ptype-tbl td{padding:11px 14px;text-align:right;border-bottom:1px solid var(--line-soft);}
+            .ptype-tbl th:first-child,.ptype-tbl td:first-child{text-align:left;}
+            .ptype-tbl thead th{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted-2);font-weight:600;}
+            .ptype-tbl tbody td{font-family:var(--mono);color:#CFC8BB;}
+            .ptype-tbl tbody tr.best{background:var(--accent-tint);}
+            .ptype-tbl tbody tr.best th,.ptype-tbl tbody tr.best td{color:var(--accent);font-weight:600;}
+          </style>
+          <p class="cb-note">Per-type TEDS (%) on the 135-table test set. Frontier models collapse hardest on <b style="color:var(--accent)">Financial</b> tables (merged headers). &ldquo;&mdash;&rdquo; = per-type breakdown pending for our fine-tuned model.</p>
+        </div>
+      </div>
+
+      <!-- Numbered methodology steps (mockup-v2) -->
+      <div class="dt-steps">
+        <style>
+          .dt-steps{margin:28px 0 8px;}
+          .dt-steps .sh{font-size:17px;font-weight:600;color:var(--paper);margin:0 0 16px;}
+          .dt-step{display:grid;grid-template-columns:44px 1fr;gap:14px;border:1px solid var(--line);border-radius:14px;background:var(--ink-2);padding:18px 22px;margin-bottom:12px;}
+          .dt-step .num{width:32px;height:32px;border-radius:50%;background:var(--accent-tint);color:var(--accent);font-family:var(--mono);font-weight:700;display:flex;align-items:center;justify-content:center;font-size:14px;}
+          .dt-step h5{font-size:15px;margin:0 0 5px;color:var(--paper);font-weight:600;}
+          .dt-step p{font-size:13.5px;color:var(--muted);margin:0;line-height:1.55;}
+        </style>
+        <p class="sh">How it was built &mdash; four reproducible steps</p>
+        <div class="dt-step"><div class="num">1</div><div><h5>Curate &amp; annotate</h5><p>1,421 tables sourced from 9 S. Chand textbooks, each manually annotated to ground-truth HTML with semantic structure (thead/tbody, colspan/rowspan, formatting).</p></div></div>
+        <div class="dt-step"><div class="num">2</div><div><h5>Split &amp; freeze</h5><p>Split 1,141 train / 145 val / 135 test. The test set is content-hashed and held private to prevent contamination.</p></div></div>
+        <div class="dt-step"><div class="num">3</div><div><h5>Fine-tune (QLoRA)</h5><p>Qwen2.5-VL-7B fine-tuned with 4-bit QLoRA via Unsloth on a single A100 &mdash; about 35 minutes of compute.</p></div></div>
+        <div class="dt-step"><div class="num">4</div><div><h5>Evaluate (TEDS)</h5><p>Every model scored with the canonical TEDS scorer against expert ground truth. Top frontier failure modes: content divergence, row-count mismatch, flattened merged headers.</p></div></div>
       </div>
 
       <!-- Recognition viewer (illustrative, from mockup-v2) -->
@@ -631,6 +741,21 @@
             <div class="dt-vbox"><h5>vs GPT-4o (same table)</h5><div style="font-family:var(--mono);font-size:13px;margin-bottom:9px;">TEDS: <b style="color:var(--muted)">0.78</b></div><p class="dt-code">GPT-4o flattened the merged "Amount" header into one column &mdash; the classic Financial-table failure.</p></div>
           </div>
         </div>
+      </div>
+
+      <!-- Data access cards (mockup-v2) -->
+      <div class="dt-access">
+        <style>
+          .dt-access{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:28px 0 8px;}
+          @media(max-width:700px){.dt-access{grid-template-columns:1fr;}}
+          .dt-ac{border:1px solid var(--line);border-radius:16px;background:var(--ink-2);padding:26px;}
+          .dt-ac .pill{display:inline-block;font-family:var(--mono);font-size:11px;border:1px solid var(--accent-deep);color:var(--accent);border-radius:20px;padding:4px 14px;margin-bottom:14px;}
+          .dt-ac h5{font-size:16px;margin:0 0 8px;color:var(--paper);font-weight:600;}
+          .dt-ac p{color:var(--muted);font-size:14px;margin:0 0 16px;line-height:1.55;}
+          .dt-ac a.cta{font-family:var(--mono);font-size:13px;color:var(--accent);}
+        </style>
+        <div class="dt-ac"><span class="pill">Public</span><h5>Sample dataset &amp; eval</h5><p>A public sample of DrishtiTable is on Hugging Face (Apache-2.0) with the evaluation script. Run any model on the test set &mdash; no form required.</p><a class="cta" href="https://huggingface.co/datasets/Nalandadata/DrishtiTable" target="_blank" rel="noopener">&#129303; Hugging Face &rarr;</a></div>
+        <div class="dt-ac"><span class="pill">Full corpus</span><h5>License the dataset</h5><p>Reach out for the full 1,421-table annotated corpus and commercial licensing.</p><a class="cta" href="/contact">Contact us &rarr;</a></div>
       </div>
 
       <p class="selfserve">To run your model on the public test set, use the <a href="https://huggingface.co/datasets/Nalandadata/DrishtiTable" target="_blank" rel="noopener">evaluation script on Hugging Face</a> &mdash; no form required. To submit to the held-out leaderboard, request access below.</p>

@@ -45,22 +45,26 @@
     notifySynced();
   }
 
-  function renderBars(rows) {
-    var box = document.getElementById('teds-bars');
+  function renderBars(rows) { barsBy('teds-bars', rows, 'teds'); barsBy('steds-bars', rows, 'steds'); }
+  function barsBy(boxId, rows, key) {
+    var box = document.getElementById(boxId);
     if (!box || !rows || !rows.length) return;
-    var top = rows.slice(0, 6);          // show up to top 6
-    var max = top[0].teds || 100;        // scale to leader for visual range
+    var top = rows.filter(function (r) { return typeof r[key] === 'number'; })
+                  .sort(function (a, b) { return b[key] - a[key]; })
+                  .slice(0, 6);
+    if (!top.length) return;
+    var max = top[0][key] || 100;
     var html = '';
     for (var i = 0; i < top.length; i++) {
       var r = top[i];
       var ours = (r.category === 'fine-tuned') ||
                  (r.model && r.model.indexOf('DrishtiTable') !== -1);
-      var pct = Math.max(2, (r.teds / max) * 100);
+      var pct = Math.max(2, (r[key] / max) * 100);
       var label = ours ? 'DrishtiTable (ours)' : esc(r.model);
       html += '<div class="bar-row' + (ours ? ' ours' : '') + '">' +
         '<span class="bar-label">' + label + '</span>' +
         '<span class="bar-track"><span class="bar-fill" style="width:' + pct.toFixed(1) + '%"></span></span>' +
-        '<span class="bar-val">' + r.teds.toFixed(1) + '%</span>' +
+        '<span class="bar-val">' + r[key].toFixed(1) + '%</span>' +
       '</div>';
     }
     box.innerHTML = html;
@@ -103,10 +107,17 @@
     fetch('/api/hf/composition', { headers: { 'Accept': 'application/json' } })
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (d) {
-        if (!d || !d.full) return;
-        renderDist('comp-table_type', d.full.table_type);
-        renderDist('comp-subject', d.full.subject);
-        renderDist('comp-complexity', d.full.complexity);
+        if (!d) return;
+        if (d.full) {
+          renderDist('comp-table_type', d.full.table_type);
+          renderDist('comp-subject', d.full.subject);
+          renderDist('comp-complexity', d.full.complexity);
+        }
+        if (d.test) {
+          renderDist('comp-test-table_type', d.test.table_type);
+          renderDist('comp-test-subject', d.test.subject);
+          renderDist('comp-test-complexity', d.test.complexity);
+        }
       })
       .catch(function () { /* keep fallback */ });
   }

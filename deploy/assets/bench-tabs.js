@@ -28,7 +28,21 @@
       });
     }
   }
-  function init() { initTabs(); initViewer(); }
+  function initCset() {
+    var btns = document.querySelectorAll('.dt-toggle button[data-cset]');
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].addEventListener('click', function () {
+        var set = this.getAttribute('data-cset');
+        var sets = document.querySelectorAll('.dt-cset');
+        for (var j = 0; j < sets.length; j++) sets[j].classList.remove('active');
+        var el = document.getElementById('dt-cset-' + set);
+        if (el) el.classList.add('active');
+        for (var k = 0; k < btns.length; k++) btns[k].classList.remove('active');
+        this.classList.add('active');
+      });
+    }
+  }
+  function init() { initTabs(); initViewer(); initCset(); }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
 })();
