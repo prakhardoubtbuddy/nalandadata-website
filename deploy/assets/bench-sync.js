@@ -162,6 +162,40 @@
       .catch(function () { /* keep fallback */ });
   }
 
+  // ---- Nalanda Image VL (STEM-VL) leaderboard table ----
+  function renderIQ(rows) {
+    var body = document.getElementById('imageqa-lb-body');
+    if (!body || !rows || !rows.length) return;
+    var html = '';
+    for (var i = 0; i < rows.length; i++) {
+      var r = rows[i];
+      var ours = (r.category === 'fine-tuned');
+      var base = (r.category === 'baseline');
+      var nameExtra = ours ? ' <span class="badge">ours</span>' : (base ? ' <span class="who2">baseline</span>' : '');
+      var vb = (ours && r.vs_base != null)
+        ? '<span class="dpos">+' + r.vs_base + '</span>'
+        : '&mdash;';
+      html += '<tr' + (ours ? ' class="best"' : '') + '>' +
+        '<th>' + esc(r.model) + nameExtra + '</th>' +
+        '<td>' + esc(r.method || '') + '</td>' +
+        '<td style="text-align:right">' + fmt(r.accuracy) + '</td>' +
+        '<td style="text-align:right">' + vb + '</td>' +
+      '</tr>';
+    }
+    body.innerHTML = html;
+    body.removeAttribute('data-fallback');
+    var sync = document.getElementById('iq-sync');
+    if (sync) { sync.textContent = '\u25CF live from Hugging Face'; sync.classList.add('live'); }
+    notifySynced();
+  }
+
+  function loadImageQA() {
+    fetch('/api/hf/imageqa-leaderboard', { headers: { 'Accept': 'application/json' } })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) { if (d && d.rows) renderIQ(d.rows); })
+      .catch(function () { /* keep fallback */ });
+  }
+
   function load() {
     if (!window.fetch) return; // very old browsers: keep fallback
     fetch(ENDPOINT, { headers: { 'Accept': 'application/json' } })
@@ -172,6 +206,7 @@
       .catch(function () { /* keep hardcoded fallback */ });
     loadComposition();
     loadNalandaBench();
+    loadImageQA();
   }
 
   if (document.readyState === 'loading') {

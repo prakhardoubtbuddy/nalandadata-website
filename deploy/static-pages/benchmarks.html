@@ -428,8 +428,8 @@
       <button class="bench-tab" data-bench="nalandabench">
         <span class="tn">NalandaBench V1</span><span class="ts">66.8% accuracy &middot; +6.3pp via GRPO</span>
       </button>
-      <button class="bench-tab soon" disabled>
-        <span class="tn">nalanda-image-vl</span><span class="tab-badge">Coming soon</span>
+      <button class="bench-tab" data-bench="imageqa">
+        <span class="tn">Nalanda Image VL</span><span class="ts">+12.3pp vs base &middot; STEM-VL</span>
       </button>
     </div></div>
 
@@ -800,6 +800,121 @@
         <div class="cond">Same base model, same held-out set. Verified-reward RL (GRPO) using expert-verified answers as the reward lifted accuracy <b>+6.3 points</b> (60.5% &rarr; 66.8%) &mdash; by reasoning, not memorising. Full method in the <a href="/research/nalandabench" style="color:var(--accent)">case study &rarr;</a></div>
       </div>
       <p class="selfserve">To run your model on the public test set, use the <a href="https://huggingface.co/datasets/Nalandadata/NalandaJEENEETBench" target="_blank" rel="noopener">evaluation script on Hugging Face</a> &mdash; no form required. To submit to the held-out leaderboard, request access below.</p>
+    </div>
+
+    <!-- Nalanda Image VL (STEM-VL) panel -->
+    <div class="bench-panel" id="bp-imageqa">
+      <div class="bench-h">
+        <h3>Nalanda Image VL &mdash; STEM Science QA</h3>
+        <p>Multiple-choice science reasoning (Physics, Chemistry, Biology, Maths) on a held-out set. Tests whether domain-specific fine-tuning of an open vision-language model can close the gap on curriculum-grade STEM questions.</p>
+      </div>
+      <div class="key-stat">
+        <span class="kd">+12.3pp</span>
+        <span class="kl"><b>from QLoRA fine-tuning of LLaMA-3.2-Vision-11B</b>37.7% &rarr; 50.0% over the zero-shot base, from a curated 22.7K-pair dataset &mdash; frontier models still lead on absolute accuracy</span>
+      </div>
+      <div class="methbox">
+        <h4>Methodology</h4>
+        <p>162 held-out scorable MCQs with expert ground-truth answers. Every model &mdash; our fine-tune, the zero-shot base, and frontier models &mdash; is scored with the <b>identical</b> exact-match scorer over its full response, so reason-first models are not penalised. Decoding is deterministic (greedy / temperature&nbsp;0). <a href="https://huggingface.co/datasets/Nalandadata/nalanda-image-qa" target="_blank" rel="noopener">Full methodology &amp; scoring on Hugging Face &rarr;</a></p>
+      </div>
+      <div class="lb-meta">
+        <span class="lm">Nalanda Image VL &middot; 162 held-out MCQs &middot; 6 models</span>
+        <span class="ll">
+          <a href="https://huggingface.co/datasets/Nalandadata/nalanda-image-qa" target="_blank" rel="noopener">&#8599; HF dataset</a>
+          <a href="https://huggingface.co/Nalandadata/nalanda-image-vl" target="_blank" rel="noopener">&#8599; Model</a>
+        </span>
+      </div>
+      <div class="tablecard">
+        <div class="tbl-scroll">
+          <table>
+            <caption>Nalanda Image VL &mdash; 162 held-out STEM MCQs (accuracy, higher is better) <span id="iq-sync" class="lb-sync"></span></caption>
+            <thead><tr><th>Model</th><th>Method</th><th style="text-align:right">Accuracy</th><th style="text-align:right">vs base</th></tr></thead>
+            <tbody id="imageqa-lb-body" data-fallback="1">
+              <tr><th>Claude Sonnet 4.6</th><td>Zero-shot</td><td style="text-align:right">72.2%</td><td style="text-align:right">&mdash;</td></tr>
+              <tr><th>Claude Opus 4.8</th><td>Zero-shot</td><td style="text-align:right">68.5%</td><td style="text-align:right">&mdash;</td></tr>
+              <tr><th>Gemini 3.1 Pro</th><td>Zero-shot</td><td style="text-align:right">65.4%</td><td style="text-align:right">&mdash;</td></tr>
+              <tr><th>GPT-5.1</th><td>Zero-shot</td><td style="text-align:right">64.2%</td><td style="text-align:right">&mdash;</td></tr>
+              <tr class="best"><th>Nalanda Image VL <span class="badge">ours</span></th><td>Fine-tuned (QLoRA)</td><td style="text-align:right">50.0%</td><td style="text-align:right" class="dpos">+12.3</td></tr>
+              <tr><th>LLaMA-3.2-Vision-11B <span class="who2">baseline</span></th><td>Zero-shot (base)</td><td style="text-align:right">37.7%</td><td style="text-align:right">&mdash;</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="cond">Honest ranking by real accuracy on the same 162 held-out questions. Fine-tuning lifts the open 11B model <b>+12.3 points</b> (37.7% &rarr; 50.0%) over its zero-shot base &mdash; a large gain from a small curated dataset. Frontier models lead on absolute accuracy on general science reasoning; the result here is the <b>fine-tuning gain</b>, not a frontier win.</div>
+      </div>
+
+      <!-- Per-subject breakdown -->
+      <div class="ptype-wrap">
+        <h4 class="cb-title" style="margin-top:30px">Per-subject accuracy &mdash; fine-tuned vs base</h4>
+        <div class="tbl-scroll">
+          <table class="ptype-tbl">
+            <thead><tr><th>Subject</th><th style="text-align:right">N</th><th style="text-align:right">Base</th><th style="text-align:right">Nalanda Image VL</th><th style="text-align:right">&Delta;</th></tr></thead>
+            <tbody>
+              <tr class="best"><th>Maths</th><td style="text-align:right">34</td><td style="text-align:right">26.5</td><td style="text-align:right">50.0</td><td style="text-align:right" class="dpos">+23.5</td></tr>
+              <tr><th>Biology</th><td style="text-align:right">37</td><td style="text-align:right">32.4</td><td style="text-align:right">45.9</td><td style="text-align:right" class="dpos">+13.5</td></tr>
+              <tr><th>Physics</th><td style="text-align:right">52</td><td style="text-align:right">38.5</td><td style="text-align:right">50.0</td><td style="text-align:right" class="dpos">+11.5</td></tr>
+              <tr><th>Chemistry</th><td style="text-align:right">39</td><td style="text-align:right">51.3</td><td style="text-align:right">53.8</td><td style="text-align:right" class="dpos">+2.6</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="cb-note">Per-subject accuracy (%) on the 162-question held-out set. The largest gains land where the base model was weakest &mdash; Maths nearly doubled.</p>
+      </div>
+
+      <!-- Scoring system + rubric + failure modes (data-set section) -->
+      <div class="dt-step-grid" style="margin-top:34px">
+        <style>
+          .iq-rubric{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:8px 0;}
+          @media(max-width:700px){.iq-rubric{grid-template-columns:1fr;}}
+          .iq-card{border:1px solid var(--line);border-radius:14px;background:var(--ink-2);padding:22px;}
+          .iq-card h5{font-size:15px;margin:0 0 10px;color:var(--paper);font-weight:600;}
+          .iq-card ul{margin:0;padding-left:18px;color:var(--muted);font-size:13.5px;line-height:1.7;}
+          .iq-card p{color:var(--muted);font-size:13.5px;line-height:1.6;margin:0 0 8px;}
+          .iq-card code{font-family:var(--mono);font-size:12px;color:var(--accent);}
+        </style>
+        <h4 class="cb-title">Scoring system &amp; how it was evaluated</h4>
+        <div class="iq-rubric">
+          <div class="iq-card">
+            <h5>Scoring system</h5>
+            <p><b>Metric:</b> exact-match MCQ accuracy = correct / scorable, overall &amp; per-subject.</p>
+            <p><b>Ground truth:</b> parsed via <code>correct answer is [A-D]</code> &rarr; a set (multi-correct supported).</p>
+            <p><b>Prediction:</b> fair scorer reads the <b>full</b> response and takes the <b>last</b> stated final answer &mdash; so reason-first models aren&rsquo;t penalised for answering after their reasoning.</p>
+            <p><b>Decoding:</b> greedy / temperature&nbsp;0 (deterministic). Same scorer for every model.</p>
+          </div>
+          <div class="iq-card">
+            <h5>Rubric</h5>
+            <ul>
+              <li><b>Correct</b> &mdash; final stated letter is in the ground-truth set.</li>
+              <li><b>Wrong letter</b> &mdash; a letter was stated but not in the set.</li>
+              <li><b>Unparseable</b> &mdash; no A&ndash;D letter could be extracted (truncated reasoning / refusal); counts as incorrect.</li>
+              <li><b>Multi-correct miss</b> &mdash; multiple correct answers, prediction didn&rsquo;t match.</li>
+            </ul>
+          </div>
+          <div class="iq-card">
+            <h5>Failure modes observed</h5>
+            <ul>
+              <li>Specialized visual vocabulary (circuits, molecules, free-body conventions).</li>
+              <li>Multi-step reasoning chaining visual + domain knowledge.</li>
+              <li>Precision &mdash; misreading a subscript or sign flips the answer.</li>
+              <li>Verbose reasoning models can exhaust the token budget before answering (mitigated by raising the limit for all models).</li>
+            </ul>
+          </div>
+          <div class="iq-card">
+            <h5>Limitations (stated plainly)</h5>
+            <ul>
+              <li>The scored held-out subset is <b>text-only</b> &mdash; not a pure vision evaluation.</li>
+              <li>Single fine-tuned base model (LLaMA-3.2-Vision-11B).</li>
+              <li>162-question set &mdash; small N, so per-subject deltas have wide confidence intervals.</li>
+              <li>3,253 corpus samples excluded for missing images.</li>
+            </ul>
+          </div>
+        </div>
+        <p class="cb-note">Eval harness adapted verbatim from the project pipeline; per-question logs retained. Full <a href="https://huggingface.co/datasets/Nalandadata/nalanda-image-qa/blob/main/benchmark/methodology.json" target="_blank" rel="noopener" style="color:var(--accent)">methodology.json on Hugging Face &rarr;</a></p>
+      </div>
+
+      <div class="dt-access">
+        <div class="dt-ac"><span class="pill">Public</span><h5>Sample dataset</h5><p>A 1,000-pair stratified sample of the STEM-VL dataset is on Hugging Face (CC BY 4.0) with images and the full benchmark methodology.</p><a class="cta" href="https://huggingface.co/datasets/Nalandadata/nalanda-image-qa" target="_blank" rel="noopener">&#129303; Hugging Face &rarr;</a></div>
+        <div class="dt-ac"><span class="pill">Full corpus</span><h5>License the dataset</h5><p>Reach out for the full 22,679-pair multimodal STEM QA corpus and commercial licensing.</p><a class="cta" href="/contact">Contact us &rarr;</a></div>
+      </div>
+
+      <p class="selfserve">To run your model on this benchmark, use the <a href="https://huggingface.co/datasets/Nalandadata/nalanda-image-qa" target="_blank" rel="noopener">dataset &amp; methodology on Hugging Face</a>. To submit to the leaderboard, request access below.</p>
     </div>
   </div>
 </section>

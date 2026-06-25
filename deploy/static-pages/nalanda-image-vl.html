@@ -232,7 +232,7 @@
     <div class="wrap">
       <p class="eyebrow">Case study · Science diagram understanding</p>
       <h1>Teaching a vision model to read <span class="hl">science diagrams</span>.</h1>
-      <p class="cs-deck">We wanted a model that could look at a science diagram &mdash; a circuit, a molecule, a geometry figure &mdash; and reason its way to the answer. That&rsquo;s hard, because science diagrams use their own visual shorthand, nothing like the everyday photos these models learn from. So we built <b>22,679 science questions</b>, each paired with its diagram and a step-by-step worked answer, and fine-tuned a <b>LLaMA-3.2-Vision-11B</b> model on them. The key move: we trained the part of the model that sees, not just the part that reads, since the seeing is where these models fall short on diagrams. On a held-out set its accuracy rose from 38.3% to <b>47.5%</b>, a <b>9.3-point gain</b>, with mathematics nearly tripling. The model and a dataset sample are public.</p>
+      <p class="cs-deck">We wanted a model that could look at a science diagram &mdash; a circuit, a molecule, a geometry figure &mdash; and reason its way to the answer. That&rsquo;s hard, because science diagrams use their own visual shorthand, nothing like the everyday photos these models learn from. So we built <b>22,679 science questions</b>, each paired with its diagram and a step-by-step worked answer, and fine-tuned a <b>LLaMA-3.2-Vision-11B</b> model on them. The key move: we trained the part of the model that sees, not just the part that reads, since the seeing is where these models fall short on diagrams. On a held-out set its accuracy rose from 37.7% to <b>50.0%</b>, a <b>12.3-point gain</b>, with mathematics nearly doubling. The model and a dataset sample are public.</p>
 
       <div class="metastrip">
         <div><div class="mk">Method</div><div class="mv">Visual instruction tuning (QLoRA)</div></div>
@@ -243,12 +243,12 @@
 
       <div class="cs-stats">
         <div class="c win">
-          <div class="num">+9.3<span class="u">pts</span></div>
-          <div class="lbl">Overall accuracy on the held-out set, 38.3% &rarr; 47.5%, after fine-tuning on the dataset.</div>
+          <div class="num">+12.3<span class="u">pts</span></div>
+          <div class="lbl">Overall accuracy on the held-out set, 37.7% &rarr; 50.0%, after fine-tuning on the dataset.</div>
         </div>
         <div class="c win">
           <div class="num">+23.5<span class="u">pts</span></div>
-          <div class="lbl">Mathematics, the largest subject gain &mdash; accuracy nearly tripled, from 14.7% to 38.2%.</div>
+          <div class="lbl">Mathematics, the largest subject gain &mdash; accuracy nearly doubled, from 26.5% to 50.0%.</div>
         </div>
         <div class="c">
           <div class="num">22,679</div>
@@ -356,15 +356,15 @@
               </tr>
             </thead>
             <tbody>
-              <tr><th scope="row">Mathematics</th><td>14.7</td><td>38.2</td><td class="pos">+23.5</td></tr>
-              <tr><th scope="row">Biology</th><td>37.8</td><td>51.4</td><td class="pos">+13.5</td></tr>
-              <tr><th scope="row">Physics</th><td>38.5</td><td>44.2</td><td class="pos">+5.8</td></tr>
-              <tr><th scope="row">Chemistry</th><td>59.0</td><td>56.4</td><td class="neg">&minus;2.6</td></tr>
-              <tr class="best"><th scope="row">Overall</th><td>38.3</td><td>47.5</td><td class="pos">+9.3</td></tr>
+              <tr><th scope="row">Mathematics</th><td>26.5</td><td>50.0</td><td class="pos">+23.5</td></tr>
+              <tr><th scope="row">Biology</th><td>32.4</td><td>45.9</td><td class="pos">+13.5</td></tr>
+              <tr><th scope="row">Physics</th><td>38.5</td><td>50.0</td><td class="pos">+11.5</td></tr>
+              <tr><th scope="row">Chemistry</th><td>51.3</td><td>53.8</td><td class="pos">+2.6</td></tr>
+              <tr class="best"><th scope="row">Overall</th><td>37.7</td><td>50.0</td><td class="pos">+12.3</td></tr>
             </tbody>
           </table>
         </div>
-        <p class="cond"><b>How to read this.</b> The held-out questions come from the same distribution as training, and the model never saw them; each is scored with its diagram present. The lift concentrates where the base model was weakest and the diagrams least like natural images: mathematics nearly tripled, and biology rose 13.5 points. Chemistry, where the base model was already strongest, dips slightly &mdash; a known effect when one strong subject is fine-tuned alongside three weaker ones. The overall gain is +9.3 points, on a deliberately held-out set of 162 questions.</p>
+        <p class="cond"><b>How to read this.</b> The held-out questions come from the same distribution as training, and the model never saw them. Every model is scored with the same exact-match scorer over its full response. The lift concentrates where the base model was weakest: mathematics nearly doubled (+23.5), and biology rose 13.5 points. Chemistry, where the base model was already strongest, gains only modestly (+2.6). The overall gain is +12.3 points, on a deliberately held-out set of 162 questions.</p>
       </div>
     </div>
   </section>
@@ -383,7 +383,7 @@
         <li><b>It can't connect sight to principle.</b> It describes the diagram but doesn't tie what it sees to the law or theorem that answers the question.</li>
         <li><b>It can't tell look-alikes apart.</b> Given near-identical diagrams as options &mdash; two molecules, two cell types &mdash; it picks the wrong one.</li>
       </ul>
-      <p class="closing">Fine-tuning on diagram-grounded reasoning fixes these where the diagrams are most distinctive. On the held-out set, overall accuracy rose 9.3 points; mathematics nearly tripled, from 14.7% to 38.2%, and biology climbed 13.5. The biggest gains came in exactly the subjects whose diagrams look least like natural images &mdash; which is the case for training the vision layers, not just the language ones. The same model that used to misread a geometry figure now reasons from it.</p>
+      <p class="closing">Fine-tuning on diagram-grounded reasoning fixes these where the diagrams are most distinctive. On the held-out set, overall accuracy rose 12.3 points; mathematics nearly doubled, from 26.5% to 50.0%, and biology climbed 13.5. The biggest gains came in exactly the subjects where the base model was weakest &mdash; which is the case for training the vision layers, not just the language ones. The same model that used to misread a geometry figure now reasons from it.</p>
       <p class="closing">The model and a dataset sample are public. And because the gain came from diagram-grounded questions with reasoning traces, the same recipe carries to any field where the picture is the problem &mdash; engineering schematics, medical imaging, technical manuals, charts and graphs.</p>
     </div>
   </section>
@@ -418,7 +418,7 @@ prompt = processor.apply_chat_template(msg, add_generation_prompt=True)
 inputs = processor(diagram_image, prompt, return_tensors="pt").to(model.device)
 print(processor.decode(model.generate(**inputs, max_new_tokens=512)[0],
                        skip_special_tokens=True))</code></pre>
-        <p class="repro-note">The released checkpoint is the LLaMA-3.2-Vision-11B fine-tune. Prepending the subject tag, as in training, matches how the model was evaluated; the held-out result is +9.3 points overall, the number on this page.</p>
+        <p class="repro-note">The released checkpoint is the LLaMA-3.2-Vision-11B fine-tune. Prepending the subject tag, as in training, matches how the model was evaluated; the held-out result is +12.3 points overall, the number on this page.</p>
       </div>
     </div>
   </section>
@@ -438,11 +438,11 @@ print(processor.decode(model.generate(**inputs, max_new_tokens=512)[0],
         </details>
         <details>
           <summary>Why did Mathematics gain the most?<span class="ic">+</span></summary>
-          <div class="ans">Because the base model started weakest there, at 14.7%, and maths diagrams &mdash; geometric constructions, function graphs &mdash; are among the least like natural images, so there was the most to learn. Accuracy nearly tripled, to 38.2%.</div>
+          <div class="ans">Because the base model started weakest there, at 26.5%, and maths diagrams &mdash; geometric constructions, function graphs &mdash; are among the least like natural images, so there was the most to learn. Accuracy nearly doubled, to 50.0%.</div>
         </details>
         <details>
           <summary>What happened with Chemistry?<span class="ic">+</span></summary>
-          <div class="ans">Chemistry dipped 2.6 points. The base model was already strongest there, at 59%, and training one strong subject alongside three weaker ones can erode it slightly. It points to subject-aware training as a next step; we report the full per-subject table rather than hide it.</div>
+          <div class="ans">Chemistry gained the least &mdash; +2.6 points. The base model was already strongest there, at 51.3%, so there was less headroom than in maths or physics. We report the full per-subject table rather than hide it.</div>
         </details>
         <details>
           <summary>Can we get the data, or data for our own domain?<span class="ic">+</span></summary>

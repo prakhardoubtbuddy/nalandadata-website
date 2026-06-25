@@ -646,6 +646,7 @@ async def delete_dataset(dataset_id: str):
 HF_MODEL_ID   = "Nalandadata/nalanda-qwen-7b-grpo"
 HF_DATASET_ID = "Nalandadata/NalandaJEENEETBench"
 DRISHTI_DATASET_ID = "Nalandadata/DrishtiTable"  # holds benchmark/leaderboard.jsonl
+IMAGEQA_DATASET_ID = "Nalandadata/nalanda-image-qa"  # holds benchmark/{leaderboard,composition,methodology}
 HF_TOKEN = os.environ.get("HF_TOKEN", "")  # needed for gated repos (e.g. DrishtiTable)
 _hf_cache: Dict[str, Any] = {}
 HF_CACHE_TTL = 600  # 10 minutes
@@ -833,6 +834,64 @@ async def get_hf_nalandabench_leaderboard():
         "count": len(clean),
         "rows": clean,
     }
+
+
+@api_router.get("/hf/imageqa-leaderboard")
+async def get_hf_imageqa_leaderboard():
+    """Live Nalanda Image QA (STEM-VL) leaderboard, from benchmark/leaderboard.jsonl on HF."""
+    url = f"https://huggingface.co/datasets/{IMAGEQA_DATASET_ID}/resolve/main/benchmark/leaderboard.jsonl"
+    text = await _fetch_hf_file(url, "hf_imageqa_lb")
+    rows = []
+    for line in text.splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            rows.append(json.loads(line))
+        except json.JSONDecodeError:
+            continue
+    clean = [
+        {
+            "model": x.get("model"),
+            "org": x.get("org"),
+            "method": x.get("method"),
+            "category": x.get("category"),
+            "accuracy": x.get("accuracy"),
+            "vs_base": x.get("vs_base"),
+            "per_subject": x.get("per_subject"),
+            "n_samples": x.get("n_samples"),
+            "verified": x.get("verified", False),
+        }
+        for x in rows if x.get("accuracy") is not None
+    ]
+    clean.sort(key=lambda r: r["accuracy"], reverse=True)
+    return {
+        "source": f"https://huggingface.co/datasets/{IMAGEQA_DATASET_ID}",
+        "count": len(clean),
+        "rows": clean,
+    }
+
+
+@api_router.get("/hf/imageqa-composition")
+async def get_hf_imageqa_composition():
+    """Live Nalanda Image QA composition, from benchmark/composition.json on HF."""
+    url = f"https://huggingface.co/datasets/{IMAGEQA_DATASET_ID}/resolve/main/benchmark/composition.json"
+    text = await _fetch_hf_file(url, "hf_imageqa_composition")
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError:
+        raise HTTPException(status_code=502, detail="Invalid composition.json from HF")
+
+
+@api_router.get("/hf/imageqa-methodology")
+async def get_hf_imageqa_methodology():
+    """Live Nalanda Image QA methodology/scoring/failure-modes, from benchmark/methodology.json on HF."""
+    url = f"https://huggingface.co/datasets/{IMAGEQA_DATASET_ID}/resolve/main/benchmark/methodology.json"
+    text = await _fetch_hf_file(url, "hf_imageqa_methodology")
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError:
+        raise HTTPException(status_code=502, detail="Invalid methodology.json from HF")
 
 
 # ── BLOG ROUTES ────────────────────────────────────────────────────────────────
