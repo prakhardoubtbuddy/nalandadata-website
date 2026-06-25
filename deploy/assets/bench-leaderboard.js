@@ -125,7 +125,10 @@
     var hasZs = rows.some(function (r) { return r.dataset.mclass === 'zero'; });
     var showFilter = rows.length >= 4 && hasFt && hasZs;
     var showSearch = rows.length >= 5;
-    if (showFilter || showSearch) {
+    // Guard: don't add a second controls bar if this table already has one
+    // (enhance() re-runs after bench-sync replaces the rows).
+    var existingCtr = card && card.parentNode && card.parentNode.querySelector('.lb-controls');
+    if ((showFilter || showSearch) && !existingCtr) {
       var ctr = document.createElement('div'); ctr.className = 'lb-controls';
       if (showFilter) {
         var fl = document.createElement('div'); fl.className = 'lb-filter';
@@ -155,15 +158,30 @@
   function enhanceAll() {
     try {
       var tables = document.querySelectorAll('.bench-panel .tablecard table');
-      Array.prototype.forEach.call(tables, enhance);
+      Array.prototype.forEach.call(tables, function (t) {
+        // enhance each table at most once (avoids duplicate controls / stale state)
+        if (t.dataset.lbEnhanced) return;
+        t.dataset.lbEnhanced = '1';
+        enhance(t);
+      });
     } catch (e) { /* leave static tables intact */ }
   }
   function init() {
     try { injectCss(); } catch (e) {}
     enhanceAll();
   }
-  // Re-enhance when bench-sync replaces table bodies with live HF data.
-  document.addEventListener('bench:synced', enhanceAll);
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
-  else init();
+  // bench-sync replaces table bodies with live HF data, then fires 'bench:synced'.
+  // We enhance AFTER that so the enhancement is built on the final rows (once).
+  // If sync never fires (HF down -> fallback rows), enhance on DOM ready anyway.
+  var enhancedViaSync = false;
+  document.addEventListener('bench:synced', function () {
+    enhancedViaSync = true;
+    enhanceAll();
+  });
+  function deferredInit() {
+    // small delay to let bench-sync's fetch resolve first; fall back if it doesn't
+    setTimeout(function () { if (!enhancedViaSync) init(); }, 1500);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', deferredInit);
+  else deferredInit();
 })();
