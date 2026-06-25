@@ -185,6 +185,7 @@
   var enhancedViaSync = false;
   document.addEventListener('bench:synced', function () {
     enhancedViaSync = true;
+    try { injectCss(); } catch (e) {}   // ensure control styling is present
     enhanceAll();
   });
   function deferredInit() {
