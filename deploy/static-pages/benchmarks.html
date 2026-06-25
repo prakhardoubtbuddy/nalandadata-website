@@ -644,7 +644,7 @@
             <table class="ptype-tbl">
               <thead><tr><th>Model</th><th>Statistical</th><th>Financial</th><th>Lookup</th><th>Comparison</th></tr></thead>
               <tbody>
-                <tr class="best"><th>DrishtiTable (ours)</th><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td></tr>
+                <tr class="best"><th>DrishtiTable (ours)</th><td>82.8</td><td>82.0</td><td>85.7</td><td>95.9</td></tr>
                 <tr><th>Claude Sonnet 4.6</th><td>81.8</td><td>66.9</td><td>85.3</td><td>94.6</td></tr>
                 <tr><th>Claude Opus 4.8</th><td>81.2</td><td>63.4</td><td>80.0</td><td>94.7</td></tr>
                 <tr><th>GPT-5.1</th><td>77.4</td><td>56.0</td><td>74.6</td><td>75.6</td></tr>
@@ -661,7 +661,7 @@
             .ptype-tbl tbody tr.best{background:var(--accent-tint);}
             .ptype-tbl tbody tr.best th,.ptype-tbl tbody tr.best td{color:var(--accent);font-weight:600;}
           </style>
-          <p class="cb-note">Per-type TEDS (%) on the 135-table test set. Frontier models collapse hardest on <b style="color:var(--accent)">Financial</b> tables (merged headers). &ldquo;&mdash;&rdquo; = per-type breakdown pending for our fine-tuned model.</p>
+          <p class="cb-note">Per-type TEDS (%) on the 135-table test set. Frontier models collapse hardest on <b style="color:var(--accent)">Financial</b> tables (merged headers, debit/credit columns) &mdash; where the fine-tuned model leads by <b style="color:var(--accent)">15&ndash;19 points</b> (82.0 vs 53&ndash;67).</p>
         </div>
       </div>
 
