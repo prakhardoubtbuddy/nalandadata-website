@@ -32,12 +32,13 @@
     s.textContent =
       '.lb-controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:0 0 14px}' +
       '.lb-filter{display:flex;gap:6px;flex-wrap:wrap}' +
-      '.lb-filter button{-webkit-appearance:none;appearance:none;font:inherit;font-size:11.5px;font-family:"JetBrains Mono",var(--mono,monospace);letter-spacing:.04em;color:#9A938A;background:transparent;border:1px solid #2A2622;border-radius:20px;padding:6px 14px;cursor:pointer;transition:.15s;line-height:1.2}' +
-      '.lb-filter button:hover{color:#F0EBE0;border-color:#A6884F}' +
-      '.lb-filter button.on{background:rgba(200,169,110,.14);color:#C8A96E;border-color:#C8A96E}' +
-      '.lb-search{-webkit-appearance:none;appearance:none;margin-left:auto;font:inherit;font-size:12.5px;font-family:"JetBrains Mono",var(--mono,monospace);color:#F0EBE0;background:#0D0D0D;border:1px solid #2A2622;border-radius:8px;padding:7px 12px;min-width:160px;outline:none}' +
-      '.lb-search:focus{border-color:#C8A96E}' +
-      '.lb-search::placeholder{color:#6B655C}' +
+      '.lb-filter button{-webkit-appearance:none!important;appearance:none!important;font-size:11.5px!important;font-family:"JetBrains Mono",monospace!important;letter-spacing:.04em;color:#9A938A!important;background:transparent!important;border:1px solid #2A2622!important;border-radius:20px!important;padding:6px 14px!important;cursor:pointer;transition:.15s;line-height:1.2;width:auto!important;min-width:0!important}' +
+      '.lb-filter button:hover{color:#F0EBE0!important;border-color:#A6884F!important}' +
+      '.lb-filter button.on{background:rgba(200,169,110,.14)!important;color:#C8A96E!important;border-color:#C8A96E!important}' +
+      '.lb-search{-webkit-appearance:none!important;appearance:none!important;margin-left:auto;flex:0 0 auto!important;font-size:12.5px!important;font-family:"JetBrains Mono",monospace!important;color:#F0EBE0!important;background:#0D0D0D!important;border:1px solid #2A2622!important;border-radius:8px!important;padding:7px 12px!important;min-width:160px!important;width:auto!important;outline:none}' +
+      '.lb-search:focus{border-color:#C8A96E!important}' +
+      '.lb-search::placeholder{color:#6B655C!important}' +
+      '.lb-search:-webkit-autofill,.lb-search:-webkit-autofill:focus{-webkit-text-fill-color:#F0EBE0!important;-webkit-box-shadow:0 0 0 1000px #0D0D0D inset!important;caret-color:#F0EBE0}' +
       'table th.lb-sort{cursor:pointer;user-select:none;white-space:nowrap}' +
       'table th.lb-sort:hover{color:var(--accent,#C8A96E)}' +
       'table th.lb-sort .ar{opacity:.35;font-size:9px;margin-left:4px}' +
