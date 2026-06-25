@@ -74,6 +74,12 @@
       r.dataset.model = model.toLowerCase();
       r.dataset.mclass = mclassOf(r.cells[3] ? r.cells[3].textContent : '');
     });
+    // Update the "N models" count label in this panel to the live row count.
+    try {
+      var panel = table.closest ? table.closest('.bench-panel') : null;
+      var lm = panel && panel.querySelector('.lm');
+      if (lm) lm.textContent = lm.textContent.replace(/\b\d+\s+models\b/i, rows.length + ' models');
+    } catch (e) {}
     var sortCols = [];
     for (var c = 4; c < hrow.cells.length; c++) {
       var hasNum = rows.some(function (r) { return num(r.cells[c] && r.cells[c].textContent) !== null; });
@@ -87,7 +93,8 @@
     }
     var st = { col: sortCols.length ? sortCols[0] : null, dir: -1, filter: 'all', q: '' };
     function draw() {
-      var rs = rows.slice();
+      // re-read rows live from the DOM (don't trust a stale snapshot)
+      var rs = Array.prototype.slice.call(tb.rows);
       if (st.col !== null) {
         rs.sort(function (a, b) {
           var va = num(a.cells[st.col].textContent), vb = num(b.cells[st.col].textContent);
@@ -101,8 +108,8 @@
       var rank = 0;
       rs.forEach(function (r) {
         var okF = st.filter === 'all' || r.dataset.mclass === st.filter;
-        var okQ = !st.q || r.dataset.model.indexOf(st.q) !== -1;
-        if (okF && okQ) { rank++; r.style.display = ''; r.cells[0].textContent = rank; }
+        var okQ = !st.q || (r.dataset.model || '').indexOf(st.q) !== -1;
+        if (okF && okQ) { rank++; r.style.display = ''; if (r.cells[0]) r.cells[0].textContent = rank; }
         else { r.style.display = 'none'; }
       });
       for (var i = 0; i < hrow.cells.length; i++) {
