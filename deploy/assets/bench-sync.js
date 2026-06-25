@@ -23,12 +23,15 @@
     var html = '';
     for (var i = 0; i < rows.length; i++) {
       var r = rows[i];
-      var ours = (r.category === 'fine-tuned') ||
+      var research = r.category === 'research-unreleased';
+      var ours = (r.category === 'fine-tuned') || research ||
                  (r.model && r.model.indexOf('DrishtiTable') !== -1);
       var delta = (i === 0)
         ? '&mdash;'
         : '<span class="dneg">&minus;' + (top - r.teds).toFixed(1) + '</span>';
-      var name = esc(r.model) + (ours ? ' <span class="badge">ours</span>' : '');
+      var badge = research ? ' <span class="badge" style="background:var(--accent-deep)">research</span>'
+                           : (ours ? ' <span class="badge">ours</span>' : '');
+      var name = esc(r.model) + badge;
       html += '<tr' + (ours ? ' class="best"' : '') + '>' +
         '<th>' + name + '</th>' +
         '<td>' + esc(r.method || '') + '</td>' +
@@ -57,10 +60,13 @@
     var html = '';
     for (var i = 0; i < top.length; i++) {
       var r = top[i];
-      var ours = (r.category === 'fine-tuned') ||
+      var ours = (r.category === 'fine-tuned') || r.category === 'research-unreleased' ||
                  (r.model && r.model.indexOf('DrishtiTable') !== -1);
       var pct = Math.max(2, (r[key] / max) * 100);
-      var label = ours ? 'DrishtiTable (ours)' : esc(r.model);
+      // distinguish our models by size; shorten the long HF names for the bar label
+      var label = esc(r.model);
+      if (r.model && r.model.indexOf('Qwen3-VL-8B') !== -1) label = 'DrishtiTable 8B (research)';
+      else if (r.model && r.model.indexOf('Qwen2.5-VL-7B') !== -1 && r.category === 'fine-tuned') label = 'DrishtiTable 7B (ours)';
       html += '<div class="bar-row' + (ours ? ' ours' : '') + '">' +
         '<span class="bar-label">' + label + '</span>' +
         '<span class="bar-track"><span class="bar-fill" style="width:' + pct.toFixed(1) + '%"></span></span>' +

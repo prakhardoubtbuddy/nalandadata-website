@@ -440,8 +440,8 @@
         <p>Image &rarr; HTML table recognition on 135 held-out Indian-textbook tables, ranked by TEDS (Tree-Edit-Distance-based Similarity). Tests a model&rsquo;s ability to parse the structure of tables as Indian students and researchers actually encounter them.</p>
       </div>
       <div class="key-stat">
-        <span class="kd">+5.9pp</span>
-        <span class="kl"><b>over the best frontier model (Claude Sonnet 4.6, zero-shot)</b>Fine-tuned 7B leads every frontier model tested</span>
+        <span class="kd">84.9% TEDS</span>
+        <span class="kl"><b>top result &mdash; the fine-tuned 8B, +7.5 points over the best frontier model (Claude Sonnet 4.6)</b>The released 7B is right behind at 83.2%, itself ahead of every frontier model tested</span>
       </div>
       <div class="methbox">
         <h4>Methodology</h4>
@@ -491,7 +491,7 @@
             </tbody>
           </table>
         </div>
-        <div class="cond">Image &rarr; HTML recognition on 135 held-out Indian-textbook tables, ranked by TEDS. The fine-tuned 7B beats the best zero-shot frontier model by <b>+5.9 points</b> (83.2% vs 77.3%).</div>
+        <div class="cond">Image &rarr; HTML recognition on 135 held-out Indian-textbook tables, ranked by TEDS. The fine-tuned <b>8B research variant tops the board at 84.9%</b>; the publicly released 7B is right behind at <b>83.2%</b> &mdash; both ahead of every frontier model tested (best frontier: Claude Sonnet 4.6 at 77.3%).</div>
       </div>
 
       <!-- ── Visual charts: TEDS bars + dataset composition (pure CSS/SVG, no JS) ── -->
@@ -644,7 +644,8 @@
             <table class="ptype-tbl">
               <thead><tr><th>Model</th><th>Statistical</th><th>Financial</th><th>Lookup</th><th>Comparison</th></tr></thead>
               <tbody>
-                <tr class="best"><th>DrishtiTable (ours)</th><td>82.8</td><td>82.0</td><td>85.7</td><td>95.9</td></tr>
+                <tr class="best"><th>DrishtiTable 8B (research)</th><td>85.0</td><td>82.6</td><td>89.2</td><td>93.2</td></tr>
+                <tr class="best"><th>DrishtiTable 7B (released)</th><td>82.8</td><td>82.0</td><td>85.7</td><td>95.9</td></tr>
                 <tr><th>Claude Sonnet 4.6</th><td>81.8</td><td>66.9</td><td>85.3</td><td>94.6</td></tr>
                 <tr><th>Claude Opus 4.8</th><td>81.2</td><td>63.4</td><td>80.0</td><td>94.7</td></tr>
                 <tr><th>GPT-5.1</th><td>77.4</td><td>56.0</td><td>74.6</td><td>75.6</td></tr>
