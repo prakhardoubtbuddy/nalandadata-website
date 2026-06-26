@@ -22,7 +22,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="w-full bg-[#0D0D0D]/90 backdrop-blur-xl border-b border-white/5">
+    <nav className="w-full bg-[#0D0D0D]/90 backdrop-blur-xl border-b border-white/5 relative">
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
         <div className="flex items-center justify-between h-14">
           {/* Logo */}
@@ -80,15 +80,26 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu — full-screen overlay so page content doesn't bleed through */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
             id="mobile-menu"
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden bg-[#0D0D0D] border-t border-white/5"
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.15 }}
+            className="lg:hidden"
+            style={{
+              position: "absolute",
+              top: "100%",
+              left: 0,
+              right: 0,
+              minHeight: "calc(100vh - 96px)",
+              background: "#0D0D0D",
+              borderTop: "1px solid rgba(255,255,255,0.05)",
+              overflowY: "auto",
+            }}
           >
             <div className="px-6 py-5 space-y-1">
               {navLinks.map((link) => (
