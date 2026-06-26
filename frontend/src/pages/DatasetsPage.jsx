@@ -265,7 +265,7 @@ export default function DatasetsPage() {
                   </div>
 
                   {/* Dataset cards */}
-                  <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "16px" }}>
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 280px), 1fr))", gap: "16px" }}>
                     {section.datasets.map((ds, di) => (
                       <Link
                         key={ds.title}
