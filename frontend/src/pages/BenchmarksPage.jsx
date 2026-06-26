@@ -52,30 +52,6 @@ export default function BenchmarksPage() {
         </div>
       </section>
 
-      {/* Why different */}
-      <section className="s-band alt">
-        <div className="s-wrap">
-          <p className="s-eyebrow">Why it's different</p>
-          <h2 style={{ fontSize: "clamp(25px,3.6vw,40px)", fontWeight: 800, letterSpacing: "-0.025em", lineHeight: 1.08, margin: 0 }}>A measurement only matters if it's neutral.</h2>
-          <div className="s-verify">
-            <div className="s-vcard">
-              <div className="vk">Verified ground truth</div>
-              <h3>Expert-authored, not crowd-voted</h3>
-              <p>Every item has a verified correct answer from subject-matter experts, ready for verifier-based scoring.</p>
-            </div>
-            <div className="s-vcard">
-              <div className="vk">Independent</div>
-              <h3>No lab owns the scorekeeper</h3>
-              <p>NalandaBench is built to be the standard others report against — not a tool to validate our own models only.</p>
-            </div>
-            <div className="s-vcard">
-              <div className="vk">Reproducible</div>
-              <h3>Public methodology &amp; data</h3>
-              <p>Open scoring rules and a public test set on Hugging Face, so any result can be independently checked.</p>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Leaderboard section */}
       <section className="s-band" id="leaderboard">
