@@ -1,802 +1,404 @@
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { motion, useInView } from "framer-motion";
-import { Download, Check, ArrowRight, Pencil, Search, Activity, Globe2 } from "lucide-react";
-import HuggingFaceSection from "@/components/HuggingFaceSection";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { LeadCaptureForm } from "@/components/LeadCaptureForm";
 import { Helmet } from "react-helmet-async";
-import axios from "axios";
-import API from "@/lib/api";
-
-function AnimatedCounter({ end, suffix = "", prefix = "", duration = 2 }) {
-  const [count, setCount] = useState(0);
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
-
-  useEffect(() => {
-    if (isInView) {
-      let start = 0;
-      const increment = end / (duration * 60);
-      const timer = setInterval(() => {
-        start += increment;
-        if (start >= end) {
-          setCount(end);
-          clearInterval(timer);
-        } else {
-          setCount(Math.floor(start));
-        }
-      }, 1000 / 60);
-      return () => clearInterval(timer);
-    }
-  }, [isInView, end, duration]);
-
-  return (
-    <span ref={ref} className="stat-number">
-      {prefix}{count.toLocaleString()}{suffix}
-    </span>
-  );
-}
-
-const heroCategoryTags = [
-  "Frontier LLM Training",
-  "RLHF & Preference Data",
-  "Multimodal & Vision-Language",
-  "Indic AI & Sovereign AI",
-  "Enterprise Domain Fine-Tuning",
-  "Evaluation Benchmarks",
-  "Agentic & RAG Pipelines",
-];
-
-const comparisonRows = [
-  { label: "Clean IP ownership" },
-  { label: "Multi-step reasoning chains" },
-  { label: "Difficulty stratification" },
-  { label: "Coherent knowledge structure" },
-  { label: "Authentic Indic linguistic diversity" },
-  { label: "Verifiable ground truth" },
-  { label: "Contamination-resistant" },
-  { label: "Multimodal (diagrams, audio, OCR)", scraped: "Partial" },
-  { label: "SFT / RLHF / CoT / HITL ready", scraped: "Partial" },
-  { label: "Expert human baseline scores" },
-];
-
-const performanceMetrics = [
-  {
-    value: "+11.5%",
-    label: "Reasoning accuracy on STEM benchmarks",
-    sub: "Based on fine-tuning evaluations with frontier model partners · STEM reasoning benchmark suite",
-  },
-  {
-    value: "+7.2%",
-    label: "MMLU score improvement",
-    sub: "Based on fine-tuning evaluations with frontier model partners · MMLU academic benchmark",
-  },
-  {
-    value: "98%",
-    label: "Data quality score on delivered datasets",
-    sub: "Multi-stage expert review · Node-level validation · Inter-annotator agreement scoring",
-  },
-  {
-    value: "500K+",
-    label: "Chain of thought reasoning chains",
-    sub: "Explicit step-by-step reasoning from foundational to advanced, structured for direct model integration",
-  },
-];
-
-const testimonials = [
-  {
-    type: "FRONTIER MODEL TRAINING",
-    quote: "Used to improve STEM reasoning capabilities across multiple frontier model training runs — improving multi-step physics and chemistry performance on internal evaluation benchmarks beyond what synthetic data alone could achieve.",
-    source: "Frontier AI lab partner",
-    dataset: "India-STEM Reasoning + JEE Advanced CoT",
-  },
-  {
-    type: "MULTILINGUAL MODEL DEVELOPMENT",
-    quote: "The Indic multilingual corpus provided curriculum-structured training signal across 8 scripts that web-scraped sources could not. Coverage depth and linguistic diversity were materially superior to any alternative we evaluated.",
-    source: "Global technology company",
-    dataset: "Indic Multilingual Education Corpus",
-  },
-  {
-    type: "SFT & INSTRUCTION TUNING",
-    quote: "Clean IP provenance and expert-verified difficulty gradients made the instruction dataset the strongest structured SFT corpus we have used. The annotation quality and domain expert coverage set a new bar for our evaluation pipeline.",
-    source: "Enterprise AI team",
-    dataset: "Academic Q&A Instruction Dataset",
-  },
-];
-
-const audiences = [
-  {
-    label: "FRONTIER AI LABS",
-    title: "Pretraining & post-training at scale",
-    description: "Teams building foundation models need high-quality reasoning corpora, SFT instruction pairs, and RLHF preference data that web-scraped sources cannot provide. Our structured, difficulty-graded datasets improve multi-step reasoning accuracy and reduce hallucination on complex domain tasks — at a quality level synthetic generation cannot reach.",
-    tags: ["INDIA-STEM REASONING", "JEE ADVANCED COT", "ACADEMIC QA SFT", "CHAIN-OF-THOUGHT"],
-  },
-  {
-    label: "ENTERPRISE AI TEAMS",
-    title: "Domain fine-tuning for production AI",
-    description: "Legal AI assistants, financial reasoning models, compliance tools, and medical AI applications need domain-specific training data grounded in verified expert knowledge — not web scrapes. Our domain corpora provide the conceptual depth, structured reasoning chains, and difficulty gradients enterprise models require for reliable production performance.",
-    tags: ["LEGAL & CONSTITUTIONAL", "COMMERCE & ECONOMICS", "ENGINEERING FUNDAMENTALS", "UPSC & CIVICS"],
-  },
-  {
-    label: "GOVERNMENT & SOVEREIGN AI",
-    title: "Bharat-first AI infrastructure",
-    description: "IndiaAI Mission ecosystem teams, BharatGPT, and sovereign AI programmes building for India's 1.4B population need curriculum-verified, Indic-script training data. Our multilingual corpora across 8 scripts are aligned to IndiaAI Mission requirements for national AI infrastructure.",
-    tags: ["INDIC MULTILINGUAL CORPUS", "HINDIC LITERATURE", "INDIAN HISTORY & CIVICS", "INDIC BENCHMARKS"],
-  },
-];
-
-const catalogueTabs = [
-  {
-    id: "pretraining",
-    label: "Pretraining Corpora",
-    datasets: [
-      {
-        tag: "PRETRAINING + COT",
-        title: "India-STEM Reasoning Corpus",
-        description: "Large-scale mathematics and science reasoning corpus spanning foundational to advanced difficulty. Worked solutions with explicit step-by-step reasoning chains — structured for chain-of-thought and multi-step reasoning model training.",
-        tokens: "450M tokens",
-        language: "English, Hindi",
-        difficulty: "Easy → Advanced",
-        slug: "stem-reasoning",
-      },
-      {
-        tag: "PRETRAINING",
-        title: "Indic Multilingual Education Corpus",
-        description: "Structured knowledge corpora across 8 Indic languages — Bengali, Tamil, Telugu, Marathi, Gujarati, Kannada, Malayalam, Punjabi. The most comprehensive multilingual training corpus available for Indic AI and sovereign language model development.",
-        tokens: "520M tokens",
-        language: "8 Indic scripts",
-        format: "Raw text corpus",
-        slug: "language-literacy",
-      },
-      {
-        tag: "PRETRAINING / SFT",
-        title: "Hindi Language & Literature Dataset",
-        description: "Formal Hindi language corpus — grammar, prose, poetry, essay composition. One of the largest structured Hindi AI training datasets available. Covers Modern Standard Hindi and literary registers across difficulty levels.",
-        tokens: "290M tokens",
-        language: "Hindi",
-        format: "Structured text + exercises",
-        slug: "language-literacy",
-      },
-    ],
-  },
-  {
-    id: "reasoning",
-    label: "Hard Reasoning & STEM",
-    datasets: [
-      {
-        tag: "REASONING / SFT",
-        title: "JEE Advanced Problem-Solution Dataset",
-        description: "Curated problem-solution pairs from India's most rigorous engineering entrance examination. Includes multi-step mathematical reasoning, physics derivations, and organic chemistry mechanisms with fully worked solutions.",
-        tokens: "85M tokens",
-        language: "English",
-        format: "Q&A + step-by-step solution",
-        slug: "stem-reasoning",
-      },
-      {
-        tag: "EVALUATION",
-        title: "Academic Q&A Instruction Dataset",
-        description: "High-quality Q&A instruction pairs across CBSE, ICSE, and competitive examination domains. Difficulty-graded with expert-verified answers for SFT and evaluation benchmark development.",
-        tokens: "180M tokens",
-        language: "English, Hindi",
-        format: "Instruction pairs",
-        slug: "stem-reasoning",
-      },
-    ],
-  },
-  {
-    id: "multimodal",
-    label: "Complex & Multimodal",
-    datasets: [
-      {
-        tag: "MULTIMODAL",
-        title: "Science Diagram & Visual Reasoning Corpus",
-        description: "Annotated STEM diagrams, charts, and figures with structured textual descriptions and reasoning chains. Built for multimodal model training and visual question answering on technical academic content.",
-        tokens: "120M tokens",
-        language: "English",
-        format: "Image + text pairs",
-        slug: "stem-reasoning",
-      },
-    ],
-  },
-  {
-    id: "sft",
-    label: "SFT & Instruction Tuning",
-    datasets: [
-      {
-        tag: "SFT / RLHF",
-        title: "UPSC & Civil Services Preparation Corpus",
-        description: "Comprehensive content spanning the UPSC examination syllabus — history, polity, economy, environment, science and technology, and current affairs frameworks. Among the broadest general knowledge corpora available in structured form.",
-        tokens: "210M tokens",
-        language: "English, Hindi",
-        format: "Concept notes + Q&A",
-        slug: "social-sciences",
-      },
-      {
-        tag: "SFT",
-        title: "Teacher Explanation & Pedagogy Dataset",
-        description: "Structured teacher explanations and pedagogically-sound answers aligned to curriculum standards. Designed for building AI tutors that explain concepts in the way expert educators do — not just answer retrieval.",
-        tokens: "95M tokens",
-        language: "English",
-        format: "Explanation pairs",
-        slug: "higher-education",
-      },
-    ],
-  },
-  {
-    id: "higher-ed",
-    label: "Higher Education",
-    datasets: [
-      {
-        tag: "PRETRAINING / SFT",
-        title: "Commerce & Economics University Corpus",
-        description: "Undergraduate-level content in economics, accountancy, business studies, and commerce. Structured for models that need to reason about financial concepts, market dynamics, and business decision-making.",
-        tokens: "240M tokens",
-        language: "English",
-        format: "Structured text + problems",
-        slug: "higher-education",
-      },
-      {
-        tag: "SFT / RLHF",
-        title: "Legal & Constitutional Studies Dataset",
-        description: "Indian constitutional law, legal reasoning, case analysis, and legislative frameworks. Built for legal AI, compliance tools, and government AI applications requiring verified legal knowledge.",
-        tokens: "160M tokens",
-        language: "English",
-        format: "Structured legal text",
-        slug: "social-sciences",
-      },
-    ],
-  },
-];
-
-const services = [
-  {
-    icon: Pencil,
-    title: "Custom Dataset Development",
-    description: "Your training objective, built on our archive. Scoped, annotated, and delivered to your exact requirements — subject, language, difficulty, and format.",
-    meta: "Typical delivery: 2–4 weeks · All formats: JSON, Parquet, CSV · Secure encrypted transfer",
-  },
-  {
-    icon: Search,
-    title: "AI Factuality Audit",
-    description: "We evaluate your model's outputs against verified academic ground truth — mapping hallucinations on Indian knowledge and generating targeted remediation datasets.",
-    meta: "Structured error analysis by subject · Remediation dataset construction · Pre/post benchmark tracking",
-  },
-  {
-    icon: Activity,
-    title: "Data Pipeline Engineering",
-    description: "Hub-to-JSON pipelines, deduplication, quality filtering, annotation tooling, and CI/CD for continuous dataset delivery in JSONL, Parquet, or CSV.",
-    meta: "Integrates with LangChain · Label Studio · Argilla workflows · Versioned dataset releases · JSONL schema documented",
-  },
-  {
-    icon: Globe2,
-    title: "India Language Solutions",
-    description: "Specialist Indic dataset development for teams building for India's 1.4B population. Datasets are aligned to IndiaAI Mission requirements for curriculum-verified, multilingual, Indic-script training data.",
-    meta: "8 Indic scripts · Parallel corpora · Multilingual benchmarks · Sovereign AI ready",
-  },
-];
-
-function TagPill({ label, className = "" }) {
-  return (
-    <span className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-white/10 text-[13px] font-mono text-[#777] ${className}`}>
-      <span className="w-1 h-1 rounded-full bg-[#C8A96E]" />
-      {label}
-    </span>
-  );
-}
 
 export default function HomePage() {
-  const [isFormOpen, setIsFormOpen] = useState(false);
-  const [downloadFiles, setDownloadFiles] = useState([]);
-  const [preselectedDataset, setPreselectedDataset] = useState("");
+  const [nlEmail, setNlEmail] = useState("");
+  const [nlStatus, setNlStatus] = useState("");
+  const [sampleEmail, setSampleEmail] = useState("");
+  const [sampleUsecase, setSampleUsecase] = useState("");
+  const [sampleStatus, setSampleStatus] = useState("");
+  const [lfName, setLfName] = useState("");
+  const [lfEmail, setLfEmail] = useState("");
+  const [lfOrg, setLfOrg] = useState("");
+  const [lfUsecase, setLfUsecase] = useState("Reasoning / RLVR");
+  const [lfMessage, setLfMessage] = useState("");
+  const [lfStatus, setLfStatus] = useState("");
 
-  useEffect(() => {
-    const fetchFiles = async () => {
-      try {
-        const response = await axios.get(`${API}/files`);
-        setDownloadFiles(response.data.filter((f) => f.is_sample).slice(0, 3));
-      } catch (error) {
-        if (process.env.NODE_ENV === "development") console.error("Error fetching files:", error);
-      }
-    };
-    fetchFiles();
-  }, []);
+  const postLead = async (payload) => {
+    const r = await fetch("/api/leads", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+    if (!r.ok) throw new Error("Failed");
+  };
 
-  const openFormWithDataset = (slug) => {
-    setPreselectedDataset(slug);
-    setIsFormOpen(true);
+  const handleNewsletter = async (e) => {
+    e.preventDefault();
+    try {
+      await postLead({ work_email: nlEmail, use_case: "Newsletter" });
+      setNlStatus("Subscribed!");
+      setNlEmail("");
+    } catch { setNlStatus("Something went wrong."); }
+  };
+
+  const handleSample = async (e) => {
+    e.preventDefault();
+    try {
+      await postLead({ work_email: sampleEmail, use_case: sampleUsecase || "Sample download" });
+      setSampleStatus("Sample on its way!");
+      setSampleEmail("");
+    } catch { setSampleStatus("Something went wrong."); }
+  };
+
+  const handleLead = async (e) => {
+    e.preventDefault();
+    try {
+      await postLead({ full_name: lfName, work_email: lfEmail, company: lfOrg, use_case: lfUsecase, message: lfMessage });
+      setLfStatus("Thanks! We'll be in touch.");
+      setLfName(""); setLfEmail(""); setLfOrg(""); setLfMessage("");
+    } catch { setLfStatus("Something went wrong."); }
   };
 
   return (
-    <div className="min-h-screen bg-[#0D0D0D]" data-testid="home-page">
+    <div data-testid="home-page">
       <Helmet>
-        <title>nalandadata.ai — The training data frontier models can't synthesize</title>
-        <meta name="description" content="Human-authored. Expert-verified. Multimodal. Impossible to replicate. The reasoning signal LLMs cannot generate for themselves. For frontier labs, enterprise AI teams, and government AI programmes." />
+        <title>Nalandadata — Verified reasoning data for frontier models</title>
+        <meta name="description" content="Human-authored. Expert-verified. Reproducible. Difficulty-graded reasoning data with verified correct answers — the signal that makes a model measurably better." />
       </Helmet>
 
-      {/* ── HERO ────────────────────────────────────────────────────── */}
-      <section className="relative pt-28 pb-0 overflow-hidden" data-testid="hero-section">
-        <div className="max-w-7xl mx-auto px-6 lg:px-10">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7 }}
-            className="max-w-3xl"
-          >
-            <h1
-              className="font-bold leading-[1.0] tracking-tight mb-6"
-              style={{ fontSize: "clamp(52px, 7vw, 96px)", color: "#F0EBE0" }}
-            >
-              The training data
-              <br />frontier models
-              <br /><span style={{ color: "#C8A96E" }}>can't synthesize.</span>
-            </h1>
+      {/* HERO */}
+      <section className="s-hero">
+        <div className="s-hero-grid" aria-hidden="true" />
+        <div className="s-wrap">
+          <h1>Verified reasoning data that frontier models <span className="hl">can't synthesize</span>.</h1>
+          <p className="lede"><b>Human-authored. Expert-verified. Reproducible.</b> Difficulty-graded reasoning data with verified correct answers — the signal that makes a model measurably better, and that scraped or synthetic data can't provide. Built for frontier labs, foundation-model teams and sovereign AI programmes.</p>
+          <div className="s-chips">
+            <span className="s-chip">Reasoning &amp; CoT</span>
+            <span className="s-chip">RLVR reward data</span>
+            <span className="s-chip">Multimodal &amp; vision-language</span>
+            <span className="s-chip">Indic &amp; sovereign AI</span>
+            <Link className="s-chip link" to="/research">See the proof →</Link>
+          </div>
+          <div className="s-hero-cta">
+            <a className="s-btn primary" href="#connect">Download a sample</a>
+            <a className="s-btn ghost" href="#connect">Talk to a researcher</a>
+            <a className="s-cta-sub" href="https://huggingface.co/Nalandadata" target="_blank" rel="noopener noreferrer" style={{ borderBottom: "1px solid var(--line)" }}>Or browse our published models &amp; dataset samples on Hugging Face →</a>
+          </div>
 
-            <p className="text-[#F0EBE0] text-lg mb-3 font-medium">
-              Human-authored. Expert-verified. Multimodal. Impossible to replicate.
-            </p>
-
-            <p className="text-[#AAA] text-[15px] font-medium leading-relaxed max-w-xl mb-6">
-              Difficulty-graded. Structured. Human-verified.{" "}
-              <strong className="text-[#C8A96E] font-semibold">
-                The reasoning signal LLMs cannot generate for themselves.
-              </strong>{" "}
-              For frontier labs, enterprise AI teams, and government AI programmes.
-            </p>
-
-            <div className="flex flex-wrap gap-2 mb-10">
-              {heroCategoryTags.map((tag) => (
-                <TagPill key={tag} label={tag} />
-              ))}
+          <div className="s-statband" style={{ gridTemplateColumns: "repeat(3,1fr)" }}>
+            <div>
+              <Link to="/research/drishtitable" style={{ display: "block", textDecoration: "none", color: "inherit" }}>
+                <div className="sv">84.9%</div>
+                <div className="sl">TEDS · our 8B research model beats every cloud model we tested; the released 7B is right behind at 83.2%</div>
+              </Link>
             </div>
-          </motion.div>
+            <div>
+              <Link to="/research/nalandabench" style={{ display: "block", textDecoration: "none", color: "inherit" }}>
+                <div className="sv">+6.3<span style={{ fontSize: ".55em" }}> pts</span></div>
+                <div className="sl">JEE &amp; NEET reasoning · from verified-reward RL</div>
+              </Link>
+            </div>
+            <div>
+              <Link to="/research/nalanda-image-vl" style={{ display: "block", textDecoration: "none", color: "inherit" }}>
+                <div className="sv">+12.3<span style={{ fontSize: ".55em" }}> pts</span></div>
+                <div className="sl">Science diagrams · a vision-language fine-tune</div>
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* ── CTA + STATS + TRUSTED BY ─────────────────────────────────── */}
-      <section className="py-10 border-b border-[#252525]" data-testid="stats-section">
-        <div className="max-w-7xl mx-auto px-6 lg:px-10">
-          <div className="flex flex-wrap items-center gap-4 mb-2">
-            <button
-              onClick={() => setIsFormOpen(true)}
-              className="bg-[#C8A96E] hover:bg-[#D4B896] text-[#0D0D0D] font-semibold text-sm px-5 py-2.5 rounded transition-colors"
-              data-testid="hero-request-dataset-btn"
-            >
-              Request Dataset Access
-            </button>
-            <button
-              onClick={() => setIsFormOpen(true)}
-              className="border border-white/20 text-[#F0EBE0] hover:bg-white/5 text-sm px-5 py-2.5 rounded transition-colors"
-              data-testid="hero-why-human-btn"
-            >
-              Why human-authored? →
-            </button>
+      {/* LATEST */}
+      <section className="s-band" style={{ paddingTop: "26px", paddingBottom: "26px" }}>
+        <div className="s-wrap">
+          <div className="s-latest">
+            <span className="lk">Latest</span>
+            <Link className="lt" to="/research/drishtitable"><span className="when">New</span><b>DrishtiTable</b> — our 8B research model tops every cloud model on table extraction</Link>
+            <Link className="lt" to="/research/nalanda-image-vl"><span className="when">New</span><b>Nalanda Image VL</b> — a vision model that reads science diagrams</Link>
+            <a className="lt" href="https://huggingface.co/Nalandadata" target="_blank" rel="noopener noreferrer"><span className="when">HF</span><b>Models &amp; dataset samples</b> on Hugging Face</a>
           </div>
+        </div>
+      </section>
 
-          {/* Stats */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 mb-8">
-            {[
-              { value: 2, suffix: "B+", label: "TOKENS OF HUMAN TRAINING DATA" },
-              { value: 12, suffix: "M+", label: "Q&A INSTRUCTION PAIRS" },
-              { value: 28, suffix: "M+", label: "MULTIMODAL (IMAGE-TEXT) PAIRS" },
-              { value: 12, suffix: "", label: "LANGUAGES INCL. 8 INDIC" },
-            ].map((stat) => (
-              <div key={stat.label}>
-                <div
-                  className="font-bold leading-none mb-1"
-                  style={{ fontSize: "clamp(28px, 3.5vw, 42px)", color: "#F0EBE0" }}
-                >
-                  <AnimatedCounter end={stat.value} suffix={stat.suffix} />
-                </div>
-                <div className="text-[#777] font-mono font-semibold text-[12px] tracking-widest uppercase">
-                  {stat.label}
-                </div>
+      {/* VERIFY / REPRODUCIBILITY */}
+      <section className="s-band alt" id="verify">
+        <div className="s-wrap">
+          <div className="s-sec-head">
+            <p className="s-eyebrow">Reproducibility</p>
+            <h2>Reproduce every result.</h2>
+            <p className="lead">Our models, sample datasets and held-out numbers are public. <b>Download them, run them on your own inputs, and reproduce what we report.</b></p>
+          </div>
+          <div className="s-verify">
+            <div className="s-vcard">
+              <div className="vk">Published models</div>
+              <h3>Fine-tuned weights, public</h3>
+              <p>The fine-tuned models behind our results are released openly, so you can run them on your own inputs.</p>
+              <a className="vl" href="https://huggingface.co/Nalandadata" target="_blank" rel="noopener noreferrer">View the fine-tuned models →</a>
+            </div>
+            <div className="s-vcard">
+              <div className="vk">Sample datasets</div>
+              <h3>Real data, before you commit</h3>
+              <p>A representative sample of each dataset is available to download, mirroring the full structure and quality.</p>
+              <a className="vl" href="#connect">Download a sample →</a>
+            </div>
+            <div className="s-vcard">
+              <div className="vk">Held-out numbers</div>
+              <h3>Methods and metrics, in full</h3>
+              <p>Every case study shows the held-out test set, the metric, and the exact comparison conditions.</p>
+              <Link className="vl" to="/research">Read the research →</Link>
+            </div>
+          </div>
+          <a className="s-demo-bar" href="https://huggingface.co/Nalandadata" target="_blank" rel="noopener noreferrer">
+            <span className="db-k">No install</span>
+            <span className="db-t">Try the GRPO-trained JEE/NEET solver live in your browser →</span>
+          </a>
+        </div>
+      </section>
+
+      {/* THE DIFFERENCE */}
+      <section className="s-band" id="difference">
+        <div className="s-wrap">
+          <div className="s-sec-head">
+            <p className="s-eyebrow">The fundamental difference</p>
+            <h2>Data built to reason, not scraped to exist.</h2>
+          </div>
+          <div className="s-diff">
+            <div>
+              <p className="body">Synthetic data amplifies what a model already knows. Scraped web data is unverified and structurally incoherent. Neither gives a model the difficulty-graded, multi-step reasoning signal it needs, and neither carries the verified correct answers that make verifiable-reward training (RLVR) work.</p>
+              <p className="body">Our human-authored worked solutions contain the expert reasoning explicitly: the thinking that produced the answer, not just the answer. The output is structured, pipeline-ready training data.</p>
+              <div className="s-src">
+                <b>Source:</b> S Chand Group archive · 11,000+ expert-authored titles · rights-cleared · zero scraping<br />
+                <b>Provenance:</b> full copyright lineage with every dataset<br />
+                <b>Quality:</b> difficulty graded by 2,000+ subject-matter experts<br />
+                <b>Contamination:</b> deduplicated and checked against common benchmarks<br />
+                <b>Stages:</b> SFT → RLVR → CoT → HITL → Multimodal
               </div>
-            ))}
+            </div>
+            <div className="s-cmp">
+              <div className="row head"><span>Capability</span><span>Web</span><span>Us</span></div>
+              <div className="row"><span>Clean IP, rights-cleared</span><span className="x">×</span><span className="c">✓</span></div>
+              <div className="row"><span>Verified correct answers</span><span className="x">×</span><span className="c">✓</span></div>
+              <div className="row"><span>Multi-step reasoning chains</span><span className="x">×</span><span className="c">✓</span></div>
+              <div className="row"><span>Difficulty stratification</span><span className="x">×</span><span className="c">✓</span></div>
+              <div className="row"><span>RLVR-ready reward signal</span><span className="x">×</span><span className="c">✓</span></div>
+              <div className="row"><span>Authentic Indic diversity</span><span className="x">×</span><span className="c">✓</span></div>
+              <div className="row"><span>Reproducible, public artifacts</span><span className="x">×</span><span className="c">✓</span></div>
+            </div>
           </div>
 
-          {/* Trusted By */}
-          <div className="border border-[#1E1E1E] rounded px-6 py-4 flex items-center gap-6 flex-wrap">
-            <span className="text-[#666] font-mono font-semibold text-[12px] tracking-widest uppercase">TRUSTED BY</span>
-            {["Google", "Microsoft", "Meta"].map((name) => (
-              <span key={name} className="text-[#666] font-semibold text-sm">{name}</span>
-            ))}
+          <p className="s-scaleband-head">The scale behind it</p>
+          <div className="s-statband" style={{ marginTop: "16px" }}>
+            <div><div className="sv">2B+</div><div className="sl">Tokens of human reasoning data</div></div>
+            <div><div className="sv">12M+</div><div className="sl">Verified Q&amp;A instruction pairs</div></div>
+            <div><div className="sv">28M+</div><div className="sl">Multimodal image-text pairs</div></div>
+            <div><div className="sv">12</div><div className="sl">Languages · 8 Indic scripts</div></div>
           </div>
         </div>
       </section>
 
-      {/* ── THE FUNDAMENTAL DIFFERENCE ──────────────────────────────── */}
-      <section className="py-20 border-b border-[#252525]" data-testid="difference-section">
-        <div className="max-w-7xl mx-auto px-6 lg:px-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
-            {/* Left */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-            >
-              <p className="text-[#666] font-mono font-semibold text-[12px] tracking-widest uppercase mb-5">
-                THE FUNDAMENTAL DIFFERENCE
-              </p>
-              <h2
-                className="font-bold leading-tight tracking-tight mb-6"
-                style={{ fontSize: "clamp(36px, 4vw, 54px)", color: "#F0EBE0" }}
-              >
-                Data built to{" "}
-                <span style={{ color: "#C8A96E" }}>reason.</span>
-                <br />
-                Not scraped
-                <br />
-                to exist.
-              </h2>
+      {/* RESEARCH TEASER */}
+      <section className="s-band alt" id="research-teaser">
+        <div className="s-wrap">
+          <div className="s-teaser-head">
+            <div className="s-sec-head">
+              <p className="s-eyebrow">Research</p>
+              <h2>The experiments behind the claims.</h2>
+              <p className="lead">Each experiment shows what verified, curriculum-grade data does to a real model — method, held-out numbers, and a public mirror on Hugging Face.</p>
+            </div>
+            <Link className="s-viewall" to="/research">View all research →</Link>
+          </div>
+          <div className="s-casecards">
+            <Link className="s-cc" to="/research/drishtitable">
+              <div className="res">84.9% TEDS</div>
+              <div className="ti">DrishtiTable</div>
+              <div className="dm">Table structure recognition</div>
+              <div className="ds2">A fine-tuned 8B research model tops every frontier cloud model on table extraction; the released 7B is right behind at 83.2%.</div>
+              <div className="go">Read the case study →</div>
+            </Link>
+            <Link className="s-cc" to="/research/nalandabench">
+              <div className="res">+6.3 pts</div>
+              <div className="ti">NalandaBench</div>
+              <div className="dm">STEM reasoning · RLVR (GRPO)</div>
+              <div className="ds2">Plain fine-tuning lost 16 points on the same data; verified-reward RL turned it into a 6.3-point gain.</div>
+              <div className="go">Read the case study →</div>
+            </Link>
+            <Link className="s-cc" to="/research/nalanda-image-vl">
+              <div className="res">+12.3 pts</div>
+              <div className="ti">Nalanda Image VL</div>
+              <div className="dm">Multimodal science · vision-language</div>
+              <div className="ds2">Fine-tuning a vision model on diagram data lifted held-out accuracy by 12.3 points.</div>
+              <div className="go">Read the case study →</div>
+            </Link>
+          </div>
+        </div>
+      </section>
 
-              <p className="text-[#999] text-[15px] font-medium leading-relaxed mb-4">
-                Synthetic data amplifies what models already know. Scraped web data is unverified, inconsistent,
-                and structurally incoherent. Neither produces the difficulty-graded, multi-step reasoning signal
-                frontier models need to stop failing on complex tasks. A model trained only on synthetic physics
-                problems cannot acquire the expert reasoning moves that produced the solution — our human-authored
-                worked solutions contain that thinking explicitly.
-              </p>
-              <p className="text-[#999] text-[15px] font-medium leading-relaxed mb-6">
-                Nalandadata's source is a vast archive of knowledge created by domain specialists to build genuine,
-                verifiable understanding. The output is structured, pipeline-ready training data for{" "}
-                <span className="text-[#C8A96E]">any LLM</span>,{" "}
-                <span className="text-[#C8A96E]">any use case</span>,{" "}
-                <span className="text-[#C8A96E]">any stage of post-training</span>.
-              </p>
+      {/* BENCHMARKS */}
+      <section className="s-band" id="benchmarks">
+        <div className="s-wrap">
+          <div className="s-sec-head">
+            <p className="s-eyebrow">Benchmarks</p>
+            <h2>An independent benchmark for Indic reasoning.</h2>
+            <p className="lead">NalandaBench scores models on verified, curriculum-grade Indic and STEM reasoning — expert-authored ground truth with clean IP, built to be reproduced and cited. Independent by design: no lab owns the scorekeeper.</p>
+          </div>
+          <div className="s-verify">
+            <div className="s-vcard">
+              <div className="vk">Verified ground truth</div>
+              <h3>Expert-authored, not crowd-voted</h3>
+              <p>Every item has a verified correct answer from subject-matter experts, ready for verifier-based scoring.</p>
+            </div>
+            <div className="s-vcard">
+              <div className="vk">Independent</div>
+              <h3>No lab owns the scorekeeper</h3>
+              <p>A measurement only matters if it is neutral. NalandaBench is built to be the standard others report against.</p>
+            </div>
+            <div className="s-vcard">
+              <div className="vk">Reproducible</div>
+              <h3>Public methodology and leaderboard</h3>
+              <p>Open scoring rules and a live leaderboard, so any result can be checked.</p>
+              <Link className="vl" to="/benchmarks">See the leaderboard →</Link>
+            </div>
+          </div>
+        </div>
+      </section>
 
-              <div className="border border-[#252525] rounded p-4 text-[#888] text-xs font-mono font-medium leading-6 space-y-1">
-                <p><span className="text-[#AAA]">Source:</span> S Chand Group archive · 11,000+ expert-authored titles · 100% owned IP · Zero scraping</p>
-                <p><span className="text-[#AAA]">Provenance:</span> Each dataset ships with a full copyright lineage document — publisher, title, edition, annotation log, and commercial rights</p>
-                <p><span className="text-[#AAA]">Quality:</span> Difficulty levels (Easy / Medium / Hard / Advanced) assigned by 2,000+ subject-matter experts — not algorithmic scoring</p>
-                <p><span className="text-[#AAA]">Contamination:</span> All datasets deduplicated and checked for benchmark contamination against major public evaluation sets including MMLU, HellaSwag, and ARC</p>
-                <p><span className="text-[#AAA]">Pipeline ready:</span> SFT → RLHF → CoT → HITL → Multimodal · Secure delivery via encrypted transfer or cloud hand-off</p>
+      {/* WHO WE BUILD FOR */}
+      <section className="s-band">
+        <div className="s-wrap">
+          <div className="s-sec-head">
+            <p className="s-eyebrow">Who we build for</p>
+            <h2>Built for every team training the next model.</h2>
+          </div>
+          <div className="s-segs">
+            <div className="s-seg">
+              <div className="se">Frontier &amp; foundation-model labs</div>
+              <h3>Post-training that web data can't support</h3>
+              <p>Verified-answer reasoning corpora for RLVR, SFT instruction pairs, and multimodal data, at a quality synthetic generation cannot reach.</p>
+              <div className="ch"><span>RLVR reasoning</span><span>JEE/NEET CoT</span><span>Academic QA SFT</span></div>
+            </div>
+            <div className="s-seg">
+              <div className="se">Enterprise AI teams</div>
+              <h3>Domain fine-tuning for production</h3>
+              <p>Domain corpora with the conceptual depth and structured reasoning chains production models require, grounded in verified expert knowledge.</p>
+              <div className="ch"><span>Commerce</span><span>Engineering</span><span>Economics</span></div>
+            </div>
+            <div className="s-seg">
+              <div className="se">Government &amp; sovereign AI</div>
+              <h3>Bharat-first AI infrastructure</h3>
+              <p>Curriculum-verified, Indic-script data across 8 scripts, aligned to national AI infrastructure goals.</p>
+              <div className="ch"><span>Indic multilingual</span><span>History &amp; civics</span><span>Indic benchmarks</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* DATASET CATALOGUE */}
+      <section className="s-band alt" id="catalogue">
+        <div className="s-wrap">
+          <div className="s-sec-head">
+            <p className="s-eyebrow">Dataset catalogue</p>
+            <h2>Every training stage, one source of truth.</h2>
+          </div>
+          <div className="s-cat">
+            <div className="s-dsc">
+              <div className="de">Reasoning + CoT</div>
+              <h3>India-STEM Reasoning Corpus</h3>
+              <p>Mathematics and science reasoning, foundational to advanced, with explicit step-by-step worked solutions and verified answers.</p>
+              <div className="meta">Size: 450M tokens<br />Language: English, Hindi<br />Difficulty: Easy → Advanced</div>
+              <a className="dl" href="#connect">Download sample →</a>
+            </div>
+            <div className="s-dsc">
+              <div className="de">Pretraining</div>
+              <h3>Indic Multilingual Education Corpus</h3>
+              <p>Structured corpora across 8 Indic languages, curriculum-graded and expert-authored.</p>
+              <div className="meta">Size: 520M tokens<br />Language: 8 Indic scripts<br />Format: Raw text corpus</div>
+              <a className="dl" href="#connect">Download sample →</a>
+            </div>
+            <div className="s-dsc">
+              <div className="de">Multimodal</div>
+              <h3>Scientific Diagram QA</h3>
+              <p>Labelled diagrams with grounded question-answer pairs for vision-language training and evaluation.</p>
+              <div className="meta">Size: 28M+ pairs<br />Type: Image + text<br />Domains: STEM</div>
+              <a className="dl" href="#connect">Download sample →</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* NEWSLETTER */}
+      <section className="s-band">
+        <div className="s-wrap">
+          <div className="s-news">
+            <p className="s-eyebrow" style={{ justifyContent: "center" }}>Stay close to the work</p>
+            <h2>New experiments and dataset releases, as they ship.</h2>
+            <p>A low-volume research update for ML teams — new results, new datasets, and what we are learning. No marketing.</p>
+            {nlStatus ? (
+              <p style={{ color: "var(--accent)", fontFamily: "var(--mono)", fontSize: "14px" }}>{nlStatus}</p>
+            ) : (
+              <form className="row" onSubmit={handleNewsletter}>
+                <input type="email" placeholder="you@lab.com" aria-label="Work email" value={nlEmail} onChange={e => setNlEmail(e.target.value)} required />
+                <button className="s-btn primary" type="submit">Subscribe</button>
+              </form>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* CONNECT */}
+      <section className="s-band alt" id="connect">
+        <div className="s-wrap">
+          <div className="s-contact">
+            <div>
+              <p className="s-eyebrow">Two ways in</p>
+              <h2>Start with a sample. Or start a conversation.</h2>
+              <p className="lead" style={{ marginBottom: "24px" }}>Most teams begin by trying a sample on their own inputs. When you are ready, you talk to the people who built the data, not a sales desk.</p>
+
+              <div className="s-pathbox">
+                <div className="pk">Fastest · self-serve</div>
+                <h3>Download a sample</h3>
+                <p>Tell us where to send it and what you are working on. The sample arrives by email.</p>
+                {sampleStatus ? (
+                  <p style={{ color: "var(--accent)", fontFamily: "var(--mono)", fontSize: "14px" }}>{sampleStatus}</p>
+                ) : (
+                  <form className="s-mini" onSubmit={handleSample}>
+                    <input type="email" placeholder="Work email" value={sampleEmail} onChange={e => setSampleEmail(e.target.value)} required />
+                    <select aria-label="Use case" value={sampleUsecase} onChange={e => setSampleUsecase(e.target.value)}>
+                      <option value="">What are you building?</option>
+                      <option>Reasoning / RLVR</option>
+                      <option>SFT / fine-tuning</option>
+                      <option>Multimodal</option>
+                      <option>Indic / sovereign</option>
+                      <option>Evaluation</option>
+                    </select>
+                    <button className="s-btn primary" type="submit" style={{ flex: "none" }}>Send the sample</button>
+                  </form>
+                )}
               </div>
-            </motion.div>
+            </div>
 
-            {/* Right — comparison table */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="overflow-x-auto"
-            >
-              <table className="w-full text-sm">
-                <thead>
-                  <tr>
-                    <th className="text-left pb-4 text-[#333] font-mono text-[12px] tracking-widest uppercase w-1/2" />
-                    <th className="pb-4 text-center text-[#C45C45] font-mono text-[12px] tracking-widest uppercase">
-                      SCRAPED / SYNTHETIC
-                    </th>
-                    <th className="pb-4 text-center text-[#C8A96E] font-mono text-[12px] tracking-widest uppercase">
-                      NALANDADATA
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {comparisonRows.map((row, i) => (
-                    <tr key={i} className="border-t border-[#1E1E1E]">
-                      <td className="py-3.5 pr-4 text-[#AAA] text-[13px] font-medium">{row.label}</td>
-                      <td className="py-3.5 text-center">
-                        {row.scraped === "Partial" ? (
-                          <span className="text-[#E0854A] text-[13px] font-mono">Partial</span>
-                        ) : (
-                          <span className="text-[#C45C45] font-bold text-base">✕</span>
-                        )}
-                      </td>
-                      <td className="py-3.5 text-center text-[#C8A96E] font-bold text-base">✓</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── PERFORMANCE METRICS ──────────────────────────────────────── */}
-      <section className="py-16 border-b border-[#252525]" data-testid="metrics-section">
-        <div className="max-w-7xl mx-auto px-6 lg:px-10">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {performanceMetrics.map((m, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.08 }}
-              >
-                <div
-                  className="font-bold leading-none mb-2"
-                  style={{ fontSize: "clamp(32px, 4vw, 52px)", color: "#C8A96E" }}
-                >
-                  {m.value}
-                </div>
-                <p className="text-[#F0EBE0] text-sm font-semibold mb-1">{m.label}</p>
-                <p className="text-[#777] text-[13px] font-medium leading-relaxed font-mono">{m.sub}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── TESTIMONIALS ─────────────────────────────────────────────── */}
-      <section className="py-20 border-b border-[#252525]" data-testid="testimonials-section">
-        <div className="max-w-7xl mx-auto px-6 lg:px-10">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {testimonials.map((t, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-                className="border border-[#1E1E1E] rounded p-6 bg-[#111]"
-              >
-                <p className="text-[#C8A96E] font-mono text-[11px] tracking-widest uppercase mb-4">
-                  {t.type}
-                </p>
-                <p className="text-[#AAAAAA] text-[15px] leading-relaxed mb-6 italic">
-                  "{t.quote}"
-                </p>
-                <div className="border-t border-[#1E1E1E] pt-4">
-                  <p className="text-[#888] text-[13px] font-medium font-mono">
-                    <span className="text-[#AAA]">Source:</span> {t.source}
-                  </p>
-                  <p className="text-[#888] text-[13px] font-medium font-mono mt-1">
-                    <span className="text-[#AAA]">Dataset:</span>{" "}
-                    <span className="text-[#C8A96E]">{t.dataset}</span>
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── WHO GETS NALANDADATA ─────────────────────────────────────── */}
-      <section className="py-20 border-b border-[#252525]" data-testid="audiences-section">
-        <div className="max-w-7xl mx-auto px-6 lg:px-10">
-          <p className="text-[#666] font-mono font-semibold text-[12px] tracking-widest uppercase mb-4">
-            WHO GETS NALANDADATA
-          </p>
-          <h2
-            className="font-bold leading-tight tracking-tight mb-12"
-            style={{ fontSize: "clamp(32px, 4vw, 52px)", color: "#F0EBE0" }}
-          >
-            Built for every team
-            <br />
-            training the next model.
-          </h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {audiences.map((a, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-                className="border border-[#1E1E1E] rounded p-6 bg-[#111]"
-              >
-                <p className="text-[#C8A96E] font-mono text-[11px] tracking-widest uppercase mb-3">
-                  {a.label}
-                </p>
-                <h3 className="text-[#F0EBE0] font-bold text-lg mb-3 leading-snug">
-                  {a.title}
-                </h3>
-                <p className="text-[#999] text-[15px] font-medium leading-relaxed mb-5">{a.description}</p>
-                <div className="flex flex-wrap gap-2">
-                  {a.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="px-2 py-1 bg-[#1A1A1A] border border-[#2A2A2A] text-[#777] font-mono font-semibold text-[11px] tracking-wider rounded"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── DATASET CATALOGUE ────────────────────────────────────────── */}
-      <section className="py-20 border-b border-[#252525]" data-testid="catalogue-section">
-        <div className="max-w-7xl mx-auto px-6 lg:px-10">
-          <p className="text-[#666] font-mono font-semibold text-[12px] tracking-widest uppercase mb-4">
-            DATASET CATALOGUE
-          </p>
-          <div className="flex items-end justify-between mb-8 flex-wrap gap-4">
-            <h2
-              className="font-bold leading-tight tracking-tight"
-              style={{ fontSize: "clamp(28px, 3.5vw, 46px)", color: "#F0EBE0" }}
-            >
-              Five categories.
-              <br />
-              Every training stage.
-            </h2>
-            <button
-              onClick={() => setIsFormOpen(true)}
-              className="text-[#C8A96E] text-sm border border-[#C8A96E]/30 px-4 py-2 rounded hover:bg-[#C8A96E]/10 transition-colors"
-            >
-              Download full catalogue →
-            </button>
-          </div>
-
-          <Tabs defaultValue="pretraining">
-            <TabsList className="bg-transparent border-b border-[#252525] rounded-none h-auto p-0 mb-8 flex gap-6 flex-wrap">
-              {catalogueTabs.map((tab) => (
-                <TabsTrigger
-                  key={tab.id}
-                  value={tab.id}
-                  className="bg-transparent text-[#555] text-sm font-medium px-0 pb-3 rounded-none border-b-2 border-transparent data-[state=active]:border-[#C8A96E] data-[state=active]:text-[#F0EBE0] data-[state=active]:bg-transparent transition-colors"
-                >
-                  {tab.label}
-                </TabsTrigger>
-              ))}
-            </TabsList>
-
-            {catalogueTabs.map((tab) => (
-              <TabsContent key={tab.id} value={tab.id}>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  {tab.datasets.map((ds, i) => (
-                    <motion.div
-                      key={i}
-                      initial={{ opacity: 0, y: 12 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.4, delay: i * 0.07 }}
-                      className="border border-[#1E1E1E] rounded p-5 bg-[#111] flex flex-col"
-                    >
-                      <span className="inline-block text-[#C8A96E] font-mono text-[11px] tracking-widest uppercase bg-[#C8A96E]/10 border border-[#C8A96E]/20 px-2.5 py-1 rounded mb-3 self-start">
-                        {ds.tag}
-                      </span>
-                      <h3 className="text-[#F0EBE0] font-bold text-base mb-2 leading-snug">
-                        {ds.title}
-                      </h3>
-                      <p className="text-[#888] text-[13px] font-medium leading-relaxed mb-4 flex-1">
-                        {ds.description}
-                      </p>
-                      <div className="text-[#777] font-mono font-medium text-[12px] space-y-0.5 mb-4">
-                        <p>Size: <span className="text-[#999]">{ds.tokens}</span></p>
-                        <p>Language: <span className="text-[#999]">{ds.language}</span></p>
-                        {ds.format && <p>Format: <span className="text-[#999]">{ds.format}</span></p>}
-                        {ds.difficulty && <p>Difficulty: <span className="text-[#999]">{ds.difficulty}</span></p>}
-                      </div>
-                      <button
-                        onClick={() => openFormWithDataset(ds.slug)}
-                        className="flex items-center gap-2 text-[#F0EBE0] text-xs font-medium border border-[#2A2A2A] rounded px-3 py-2 hover:bg-white/5 transition-colors self-start"
-                      >
-                        <Download className="w-3 h-3" />
-                        Download Sample
-                      </button>
-                    </motion.div>
-                  ))}
-                </div>
-              </TabsContent>
-            ))}
-          </Tabs>
-        </div>
-      </section>
-
-      {/* ── SERVICES ─────────────────────────────────────────────────── */}
-      <section className="py-20 border-b border-[#252525]" data-testid="services-section">
-        <div className="max-w-7xl mx-auto px-6 lg:px-10">
-          <p className="text-[#666] font-mono font-semibold text-[12px] tracking-widest uppercase mb-4">
-            SERVICES
-          </p>
-          <h2
-            className="font-bold leading-tight tracking-tight mb-12"
-            style={{ fontSize: "clamp(28px, 3.5vw, 46px)", color: "#F0EBE0" }}
-          >
-            Beyond the catalogue.
-          </h2>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {services.map((svc, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.08 }}
-                className="border border-[#1E1E1E] rounded p-5 bg-[#111]"
-              >
-                <svc.icon className="w-5 h-5 text-[#C8A96E] mb-4" />
-                <h3 className="text-[#F0EBE0] font-bold text-sm mb-2">{svc.title}</h3>
-                <p className="text-[#999] text-[13px] font-medium leading-relaxed mb-4">{svc.description}</p>
-                <p className="text-[#777] font-mono font-medium text-[12px] leading-relaxed">{svc.meta}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <HuggingFaceSection />
-
-      {/* ── CONTACT / INLINE FORM ────────────────────────────────────── */}
-      <section id="contact" className="py-20 border-b border-[#252525]" data-testid="contact-section">
-        <div className="max-w-7xl mx-auto px-6 lg:px-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
-            {/* Left */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-            >
-              <p className="text-[#666] font-mono font-semibold text-[12px] tracking-widest uppercase mb-5">
-                GET IN TOUCH
-              </p>
-              <h2
-                className="font-bold leading-tight tracking-tight mb-4"
-                style={{ fontSize: "clamp(26px, 3.5vw, 42px)", color: "#F0EBE0" }}
-              >
-                Ready to bring{" "}
-                <span style={{ color: "#C8A96E" }}>structured knowledge</span>
-                <br />
-                to your AI?
-              </h2>
-              <p className="text-[#999] text-[15px] font-medium leading-relaxed mb-6">
-                Tell us about your training objective and we'll identify the right datasets, deliver a sample, and scope a licence — with no obligation.
-              </p>
-
-              <ul className="space-y-3 mb-8">
-                {[
-                  "Direct sample delivery upon request",
-                  "Direct relationship — no brokers or intermediaries",
-                  "Full provenance documentation with every licence",
-                  "Secure delivery via encrypted transfer or cloud hand-off",
-                ].map((item) => (
-                  <li key={item} className="flex items-start gap-3">
-                    <Check className="w-4 h-4 text-[#C8A96E] flex-shrink-0 mt-0.5" />
-                    <span className="text-[#AAA] text-[15px] font-medium">{item}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <div className="border border-[#252525] rounded p-4 flex items-start justify-between gap-4">
-                <p className="text-[#888] text-[13px] font-medium leading-relaxed">
-                  Researching for a future procurement cycle? Download our{" "}
-                  <span className="text-[#C8A96E]">full dataset catalogue PDF</span> — 3 pages, shareable with your team.
-                </p>
-                <button
-                  onClick={() => setIsFormOpen(true)}
-                  className="flex-shrink-0 flex items-center gap-2 text-[#F0EBE0] text-xs font-medium border border-[#2A2A2A] rounded px-3 py-2 hover:bg-white/5 transition-colors"
-                >
-                  <Download className="w-3 h-3" />
-                  Download Catalogue
-                </button>
+            <div>
+              <div className="s-pathbox" style={{ background: "transparent", borderStyle: "dashed", marginBottom: "16px" }}>
+                <div className="pk">Higher intent</div>
+                <h3>Talk to a researcher</h3>
+                <p>For scoping a licence or a custom dataset. A few more details so we can come prepared.</p>
               </div>
-            </motion.div>
-
-            {/* Right — inline form */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-            >
-              <LeadCaptureForm
-                inline
-                preselectedDataset={preselectedDataset}
-                downloadFiles={downloadFiles}
-              />
-            </motion.div>
+              {lfStatus ? (
+                <p style={{ color: "var(--accent)", fontFamily: "var(--mono)", fontSize: "14px", padding: "20px 0" }}>{lfStatus}</p>
+              ) : (
+                <form className="s-form" onSubmit={handleLead}>
+                  <div className="s-frow">
+                    <div className="s-field"><label>Full name</label><input type="text" value={lfName} onChange={e => setLfName(e.target.value)} /></div>
+                    <div className="s-field"><label>Work email</label><input type="email" value={lfEmail} onChange={e => setLfEmail(e.target.value)} required /></div>
+                  </div>
+                  <div className="s-frow">
+                    <div className="s-field"><label>Organisation</label><input type="text" value={lfOrg} onChange={e => setLfOrg(e.target.value)} /></div>
+                    <div className="s-field"><label>Use case</label>
+                      <select value={lfUsecase} onChange={e => setLfUsecase(e.target.value)}>
+                        <option>Reasoning / RLVR</option>
+                        <option>SFT / fine-tuning</option>
+                        <option>Multimodal</option>
+                        <option>Indic / sovereign</option>
+                        <option>Evaluation</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div className="s-field full" style={{ marginBottom: "18px" }}><label>What are you trying to do?</label><textarea rows={3} value={lfMessage} onChange={e => setLfMessage(e.target.value)} /></div>
+                  <button className="s-btn primary">Talk to a researcher →</button>
+                  <div className="note">No sales desk. No obligation.</div>
+                </form>
+              )}
+            </div>
           </div>
         </div>
       </section>
-
-      {/* Modal form (for dataset sample downloads) */}
-      <LeadCaptureForm
-        open={isFormOpen}
-        onOpenChange={setIsFormOpen}
-        preselectedDataset={preselectedDataset}
-        downloadFiles={downloadFiles}
-      />
     </div>
   );
 }

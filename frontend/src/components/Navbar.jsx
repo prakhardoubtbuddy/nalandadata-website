@@ -4,11 +4,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 
 const navLinks = [
+  { name: "Research", path: "/research" },
+  { name: "Benchmarks", path: "/benchmarks" },
   { name: "Datasets", path: "/datasets" },
-  { name: "Who We Serve", path: "/industries" },
-  { name: "Services", path: "/solutions" },
-  { name: "Blog", path: "/blog" },
-  { name: "Contact", path: "/contact" },
+  { name: "Solutions", path: "/solutions" },
+  { name: "About", path: "/about" },
 ];
 
 export default function Navbar() {
@@ -26,18 +26,11 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-14">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2.5" data-testid="nav-logo">
-            {/*
-              Ascending Steps mark
-              Three bars — right-aligned, ascending left-to-right.
-              Base bar is widest/heaviest. References Nalanda's tiered stupa
-              architecture while reading as ascending data bars.
-            */}
             <svg width="22" height="17" viewBox="0 0 48 37" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <rect x="0"  y="27" width="48" height="10" fill="#C8A96E"/>
               <rect x="14" y="13" width="34" height="9"  fill="#C8A96E"/>
               <rect x="28" y="0"  width="20" height="8"  fill="#C8A96E"/>
             </svg>
-            {/* Wordmark */}
             <span className="font-bold text-sm tracking-tight leading-none" style={{ color: '#F0EBE0' }}>
               nalandadata<span style={{ color: '#C8A96E' }}>.ai</span>
             </span>
@@ -61,21 +54,14 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* CTA Buttons */}
-          <div className="hidden lg:flex items-center gap-3">
-            <Link
-              to="/contact"
-              className="text-sm font-medium text-[#F0EBE0] border border-white/25 px-4 py-1.5 rounded hover:bg-white/8 transition-colors"
-              data-testid="nav-download-catalogue-btn"
-            >
-              Download Catalogue
-            </Link>
+          {/* CTA Button */}
+          <div className="hidden lg:flex items-center">
             <Link
               to="/contact"
               className="text-sm font-medium text-[#0D0D0D] bg-[#C8A96E] px-4 py-1.5 rounded hover:bg-[#D4B896] transition-colors"
-              data-testid="nav-request-dataset-btn"
+              data-testid="nav-request-access-btn"
             >
-              Request Dataset Access
+              Request access
             </Link>
           </div>
 
@@ -117,14 +103,14 @@ export default function Navbar() {
                   {link.name}
                 </Link>
               ))}
-              <div className="pt-4 flex flex-col gap-3">
+              <div className="pt-4">
                 <Link
                   to="/contact"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="btn-primary text-center text-sm"
-                  data-testid="mobile-request-dataset-btn"
+                  className="block text-center text-sm font-medium text-[#0D0D0D] bg-[#C8A96E] px-4 py-2.5 rounded hover:bg-[#D4B896] transition-colors"
+                  data-testid="mobile-request-access-btn"
                 >
-                  Request Dataset Access
+                  Request access
                 </Link>
               </div>
             </div>
