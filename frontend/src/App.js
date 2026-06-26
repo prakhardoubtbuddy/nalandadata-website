@@ -17,6 +17,11 @@ import PrivacyPage from "@/pages/PrivacyPage";
 import BlogPage from "@/pages/BlogPage";
 import BlogPostPage from "@/pages/BlogPostPage";
 import NotFoundPage from "@/pages/NotFoundPage";
+import ResearchPage from "@/pages/ResearchPage";
+import NalandaBenchPage from "@/pages/NalandaBenchPage";
+import NalandaImageVLPage from "@/pages/NalandaImageVLPage";
+import DrishtiTablePage from "@/pages/DrishtiTablePage";
+import BenchmarksPage from "@/pages/BenchmarksPage";
 
 // Layout & utilities
 import Layout from "@/components/Layout";
@@ -52,6 +57,11 @@ function App() {
                 <Route path="/privacy" element={<PrivacyPage />} />
                 <Route path="/blog" element={<BlogPage />} />
                 <Route path="/blog/:slug" element={<BlogPostPage />} />
+                <Route path="/research" element={<ResearchPage />} />
+                <Route path="/research/nalandabench" element={<NalandaBenchPage />} />
+                <Route path="/research/nalanda-image-vl" element={<NalandaImageVLPage />} />
+                <Route path="/research/drishtitable" element={<DrishtiTablePage />} />
+                <Route path="/benchmarks" element={<BenchmarksPage />} />
                 <Route path="*" element={<NotFoundPage />} />
               </Route>
               <Route path="/admin" element={<AdminPage />} />
