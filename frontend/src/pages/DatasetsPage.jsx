@@ -1,24 +1,11 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
-import { ArrowRight, Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { LeadCaptureForm } from "@/components/LeadCaptureForm";
 import { Helmet } from "react-helmet-async";
-
-function getTagClass(tag) {
-  const t = tag.toLowerCase();
-  if (t.includes("rlhf") || t.includes("dpo")) return "tag-rlhf";
-  if (t.includes("evaluation") || t.includes("eval")) return "tag-evaluation";
-  if (t.includes("cot") || t.includes("chain")) return "tag-cot";
-  if (t.includes("sft") || t.includes("fine-tun") || t.includes("reasoning")) return "tag-sft";
-  return "tag-pretraining";
-}
 
 const sections = [
   {
     id: "table-recognition",
-    label: "A — DOCUMENT AI & TABLE RECOGNITION",
+    label: "A — Document AI & Table Recognition",
     slug: "table-recognition",
     datasets: [
       {
@@ -33,7 +20,7 @@ const sections = [
   },
   {
     id: "stem-reasoning",
-    label: "B — STEM REASONING & PROBLEM SOLVING",
+    label: "B — STEM Reasoning & Problem Solving",
     slug: "stem-reasoning",
     datasets: [
       {
@@ -72,7 +59,7 @@ const sections = [
   },
   {
     id: "language-literacy",
-    label: "B — LANGUAGE, LITERACY & COMPREHENSION",
+    label: "B — Language, Literacy & Comprehension",
     slug: "language-literacy",
     datasets: [
       {
@@ -111,7 +98,7 @@ const sections = [
   },
   {
     id: "social-sciences",
-    label: "C — SOCIAL SCIENCES, CIVICS & GENERAL KNOWLEDGE",
+    label: "C — Social Sciences, Civics & General Knowledge",
     slug: "social-sciences",
     datasets: [
       {
@@ -142,7 +129,7 @@ const sections = [
   },
   {
     id: "higher-education",
-    label: "D — HIGHER EDUCATION & PROFESSIONAL KNOWLEDGE",
+    label: "D — Higher Education & Professional Knowledge",
     slug: "higher-education",
     datasets: [
       {
@@ -173,24 +160,38 @@ const sections = [
   },
 ];
 
+const searchStyle = {
+  width: "100%",
+  maxWidth: "520px",
+  background: "rgba(0,0,0,0.4)",
+  border: "1px solid var(--line)",
+  borderRadius: "8px",
+  padding: "12px 16px 12px 44px",
+  color: "var(--paper)",
+  fontFamily: "var(--sans)",
+  fontSize: "0.95rem",
+  outline: "none",
+  display: "block",
+};
+
 export default function DatasetsPage() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [isFormOpen, setIsFormOpen] = useState(false);
   const [filteredSections, setFilteredSections] = useState(sections);
 
   useEffect(() => {
     if (searchQuery) {
+      const q = searchQuery.toLowerCase();
       const filtered = sections
-        .map(section => ({
-          ...section,
-          datasets: section.datasets.filter(
-            ds =>
-              ds.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-              ds.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-              ds.tag.toLowerCase().includes(searchQuery.toLowerCase())
+        .map(s => ({
+          ...s,
+          datasets: s.datasets.filter(
+            d =>
+              d.title.toLowerCase().includes(q) ||
+              d.description.toLowerCase().includes(q) ||
+              d.tag.toLowerCase().includes(q)
           ),
         }))
-        .filter(section => section.datasets.length > 0);
+        .filter(s => s.datasets.length > 0);
       setFilteredSections(filtered);
     } else {
       setFilteredSections(sections);
@@ -198,134 +199,115 @@ export default function DatasetsPage() {
   }, [searchQuery]);
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A] pt-24" data-testid="datasets-page">
+    <div className="bg-[#0A0A0A]" style={{ paddingTop: "96px" }} data-testid="datasets-page">
       <Helmet>
         <title>Datasets — Nalandadata.ai</title>
         <meta name="description" content="Browse premium AI training datasets across STEM Reasoning, Language & Literacy, Social Sciences, and Higher Education. Research and enterprise licensing available." />
       </Helmet>
-      {/* Header */}
-      <section className="py-16 relative">
-        <div className="absolute inset-0 hero-gradient opacity-50" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center"
-          >
-            <h1 className="text-4xl sm:text-5xl font-bold text-white mb-4">
-              Our Datasets
-            </h1>
-            <p className="text-lg text-gray-400 max-w-2xl mx-auto mb-8">
-              Premium, curriculum-verified AI training datasets across five categories. Each dataset is available for research licensing and commercial enterprise agreements.
-            </p>
 
-            <div className="max-w-lg mx-auto relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
-              <Input
-                type="text"
-                placeholder="Search datasets by name, subject, or use case..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-12 bg-black/50 border-white/10 text-white placeholder:text-gray-600 h-12"
-                data-testid="dataset-search-input"
-              />
-            </div>
-          </motion.div>
+      {/* Hero */}
+      <section className="s-band" style={{ borderTop: "none", paddingBottom: "48px" }}>
+        <div className="s-wrap">
+          <nav className="s-crumb" aria-label="Breadcrumb" style={{ marginBottom: "18px" }}>
+            <Link to="/">Home</Link> / Datasets
+          </nav>
+          <p className="s-eyebrow">Datasets</p>
+          <div className="s-sec-head" style={{ maxWidth: "56ch" }}>
+            <h2>Premium curriculum-verified AI training data.</h2>
+            <p className="lead">
+              Expert-authored datasets across STEM, language, social sciences, and higher education.
+              Available for research licensing and commercial enterprise agreements.
+            </p>
+          </div>
+
+          {/* Search */}
+          <div style={{ marginTop: "32px", position: "relative", display: "inline-block", width: "100%", maxWidth: "520px" }}>
+            <span style={{ position: "absolute", left: "14px", top: "50%", transform: "translateY(-50%)", color: "var(--muted)", fontSize: "1rem", pointerEvents: "none" }}>⌕</span>
+            <input
+              type="text"
+              placeholder="Search by name, subject, or use case..."
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+              style={searchStyle}
+              data-testid="dataset-search-input"
+            />
+          </div>
         </div>
       </section>
 
-      {/* Dataset Sections */}
-      <section className="py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-20">
-          {filteredSections.map((section, si) => (
-            <motion.div
-              key={section.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: si * 0.05 }}
-            >
-              <div className="flex items-center justify-between mb-8">
-                <h2 className="text-sm font-semibold tracking-widest text-blue-400 uppercase">
-                  {section.label}
-                </h2>
-                <Link
-                  to={`/datasets/${section.slug}`}
-                  className="text-sm text-gray-500 hover:text-blue-400 transition-colors inline-flex items-center gap-1"
-                >
-                  View details <ArrowRight className="w-3 h-3" />
-                </Link>
-              </div>
-
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {section.datasets.map((ds, di) => (
-                  <motion.div
-                    key={ds.title}
-                    initial={{ opacity: 0, y: 16 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4, delay: di * 0.05 }}
-                  >
+      {/* Dataset sections */}
+      <section className="s-band alt" style={{ paddingTop: "48px" }}>
+        <div className="s-wrap">
+          {filteredSections.length === 0 ? (
+            <p style={{ color: "var(--muted)", textAlign: "center", padding: "48px 0" }}>No datasets found matching your search.</p>
+          ) : (
+            <div style={{ display: "flex", flexDirection: "column", gap: "64px" }}>
+              {filteredSections.map(section => (
+                <div key={section.id} id={section.id}>
+                  {/* Section header */}
+                  <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: "24px", gap: "16px", flexWrap: "wrap" }}>
+                    <p style={{
+                      fontFamily: "var(--mono)",
+                      fontSize: "11px",
+                      letterSpacing: "0.14em",
+                      textTransform: "uppercase",
+                      color: "var(--accent)",
+                      margin: 0,
+                    }}>
+                      {section.label}
+                    </p>
                     <Link
                       to={`/datasets/${section.slug}`}
-                      className="block h-full p-6 rounded-2xl bg-[#121212] border border-white/5 hover:border-blue-500/30 transition-all duration-300 group"
-                      data-testid={`dataset-item-${section.slug}-${di}`}
+                      style={{ fontFamily: "var(--mono)", fontSize: "12px", color: "var(--muted)", textDecoration: "none" }}
                     >
-                      <div className="mb-3">
-                        <span className={`text-xs font-mono font-medium px-2 py-1 rounded ${getTagClass(ds.tag)}`}>
-                          [{ds.tag}]
-                        </span>
-                      </div>
-                      <h3 className="text-lg font-semibold text-white group-hover:text-blue-400 transition-colors mb-3">
-                        {ds.title}
-                      </h3>
-                      <p className="text-gray-400 text-sm mb-4 leading-relaxed">
-                        {ds.description}
-                      </p>
-                      <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-500 font-mono border-t border-white/5 pt-4">
-                        <span>Size: {ds.size}</span>
-                        <span>Format: {ds.format}</span>
-                        <span>Language: {ds.language}</span>
-                      </div>
-                      <div className="flex items-center justify-end mt-4 text-gray-600 group-hover:text-blue-400 transition-colors">
-                        <span className="text-sm mr-2">View Details</span>
-                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                      </div>
+                      View details →
                     </Link>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
-          ))}
+                  </div>
 
-          {filteredSections.length === 0 && (
-            <div className="text-center py-16">
-              <p className="text-gray-500">No datasets found matching your search.</p>
+                  {/* Dataset cards */}
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "16px" }}>
+                    {section.datasets.map((ds, di) => (
+                      <Link
+                        key={ds.title}
+                        to={`/datasets/${section.slug}`}
+                        className="s-dsc"
+                        style={{ textDecoration: "none", color: "inherit", transition: "border-color .15s" }}
+                        data-testid={`dataset-item-${section.slug}-${di}`}
+                        onMouseEnter={e => e.currentTarget.style.borderColor = "var(--accent)"}
+                        onMouseLeave={e => e.currentTarget.style.borderColor = "var(--line)"}
+                      >
+                        <div className="de">[{ds.tag}]</div>
+                        <h3>{ds.title}</h3>
+                        <p>{ds.description}</p>
+                        <div className="meta">
+                          Size: {ds.size}<br />
+                          Format: {ds.format}<br />
+                          Language: {ds.language}
+                        </div>
+                        <span className="dl">View Details →</span>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              ))}
             </div>
           )}
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-24 border-t border-white/5">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">
-            Need a Custom Dataset?
-          </h2>
-          <p className="text-gray-400 mb-8">
-            We can build custom datasets tailored to your specific requirements.
+      {/* CTA */}
+      <section className="s-band">
+        <div className="s-wrap" style={{ textAlign: "center" }}>
+          <p className="s-eyebrow" style={{ justifyContent: "center" }}>Custom data</p>
+          <h2>Need a dataset we don't have?</h2>
+          <p className="lead" style={{ margin: "18px auto 28px", maxWidth: "48ch" }}>
+            We can build custom datasets tailored to your specific domain, format, and scale requirements.
           </p>
-          <button
-            onClick={() => setIsFormOpen(true)}
-            className="btn-primary inline-flex items-center gap-2"
-            data-testid="custom-dataset-btn"
-          >
-            Request Custom Dataset
-            <ArrowRight className="w-4 h-4" />
-          </button>
+          <Link className="s-btn primary" to="/contact" data-testid="custom-dataset-btn">
+            Request Custom Dataset →
+          </Link>
         </div>
       </section>
-
-      <LeadCaptureForm open={isFormOpen} onOpenChange={setIsFormOpen} />
     </div>
   );
 }
