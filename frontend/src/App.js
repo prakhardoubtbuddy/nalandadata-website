@@ -22,6 +22,7 @@ import NalandaBenchPage from "@/pages/NalandaBenchPage";
 import NalandaImageVLPage from "@/pages/NalandaImageVLPage";
 import DrishtiTablePage from "@/pages/DrishtiTablePage";
 import BenchmarksPage from "@/pages/BenchmarksPage";
+import ResourcesPage from "@/pages/ResourcesPage";
 
 // Layout & utilities
 import Layout from "@/components/Layout";
@@ -52,6 +53,7 @@ function App() {
                 <Route path="/datasets/:slug" element={<DatasetDetailPage />} />
                 <Route path="/solutions" element={<SolutionsPage />} />
                 <Route path="/industries" element={<IndustriesPage />} />
+                <Route path="/resources" element={<ResourcesPage />} />
                 <Route path="/contact" element={<ContactPage />} />
                 <Route path="/about" element={<AboutPage />} />
                 <Route path="/privacy" element={<PrivacyPage />} />
