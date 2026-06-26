@@ -27,6 +27,7 @@ export default function Footer() {
           <Link to="/research" style={{ color: "var(--muted)", textDecoration: "none" }}>Research</Link>
           <Link to="/benchmarks" style={{ color: "var(--muted)", textDecoration: "none" }}>Benchmarks</Link>
           <Link to="/solutions" style={{ color: "var(--muted)", textDecoration: "none" }}>Solutions</Link>
+          <Link to="/blog" style={{ color: "var(--muted)", textDecoration: "none" }}>Blog</Link>
           <Link to="/about" style={{ color: "var(--muted)", textDecoration: "none" }}>About</Link>
           <Link to="/contact" style={{ color: "var(--muted)", textDecoration: "none" }}>Contact</Link>
           <a href="https://huggingface.co/Nalandadata" target="_blank" rel="noopener noreferrer" style={{ color: "var(--muted)", textDecoration: "none" }}>Hugging&nbsp;Face</a>

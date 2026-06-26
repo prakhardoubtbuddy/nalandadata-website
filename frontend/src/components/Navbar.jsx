@@ -8,6 +8,7 @@ const navLinks = [
   { name: "Benchmarks", path: "/benchmarks" },
   { name: "Datasets", path: "/datasets" },
   { name: "Solutions", path: "/solutions" },
+  { name: "Blog", path: "/blog" },
   { name: "About", path: "/about" },
 ];
 
