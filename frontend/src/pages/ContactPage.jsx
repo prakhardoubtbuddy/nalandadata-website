@@ -1,26 +1,6 @@
 import { useState, useRef, useEffect } from "react";
-import { motion } from "framer-motion";
 import { Helmet } from "react-helmet-async";
-import { 
-  Mail,
-  MapPin,
-  Phone,
-  Send,
-  Loader2,
-  CheckCircle2
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { toast } from "sonner";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import API from "@/lib/api";
 
@@ -61,7 +41,7 @@ const companyTypes = [
   { value: "other", label: "Other" },
 ];
 
-const useCases = [
+const useCaseOptions = [
   { value: "pretraining", label: "Pretraining" },
   { value: "finetuning", label: "Fine-tuning" },
   { value: "rlhf", label: "RLHF / DPO" },
@@ -78,16 +58,38 @@ const datasetOptions = [
   { value: "custom", label: "Custom Dataset" },
 ];
 
+const fieldBase = {
+  background: "rgba(0,0,0,0.4)",
+  border: "1px solid var(--line)",
+  borderRadius: "6px",
+  padding: "10px 14px",
+  color: "var(--paper)",
+  fontFamily: "var(--sans)",
+  fontSize: "0.9rem",
+  width: "100%",
+  boxSizing: "border-box",
+  outline: "none",
+};
+
+const fieldErr = { ...fieldBase, borderColor: "#e05555" };
+
+const lbl = {
+  display: "block",
+  fontSize: "0.8rem",
+  color: "var(--muted)",
+  marginBottom: "6px",
+  fontFamily: "var(--sans)",
+};
+
 export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [errors, setErrors] = useState({});
-  const firstNameRef = useRef(null);
+  const firstRef = useRef(null);
 
-  useEffect(() => {
-    firstNameRef.current?.focus();
-  }, []);
-  const [formData, setFormData] = useState({
+  useEffect(() => { firstRef.current?.focus(); }, []);
+
+  const [form, setForm] = useState({
     full_name: "",
     work_email: "",
     company: "",
@@ -100,354 +102,197 @@ export default function ContactPage() {
     mobile_number: "",
   });
 
+  const set = (k, v) => {
+    setForm(f => ({ ...f, [k]: v }));
+    setErrors(e => ({ ...e, [k]: "" }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const newErrors = {};
-    if (!formData.full_name) newErrors.full_name = "Full name is required";
-    if (!formData.work_email) newErrors.work_email = "Work email is required";
-    if (!formData.company) newErrors.company = "Company is required";
-    if (!formData.role) newErrors.role = "Role is required";
-    if (!formData.company_type) newErrors.company_type = "Please select a company type";
-    if (!formData.use_case) newErrors.use_case = "Please select a use case";
-    if (!formData.dataset_interest) newErrors.dataset_interest = "Please select a dataset";
-
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
-    }
+    const errs = {};
+    if (!form.full_name) errs.full_name = "Required";
+    if (!form.work_email) errs.work_email = "Required";
+    if (!form.company) errs.company = "Required";
+    if (!form.role) errs.role = "Required";
+    if (!form.company_type) errs.company_type = "Required";
+    if (!form.use_case) errs.use_case = "Required";
+    if (!form.dataset_interest) errs.dataset_interest = "Required";
+    if (Object.keys(errs).length) { setErrors(errs); return; }
     setErrors({});
     setIsSubmitting(true);
-
     try {
-      await axios.post(`${API}/leads`, formData);
+      await axios.post(`${API}/leads`, form);
       setIsSubmitted(true);
-      toast.success("Thank you! We'll be in touch soon.");
-    } catch (error) {
-      if (process.env.NODE_ENV === "development") console.error("Error submitting:", error);
-      toast.error("Failed to submit. Please try again.");
+    } catch {
+      alert("Failed to submit. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  const resetForm = () => {
+    setIsSubmitted(false);
+    setForm({ full_name: "", work_email: "", company: "", role: "", company_type: "", use_case: "", dataset_interest: "", message: "", mobile_country_code: "+91-India", mobile_number: "" });
+  };
+
   return (
-    <div className="min-h-screen bg-[#0A0A0A] pt-24" data-testid="contact-page">
+    <div className="bg-[#0A0A0A]" style={{ paddingTop: "96px" }}>
       <Helmet>
         <title>Request Dataset Access — Nalandadata.ai</title>
         <meta name="description" content="Request access to Nalandadata AI training datasets. Contact our team to discuss licensing, custom datasets, and enterprise agreements." />
       </Helmet>
-      {/* Header */}
-      <section className="py-16 relative">
-        <div className="absolute inset-0 hero-gradient opacity-50" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <h1 className="text-4xl sm:text-5xl font-bold text-white mb-4">
-              Request Dataset Access
-            </h1>
-            <p className="text-lg text-gray-400 max-w-2xl mx-auto">
+
+      {/* Hero */}
+      <section className="s-band" style={{ borderTop: "none" }}>
+        <div className="s-wrap">
+          <nav className="s-crumb" aria-label="Breadcrumb" style={{ marginBottom: "18px" }}>
+            <Link to="/">Home</Link> / Contact
+          </nav>
+          <p className="s-eyebrow">Contact</p>
+          <div className="s-sec-head">
+            <h2>Request dataset access.</h2>
+            <p className="lead">
               Tell us about your project and we'll help you find the right datasets for your needs.
+              Our team responds within 24 hours.
             </p>
-          </motion.div>
+          </div>
         </div>
       </section>
 
       {/* Content */}
-      <section className="py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-            {/* Contact Info */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="space-y-8"
-            >
-              <div>
-                <h2 className="text-2xl font-bold text-white mb-6">Get in Touch</h2>
-                <p className="text-gray-400 leading-relaxed">
-                  Our data experts are ready to help you find the perfect datasets for your AI projects. 
-                  Fill out the form and we'll get back to you within 24 hours.
-                </p>
-              </div>
+      <section className="s-band alt">
+        <div className="s-wrap">
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: "64px", alignItems: "start" }}>
 
-              <div className="space-y-6">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-lg bg-blue-500/10 flex items-center justify-center flex-shrink-0">
-                    <Mail className="w-5 h-5 text-blue-400" />
-                  </div>
-                  <div>
-                    <h3 className="text-white font-medium mb-1">Email</h3>
-                    <p className="text-gray-400">licensing@nalandadata.ai</p>
-                  </div>
+            {/* Contact info */}
+            <div>
+              <h3 style={{ fontFamily: "var(--sans)", fontSize: "1.15rem", fontWeight: 700, color: "var(--paper)", marginBottom: "12px" }}>Get in Touch</h3>
+              <p style={{ color: "var(--muted)", lineHeight: 1.7, marginBottom: "32px", fontSize: "0.93rem" }}>
+                Our data experts are ready to help you find the perfect datasets for your AI projects.
+              </p>
+
+              <div style={{ display: "flex", flexDirection: "column", gap: "20px", marginBottom: "32px" }}>
+                <div>
+                  <p style={{ fontSize: "0.68rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--muted)", marginBottom: "4px" }}>Email</p>
+                  <a href="mailto:licensing@nalandadata.ai" style={{ color: "var(--paper)", fontSize: "0.93rem", textDecoration: "none" }}>licensing@nalandadata.ai</a>
                 </div>
-
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-lg bg-blue-500/10 flex items-center justify-center flex-shrink-0">
-                    <MapPin className="w-5 h-5 text-blue-400" />
-                  </div>
-                  <div>
-                    <h3 className="text-white font-medium mb-1">Headquarters</h3>
-                    <p className="text-gray-400">A27, 2nd Floor, Mohan Cooperative Industrial Estate, New Delhi - 110 044, INDIA</p>
-                  </div>
+                <div>
+                  <p style={{ fontSize: "0.68rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--muted)", marginBottom: "4px" }}>Phone</p>
+                  <p style={{ color: "var(--paper)", fontSize: "0.93rem" }}>+91 8882687147</p>
                 </div>
-
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-lg bg-blue-500/10 flex items-center justify-center flex-shrink-0">
-                    <Phone className="w-5 h-5 text-blue-400" />
-                  </div>
-                  <div>
-                    <h3 className="text-white font-medium mb-1">Phone</h3>
-                    <p className="text-gray-400">+91 8882687147</p>
-                  </div>
+                <div>
+                  <p style={{ fontSize: "0.68rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--muted)", marginBottom: "4px" }}>Headquarters</p>
+                  <p style={{ color: "var(--paper)", fontSize: "0.93rem", lineHeight: 1.6 }}>A27, 2nd Floor, Mohan Cooperative Industrial Estate, New Delhi — 110 044, INDIA</p>
                 </div>
               </div>
 
-              <div className="p-6 rounded-xl bg-[#121212] border border-white/5">
-                <h3 className="text-white font-medium mb-3">Enterprise Sales</h3>
-                <p className="text-gray-400 text-sm mb-4">
+              <div style={{ background: "var(--ink-2)", border: "1px solid var(--line)", borderRadius: "10px", padding: "20px" }}>
+                <p style={{ fontFamily: "var(--sans)", fontWeight: 600, color: "var(--paper)", marginBottom: "8px", fontSize: "0.95rem" }}>Enterprise Sales</p>
+                <p style={{ color: "var(--muted)", fontSize: "0.85rem", lineHeight: 1.6, marginBottom: "12px" }}>
                   For large-scale data licensing and custom partnerships, contact our enterprise team.
                 </p>
-                <a href="mailto:licensing@nalandadata.ai" className="text-blue-400 text-sm hover:underline">
-                  licensing@nalandadata.ai
+                <a href="mailto:licensing@nalandadata.ai" style={{ color: "var(--accent)", fontSize: "0.85rem", textDecoration: "none" }}>
+                  licensing@nalandadata.ai →
                 </a>
               </div>
-            </motion.div>
+            </div>
 
             {/* Form */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="lg:col-span-2"
-            >
-              <div className="p-8 rounded-2xl bg-[#121212] border border-white/5">
-                {isSubmitted ? (
-                  <div className="text-center py-12">
-                    <div className="flex items-center justify-center w-20 h-20 rounded-full bg-green-500/20 mx-auto mb-6">
-                      <CheckCircle2 className="w-10 h-10 text-green-500" />
+            <div style={{ background: "var(--ink-2)", border: "1px solid var(--line)", borderRadius: "12px", padding: "40px" }}>
+              {isSubmitted ? (
+                <div style={{ textAlign: "center", padding: "48px 0" }}>
+                  <div style={{ width: "60px", height: "60px", borderRadius: "50%", background: "rgba(200,169,110,0.15)", border: "1px solid var(--accent)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 24px", fontSize: "1.4rem", color: "var(--accent)" }}>✓</div>
+                  <h3 style={{ fontFamily: "var(--sans)", fontSize: "1.4rem", fontWeight: 700, color: "var(--paper)", marginBottom: "12px" }}>Request Submitted</h3>
+                  <p style={{ color: "var(--muted)", marginBottom: "28px", lineHeight: 1.7 }}>
+                    Thank you for your interest. Our data experts will reach out within 24 hours to discuss your requirements.
+                  </p>
+                  <button onClick={resetForm} className="s-btn ghost">Submit Another Request</button>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+                    <div>
+                      <label style={lbl}>Full Name *</label>
+                      <input ref={firstRef} value={form.full_name} onChange={e => set("full_name", e.target.value)} style={errors.full_name ? fieldErr : fieldBase} placeholder="John Smith" data-testid="contact-form-name" />
+                      {errors.full_name && <p style={{ color: "#e05555", fontSize: "0.75rem", marginTop: "4px" }}>{errors.full_name}</p>}
                     </div>
-                    <h3 className="text-2xl font-bold text-white mb-3">Request Submitted!</h3>
-                    <p className="text-gray-400 mb-6">
-                      Thank you for your interest. Our data experts will reach out within 24 hours 
-                      to discuss your requirements.
-                    </p>
-                    <Button
-                      onClick={() => {
-                        setIsSubmitted(false);
-                        setFormData({
-                          full_name: "",
-                          work_email: "",
-                          company: "",
-                          role: "",
-                          company_type: "",
-                          use_case: "",
-                          dataset_interest: "",
-                          message: "",
-                          mobile_country_code: "+91-India",
-                          mobile_number: "",
-                        });
-                      }}
-                      variant="outline"
-                      className="btn-secondary"
-                    >
-                      Submit Another Request
-                    </Button>
+                    <div>
+                      <label style={lbl}>Work Email *</label>
+                      <input type="email" value={form.work_email} onChange={e => set("work_email", e.target.value)} style={errors.work_email ? fieldErr : fieldBase} placeholder="john@company.com" data-testid="contact-form-email" />
+                      {errors.work_email && <p style={{ color: "#e05555", fontSize: "0.75rem", marginTop: "4px" }}>{errors.work_email}</p>}
+                    </div>
                   </div>
-                ) : (
-                  <form onSubmit={handleSubmit} className="space-y-6">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                      <div className="space-y-2">
-                        <Label htmlFor="full_name" className="text-gray-300">Full Name *</Label>
-                        <Input
-                          ref={firstNameRef}
-                          id="full_name"
-                          value={formData.full_name}
-                          onChange={(e) => { setFormData({ ...formData, full_name: e.target.value }); setErrors(p => ({ ...p, full_name: "" })); }}
-                          className={`bg-black/50 border-white/10 text-white placeholder:text-gray-600 ${errors.full_name ? "border-red-500/60" : ""}`}
-                          placeholder="John Smith"
-                          aria-describedby={errors.full_name ? "full_name-error" : undefined}
-                          data-testid="contact-form-name"
-                        />
-                        {errors.full_name && <p id="full_name-error" className="text-red-400 text-xs mt-1">{errors.full_name}</p>}
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="work_email" className="text-gray-300">Work Email *</Label>
-                        <Input
-                          id="work_email"
-                          type="email"
-                          value={formData.work_email}
-                          onChange={(e) => { setFormData({ ...formData, work_email: e.target.value }); setErrors(p => ({ ...p, work_email: "" })); }}
-                          className={`bg-black/50 border-white/10 text-white placeholder:text-gray-600 ${errors.work_email ? "border-red-500/60" : ""}`}
-                          placeholder="john@company.com"
-                          aria-describedby={errors.work_email ? "work_email-error" : undefined}
-                          data-testid="contact-form-email"
-                        />
-                        {errors.work_email && <p id="work_email-error" className="text-red-400 text-xs mt-1">{errors.work_email}</p>}
-                      </div>
+
+                  <div>
+                    <label style={lbl}>Mobile Number</label>
+                    <div style={{ display: "flex", gap: "8px" }}>
+                      <select value={form.mobile_country_code} onChange={e => set("mobile_country_code", e.target.value)} style={{ ...fieldBase, width: "160px", flexShrink: 0 }} data-testid="contact-form-country-code">
+                        {countryCodes.map((c, i) => (
+                          <option key={`${c.code}-${c.country}-${i}`} value={`${c.code}-${c.country}`}>
+                            {c.flag} {c.country} ({c.code})
+                          </option>
+                        ))}
+                      </select>
+                      <input type="tel" value={form.mobile_number} onChange={e => set("mobile_number", e.target.value)} style={{ ...fieldBase, flex: 1 }} placeholder="Mobile number" data-testid="contact-form-mobile" />
                     </div>
+                  </div>
 
-                    <div className="space-y-2">
-                      <Label className="text-gray-300">Mobile Number</Label>
-                      <div className="flex gap-2">
-                        <Select
-                          value={formData.mobile_country_code}
-                          onValueChange={(value) => setFormData({ ...formData, mobile_country_code: value })}
-                        >
-                          <SelectTrigger className="bg-black/50 border-white/10 text-white w-36 flex-shrink-0" data-testid="contact-form-country-code">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent className="bg-[#1A1A1A] border-white/10 max-h-60">
-                            {countryCodes.map((c, i) => (
-                              <SelectItem key={`${c.code}-${c.country}-${i}`} value={`${c.code}-${c.country}`} className="text-white hover:bg-white/10">
-                                {c.flag} {c.country} ({c.code})
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        <Input
-                          type="tel"
-                          value={formData.mobile_number}
-                          onChange={(e) => setFormData({ ...formData, mobile_number: e.target.value })}
-                          className="bg-black/50 border-white/10 text-white placeholder:text-gray-600 flex-1"
-                          placeholder="Mobile number"
-                          data-testid="contact-form-mobile"
-                        />
-                      </div>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+                    <div>
+                      <label style={lbl}>Company *</label>
+                      <input value={form.company} onChange={e => set("company", e.target.value)} style={errors.company ? fieldErr : fieldBase} placeholder="Company name" data-testid="contact-form-company" />
+                      {errors.company && <p style={{ color: "#e05555", fontSize: "0.75rem", marginTop: "4px" }}>{errors.company}</p>}
                     </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                      <div className="space-y-2">
-                        <Label htmlFor="company" className="text-gray-300">Company *</Label>
-                        <Input
-                          id="company"
-                          value={formData.company}
-                          onChange={(e) => { setFormData({ ...formData, company: e.target.value }); setErrors(p => ({ ...p, company: "" })); }}
-                          className={`bg-black/50 border-white/10 text-white placeholder:text-gray-600 ${errors.company ? "border-red-500/60" : ""}`}
-                          placeholder="Company name"
-                          aria-describedby={errors.company ? "company-error" : undefined}
-                          data-testid="contact-form-company"
-                        />
-                        {errors.company && <p id="company-error" className="text-red-400 text-xs mt-1">{errors.company}</p>}
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="role" className="text-gray-300">Role *</Label>
-                        <Input
-                          id="role"
-                          value={formData.role}
-                          onChange={(e) => { setFormData({ ...formData, role: e.target.value }); setErrors(p => ({ ...p, role: "" })); }}
-                          className={`bg-black/50 border-white/10 text-white placeholder:text-gray-600 ${errors.role ? "border-red-500/60" : ""}`}
-                          placeholder="ML Engineer"
-                          aria-describedby={errors.role ? "role-error" : undefined}
-                          data-testid="contact-form-role"
-                        />
-                        {errors.role && <p id="role-error" className="text-red-400 text-xs mt-1">{errors.role}</p>}
-                      </div>
+                    <div>
+                      <label style={lbl}>Role *</label>
+                      <input value={form.role} onChange={e => set("role", e.target.value)} style={errors.role ? fieldErr : fieldBase} placeholder="ML Engineer" data-testid="contact-form-role" />
+                      {errors.role && <p style={{ color: "#e05555", fontSize: "0.75rem", marginTop: "4px" }}>{errors.role}</p>}
                     </div>
+                  </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                      <div className="space-y-2">
-                        <Label className="text-gray-300">Company Type *</Label>
-                        <Select
-                          value={formData.company_type}
-                          onValueChange={(value) => { setFormData({ ...formData, company_type: value }); setErrors(p => ({ ...p, company_type: "" })); }}
-                        >
-                          <SelectTrigger className={`bg-black/50 border-white/10 text-white ${errors.company_type ? "border-red-500/60" : ""}`} data-testid="contact-form-company-type">
-                            <SelectValue placeholder="Select type" />
-                          </SelectTrigger>
-                          <SelectContent className="bg-[#1A1A1A] border-white/10">
-                            {companyTypes.map((type) => (
-                              <SelectItem key={type.value} value={type.value} className="text-white hover:bg-white/10">
-                                {type.label}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        {errors.company_type && <p className="text-red-400 text-xs mt-1">{errors.company_type}</p>}
-                      </div>
-                      <div className="space-y-2">
-                        <Label className="text-gray-300">Use Case *</Label>
-                        <Select
-                          value={formData.use_case}
-                          onValueChange={(value) => { setFormData({ ...formData, use_case: value }); setErrors(p => ({ ...p, use_case: "" })); }}
-                        >
-                          <SelectTrigger className={`bg-black/50 border-white/10 text-white ${errors.use_case ? "border-red-500/60" : ""}`} data-testid="contact-form-use-case">
-                            <SelectValue placeholder="Select use case" />
-                          </SelectTrigger>
-                          <SelectContent className="bg-[#1A1A1A] border-white/10">
-                            {useCases.map((uc) => (
-                              <SelectItem key={uc.value} value={uc.value} className="text-white hover:bg-white/10">
-                                {uc.label}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        {errors.use_case && <p className="text-red-400 text-xs mt-1">{errors.use_case}</p>}
-                      </div>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+                    <div>
+                      <label style={lbl}>Company Type *</label>
+                      <select value={form.company_type} onChange={e => set("company_type", e.target.value)} style={errors.company_type ? fieldErr : fieldBase} data-testid="contact-form-company-type">
+                        <option value="">Select type</option>
+                        {companyTypes.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
+                      </select>
+                      {errors.company_type && <p style={{ color: "#e05555", fontSize: "0.75rem", marginTop: "4px" }}>{errors.company_type}</p>}
                     </div>
-
-                    <div className="space-y-2">
-                      <Label className="text-gray-300">Dataset Interest *</Label>
-                      <Select
-                        value={formData.dataset_interest}
-                        onValueChange={(value) => { setFormData({ ...formData, dataset_interest: value }); setErrors(p => ({ ...p, dataset_interest: "" })); }}
-                      >
-                        <SelectTrigger className={`bg-black/50 border-white/10 text-white ${errors.dataset_interest ? "border-red-500/60" : ""}`} data-testid="contact-form-dataset">
-                          <SelectValue placeholder="Select dataset" />
-                        </SelectTrigger>
-                        <SelectContent className="bg-[#1A1A1A] border-white/10">
-                          {datasetOptions.map((ds) => (
-                            <SelectItem key={ds.value} value={ds.value} className="text-white hover:bg-white/10">
-                              {ds.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      {errors.dataset_interest && <p className="text-red-400 text-xs mt-1">{errors.dataset_interest}</p>}
+                    <div>
+                      <label style={lbl}>Use Case *</label>
+                      <select value={form.use_case} onChange={e => set("use_case", e.target.value)} style={errors.use_case ? fieldErr : fieldBase} data-testid="contact-form-use-case">
+                        <option value="">Select use case</option>
+                        {useCaseOptions.map(u => <option key={u.value} value={u.value}>{u.label}</option>)}
+                      </select>
+                      {errors.use_case && <p style={{ color: "#e05555", fontSize: "0.75rem", marginTop: "4px" }}>{errors.use_case}</p>}
                     </div>
+                  </div>
 
-                    <div className="space-y-2">
-                      <Label htmlFor="message" className="text-gray-300">Tell us about your project</Label>
-                      <Textarea
-                        id="message"
-                        value={formData.message}
-                        onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                        className="bg-black/50 border-white/10 text-white placeholder:text-gray-600 min-h-[120px]"
-                        placeholder="Describe your use case, data requirements, and any specific needs..."
-                        data-testid="contact-form-message"
-                      />
-                    </div>
+                  <div>
+                    <label style={lbl}>Dataset Interest *</label>
+                    <select value={form.dataset_interest} onChange={e => set("dataset_interest", e.target.value)} style={errors.dataset_interest ? fieldErr : fieldBase} data-testid="contact-form-dataset">
+                      <option value="">Select dataset</option>
+                      {datasetOptions.map(d => <option key={d.value} value={d.value}>{d.label}</option>)}
+                    </select>
+                    {errors.dataset_interest && <p style={{ color: "#e05555", fontSize: "0.75rem", marginTop: "4px" }}>{errors.dataset_interest}</p>}
+                  </div>
 
-                    <Button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="w-full btn-primary py-6"
-                      data-testid="contact-form-submit"
-                    >
-                      {isSubmitting ? (
-                        <>
-                          <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                          Submitting...
-                        </>
-                      ) : (
-                        <>
-                          <Send className="w-5 h-5 mr-2" />
-                          Submit Request
-                        </>
-                      )}
-                    </Button>
+                  <div>
+                    <label style={lbl}>Tell us about your project</label>
+                    <textarea value={form.message} onChange={e => set("message", e.target.value)} style={{ ...fieldBase, minHeight: "120px", resize: "vertical" }} placeholder="Describe your use case, data requirements, and any specific needs..." data-testid="contact-form-message" />
+                  </div>
 
-                    <p className="text-xs text-gray-500 text-center">
-                      By submitting, you agree to our privacy policy and terms of service.
-                    </p>
-                  </form>
-                )}
-              </div>
-            </motion.div>
+                  <button type="submit" disabled={isSubmitting} className="s-btn primary" style={{ width: "100%", justifyContent: "center", opacity: isSubmitting ? 0.7 : 1, cursor: isSubmitting ? "not-allowed" : "pointer" }} data-testid="contact-form-submit">
+                    {isSubmitting ? "Submitting..." : "Submit Request →"}
+                  </button>
+
+                  <p style={{ fontSize: "0.75rem", color: "var(--muted)", textAlign: "center" }}>
+                    By submitting, you agree to our privacy policy and terms of service.
+                  </p>
+                </form>
+              )}
+            </div>
           </div>
         </div>
       </section>

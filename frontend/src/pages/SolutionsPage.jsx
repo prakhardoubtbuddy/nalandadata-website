@@ -1,220 +1,183 @@
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import { 
-  Layers,
-  Settings,
-  Target,
-  BarChart3,
-  ArrowRight,
-  CheckCircle2
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { LeadCaptureForm } from "@/components/LeadCaptureForm";
 
 const solutions = [
   {
     id: "pretraining",
-    icon: Layers,
-    title: "Pretraining Data",
+    label: "Pretraining Data",
+    headline: "Foundation-scale academic corpora.",
     description: "Large-scale academic corpora designed to enhance foundational model capabilities with structured knowledge.",
     features: [
       "2B+ structured academic samples",
       "Multi-domain coverage (STEM, Humanities, Languages)",
       "Clean, deduplicated, and quality-filtered",
       "Format-ready for major training frameworks",
-      "Continuous updates with new content"
+      "Continuous updates with new content",
     ],
-    useCases: [
-      "Foundation model pretraining",
-      "Domain adaptation",
-      "Knowledge injection",
-      "Curriculum learning"
-    ]
+    useCases: ["Foundation model pretraining", "Domain adaptation", "Knowledge injection", "Curriculum learning"],
   },
   {
     id: "sft",
-    icon: Settings,
-    title: "Supervised Fine-Tuning (SFT)",
+    label: "Supervised Fine-Tuning (SFT)",
+    headline: "Expert-annotated instruction pairs.",
     description: "Expert-annotated instruction-response pairs for aligning models to follow complex academic instructions.",
     features: [
       "500K+ instruction-response pairs",
       "Multi-turn conversation data",
       "Step-by-step reasoning chains",
       "Task-specific datasets available",
-      "Quality scored by domain experts"
+      "Quality scored by domain experts",
     ],
-    useCases: [
-      "Instruction following",
-      "Task-specific fine-tuning",
-      "Tutoring AI development",
-      "Domain specialization"
-    ]
+    useCases: ["Instruction following", "Task-specific fine-tuning", "Tutoring AI development", "Domain specialization"],
   },
   {
     id: "rlhf",
-    icon: Target,
-    title: "RLHF / DPO Datasets",
+    label: "RLHF / DPO Datasets",
+    headline: "Human preference data at scale.",
     description: "Human preference data and ranked responses for training models to generate safer, more helpful outputs.",
     features: [
       "100K+ preference pairs",
       "Expert-ranked response comparisons",
       "Safety and helpfulness annotations",
       "Diverse academic scenarios",
-      "Continuous human feedback collection"
+      "Continuous human feedback collection",
     ],
-    useCases: [
-      "Preference optimization",
-      "Response quality improvement",
-      "Safety alignment",
-      "Helpfulness training"
-    ]
+    useCases: ["Preference optimization", "Response quality improvement", "Safety alignment", "Helpfulness training"],
   },
   {
-    id: "benchmarks",
-    icon: BarChart3,
-    title: "Evaluation Benchmarks",
+    id: "evaluation",
+    label: "Evaluation Benchmarks",
+    headline: "Rigorous academic evaluation sets.",
     description: "Comprehensive evaluation datasets for measuring model performance across academic reasoning tasks.",
     features: [
       "50K+ evaluation questions",
       "Difficulty-stratified test sets",
       "Multi-subject coverage",
       "Human expert baseline scores",
-      "Detailed performance metrics"
+      "Detailed performance metrics",
     ],
-    useCases: [
-      "Model evaluation",
-      "Progress tracking",
-      "Comparative analysis",
-      "Research benchmarking"
-    ]
-  }
+    useCases: ["Model evaluation", "Progress tracking", "Comparative analysis", "Research benchmarking"],
+  },
 ];
 
 export default function SolutionsPage() {
-  const [isFormOpen, setIsFormOpen] = useState(false);
-
   return (
-    <div className="min-h-screen bg-[#0A0A0A] pt-24" data-testid="solutions-page">
+    <div className="bg-[#0A0A0A]" style={{ paddingTop: "96px" }}>
       <Helmet>
         <title>Solutions — Nalandadata.ai</title>
         <meta name="description" content="AI training data solutions for every stage of the pipeline — pretraining corpora, supervised fine-tuning datasets, RLHF preference data, and evaluation benchmarks." />
       </Helmet>
-      {/* Header */}
-      <section className="py-16 relative">
-        <div className="absolute inset-0 hero-gradient opacity-50" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <h1 className="text-4xl sm:text-5xl font-bold text-white mb-4">
-              Built for every stage of the AI training pipeline.
-            </h1>
-            <p className="text-lg text-gray-400 max-w-2xl mx-auto">
-              Whether you are pretraining a foundation model, fine-tuning for a specific domain, building evaluation benchmarks, or developing an AI tutor — Nalandadata has a dataset designed for your use case.
+
+      {/* Hero */}
+      <section className="s-band" style={{ borderTop: "none" }}>
+        <div className="s-wrap">
+          <nav className="s-crumb" aria-label="Breadcrumb" style={{ marginBottom: "18px" }}>
+            <Link to="/">Home</Link> / Solutions
+          </nav>
+          <p className="s-eyebrow">Solutions</p>
+          <div className="s-sec-head">
+            <h2>Built for every stage of the AI training pipeline.</h2>
+            <p className="lead">
+              Whether you are pretraining a foundation model, fine-tuning for a specific domain,
+              building evaluation benchmarks, or developing an AI tutor — Nalandadata has a dataset
+              designed for your use case.
             </p>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Solutions Grid */}
-      <section className="py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="space-y-16">
-            {solutions.map((solution, i) => (
-              <motion.div
-                key={solution.id}
-                id={solution.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-                className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start"
-              >
-                {/* Left - Info */}
-                <div className={i % 2 === 1 ? "lg:order-2" : ""}>
-                  <div className="flex items-center gap-4 mb-6">
-                    <div className="w-14 h-14 rounded-xl bg-blue-500/10 flex items-center justify-center">
-                      <solution.icon className="w-7 h-7 text-blue-400" />
-                    </div>
-                    <h2 className="text-2xl font-bold text-white">{solution.title}</h2>
-                  </div>
-                  <p className="text-gray-400 mb-8 leading-relaxed">
-                    {solution.description}
-                  </p>
-
-                  <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">
-                    Key Features
-                  </h3>
-                  <ul className="space-y-3 mb-8">
-                    {solution.features.map((feature, j) => (
-                      <li key={j} className="flex items-start gap-3">
-                        <CheckCircle2 className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
-                        <span className="text-gray-300">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  <Button
-                    onClick={() => setIsFormOpen(true)}
-                    className="btn-primary"
-                    data-testid={`solution-cta-${solution.id}`}
-                  >
-                    Request {solution.title} →
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </Button>
-                </div>
-
-                {/* Right - Use Cases */}
-                <div className={`p-8 rounded-2xl bg-[#121212] border border-white/5 ${i % 2 === 1 ? "lg:order-1" : ""}`}>
-                  <h3 className="text-lg font-semibold text-white mb-6">Use Cases</h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {solution.useCases.map((useCase, j) => (
-                      <div
-                        key={j}
-                        className="p-4 rounded-lg bg-white/[0.02] border border-white/5"
-                      >
-                        <span className="text-gray-300">{useCase}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
-            ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-24 border-t border-white/5">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <h2 className="text-3xl font-bold text-white mb-4">
-              Ready to bring structured knowledge to your AI?
-            </h2>
-            <p className="text-gray-400 mb-8">
-              Talk to our team. We'll help you identify the right datasets for your training pipeline and get you a sample.
-            </p>
-            <Button
-              onClick={() => setIsFormOpen(true)}
-              className="btn-primary"
-              data-testid="custom-solution-btn"
-            >
-              Contact Our Team
-              <ArrowRight className="w-4 h-4 ml-2" />
-            </Button>
-          </motion.div>
+      {/* Solution sections */}
+      {solutions.map((sol, i) => (
+        <section key={sol.id} id={sol.id} className={`s-band${i % 2 === 1 ? " alt" : ""}`}>
+          <div className="s-wrap">
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "48px", alignItems: "start" }}>
+              {/* Left: description + features */}
+              <div>
+                <p className="s-eyebrow" style={{ marginBottom: "14px" }}>{sol.label}</p>
+                <h3 style={{
+                  fontFamily: "var(--sans)",
+                  fontSize: "clamp(1.3rem, 2.5vw, 1.75rem)",
+                  fontWeight: 700,
+                  color: "var(--paper)",
+                  marginBottom: "14px",
+                  lineHeight: 1.2,
+                }}>
+                  {sol.headline}
+                </h3>
+                <p style={{ color: "var(--muted)", lineHeight: 1.7, marginBottom: "28px" }}>
+                  {sol.description}
+                </p>
+                <p style={{
+                  fontSize: "0.68rem",
+                  letterSpacing: "0.12em",
+                  textTransform: "uppercase",
+                  color: "var(--muted)",
+                  marginBottom: "14px",
+                }}>
+                  Key Features
+                </p>
+                <ul style={{ listStyle: "none", padding: 0, margin: "0 0 32px", display: "flex", flexDirection: "column", gap: "10px" }}>
+                  {sol.features.map((f, j) => (
+                    <li key={j} style={{ display: "flex", gap: "10px", color: "var(--paper)", fontSize: "0.92rem", lineHeight: 1.5 }}>
+                      <span style={{ color: "var(--accent)", flexShrink: 0, marginTop: "2px" }}>✓</span>
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+                <Link className="s-btn primary" to="/contact">Request {sol.label} →</Link>
+              </div>
+
+              {/* Right: use cases */}
+              <div style={{
+                background: "var(--panel)",
+                border: "1px solid var(--line)",
+                borderRadius: "12px",
+                padding: "32px",
+              }}>
+                <p style={{
+                  fontSize: "0.68rem",
+                  letterSpacing: "0.12em",
+                  textTransform: "uppercase",
+                  color: "var(--muted)",
+                  marginBottom: "20px",
+                }}>
+                  Use Cases
+                </p>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
+                  {sol.useCases.map((uc, j) => (
+                    <div key={j} style={{
+                      background: "rgba(255,255,255,0.03)",
+                      border: "1px solid var(--line)",
+                      borderRadius: "8px",
+                      padding: "14px 16px",
+                      color: "var(--paper)",
+                      fontSize: "0.9rem",
+                      lineHeight: 1.4,
+                    }}>
+                      {uc}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      ))}
+
+      {/* CTA */}
+      <section className="s-band alt">
+        <div className="s-wrap" style={{ textAlign: "center" }}>
+          <p className="s-eyebrow" style={{ justifyContent: "center" }}>Get in touch</p>
+          <h2>Ready to bring structured knowledge to your AI?</h2>
+          <p className="lead" style={{ margin: "18px auto 28px", maxWidth: "52ch" }}>
+            Talk to our team. We'll help you identify the right datasets for your training pipeline and get you a sample.
+          </p>
+          <div style={{ display: "flex", gap: "14px", justifyContent: "center", flexWrap: "wrap" }}>
+            <Link className="s-btn primary" to="/contact">Contact our team →</Link>
+            <Link className="s-btn ghost" to="/research">See the research →</Link>
+          </div>
         </div>
       </section>
-
-      <LeadCaptureForm open={isFormOpen} onOpenChange={setIsFormOpen} />
     </div>
   );
 }
