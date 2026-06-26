@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 export default function ResearchPage() {
   return (
     <div className="bg-[#0A0A0A]" style={{ paddingTop: "96px" }}>
-      <section className="s-band" style={{ borderTop: "none" }}>
+      <section className="s-band" style={{ borderTop: "none", paddingBottom: "40px" }}>
         <div className="s-wrap">
           <nav className="s-crumb" aria-label="Breadcrumb" style={{ marginBottom: "18px" }}>
             <Link to="/">Home</Link> / Research
