@@ -162,7 +162,7 @@ export default function ContactPage() {
       {/* Content */}
       <section className="s-band alt">
         <div className="s-wrap">
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: "64px", alignItems: "start" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 300px), 1fr))", gap: "64px", alignItems: "start" }}>
 
             {/* Contact info */}
             <div>
@@ -210,7 +210,7 @@ export default function ContactPage() {
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 200px), 1fr))", gap: "16px" }}>
                     <div>
                       <label style={lbl}>Full Name *</label>
                       <input ref={firstRef} value={form.full_name} onChange={e => set("full_name", e.target.value)} style={errors.full_name ? fieldErr : fieldBase} placeholder="John Smith" data-testid="contact-form-name" />
@@ -237,7 +237,7 @@ export default function ContactPage() {
                     </div>
                   </div>
 
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 200px), 1fr))", gap: "16px" }}>
                     <div>
                       <label style={lbl}>Company *</label>
                       <input value={form.company} onChange={e => set("company", e.target.value)} style={errors.company ? fieldErr : fieldBase} placeholder="Company name" data-testid="contact-form-company" />
@@ -250,7 +250,7 @@ export default function ContactPage() {
                     </div>
                   </div>
 
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 200px), 1fr))", gap: "16px" }}>
                     <div>
                       <label style={lbl}>Company Type *</label>
                       <select value={form.company_type} onChange={e => set("company_type", e.target.value)} style={errors.company_type ? fieldErr : fieldBase} data-testid="contact-form-company-type">
