@@ -1,19 +1,5 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { motion } from "framer-motion";
-import {
-  Brain,
-  Database,
-  Globe2,
-  FileText,
-  Table2,
-  ArrowRight,
-  ArrowLeft,
-  Download,
-  CheckCircle2
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { LeadCaptureForm } from "@/components/LeadCaptureForm";
 import { BenchmarkCharts } from "@/components/BenchmarkCharts";
 import { Helmet } from "react-helmet-async";
 import axios from "axios";
@@ -21,7 +7,6 @@ import API from "@/lib/api";
 
 const datasetConfigs = {
   "table-recognition": {
-    icon: Table2,
     title: "DrishtiTable — Table Structure Recognition",
     subtitle: "Image-to-HTML Benchmark for Indian Academic Tables",
     overview:
@@ -50,8 +35,6 @@ const datasetConfigs = {
       "Subjects": "6 families",
       "Source Books": "9 (S. Chand)",
     },
-    // Live SWE-bench++-style charts — all values from real annotated data
-    // (results/split_composition.json, full corpus = 1,421 tables).
     benchmark: {
       metricLabel: "TEDS",
       oursLabel: "DrishtiTable (Ours)",
@@ -116,27 +99,20 @@ const datasetConfigs = {
     },
     sampleData: [
       {
-        tableType: "Financial — Trial Balance",
-        subject: "Financial Accounting",
-        structure: "Multi-level header, merged cells, 2 hierarchy levels",
-        html: "<table><thead><tr><th rowspan='2'>Particulars</th><th colspan='2'>Amount (Rs.)</th></tr><tr><th>Debit</th><th>Credit</th></tr></thead><tbody>…</tbody></table>",
+        "Table Type": "Financial — Trial Balance",
+        "Subject": "Financial Accounting",
+        "Structure": "Multi-level header, merged cells, 2 hierarchy levels",
+        "HTML": "<table><thead><tr><th rowspan='2'>Particulars</th><th colspan='2'>Amount (Rs.)</th></tr><tr><th>Debit</th><th>Credit</th></tr></thead><tbody>…</tbody></table>",
       },
       {
-        tableType: "Statistical — Frequency Distribution",
-        subject: "Business Statistics",
-        structure: "Flat header, empty cells, no merged cells",
-        html: "<table><thead><tr><th>Class Interval</th><th>Frequency</th><th>Cumulative</th></tr></thead><tbody>…</tbody></table>",
-      },
-      {
-        tableType: "Lookup — Steam Table",
-        subject: "Engineering / Science",
-        structure: "Multi-column reference, numeric, no grid lines",
-        html: "<table><thead><tr><th>Temp (°C)</th><th>Pressure</th><th>h<sub>f</sub></th><th>h<sub>g</sub></th></tr></thead><tbody>…</tbody></table>",
+        "Table Type": "Statistical — Frequency Distribution",
+        "Subject": "Business Statistics",
+        "Structure": "Flat header, empty cells, no merged cells",
+        "HTML": "<table><thead><tr><th>Class Interval</th><th>Frequency</th><th>Cumulative</th></tr></thead><tbody>…</tbody></table>",
       },
     ],
   },
   "stem-reasoning": {
-    icon: Brain,
     title: "STEM Reasoning & Problem Solving",
     subtitle: "JEE / NEET / Olympiad Level Reasoning",
     overview: "A large-scale collection of mathematics and science content spanning Class 1 to Class 12, aligned to CBSE and ICSE curricula. Covers JEE Advanced, NEET, and Olympiad-level problems with multi-step worked solutions ideal for chain-of-thought and reasoning model training.",
@@ -166,39 +142,22 @@ const datasetConfigs = {
     },
     sampleData: [
       {
-        question: "Two blocks of masses 3 kg and 5 kg are connected by a light string passing over a frictionless pulley. Find the acceleration of the system and tension in the string. (g = 10 m/s²)",
-        options: "A) a = 2.5 m/s², T = 37.5 N  B) a = 3.0 m/s², T = 40 N  C) a = 2.0 m/s², T = 35 N  D) a = 2.5 m/s², T = 40 N",
-        answer: "A) a = 2.5 m/s², T = 37.5 N",
-        solution: "Net force = (5−3)×10 = 20 N. Total mass = 8 kg. a = 20/8 = 2.5 m/s². T = 3×(10+2.5) = 37.5 N",
-        subject: "Physics — Laws of Motion",
-        source: "JEE Mains",
-        difficulty: "Medium",
+        "Question": "Two blocks of masses 3 kg and 5 kg are connected by a light string passing over a frictionless pulley. Find the acceleration of the system and tension in the string. (g = 10 m/s²)",
+        "Options": "A) a = 2.5 m/s², T = 37.5 N  B) a = 3.0 m/s², T = 40 N  C) a = 2.0 m/s², T = 35 N",
+        "Answer": "A) a = 2.5 m/s², T = 37.5 N",
+        "Solution": "Net force = (5−3)×10 = 20 N. Total mass = 8 kg. a = 20/8 = 2.5 m/s². T = 3×(10+2.5) = 37.5 N",
+        "Subject": "Physics — Laws of Motion",
+        "Difficulty": "Medium",
       },
       {
-        question: "Benzene reacts with Cl₂ in the presence of FeCl₃ to give chlorobenzene. Identify the type of reaction and write the mechanism.",
-        answer: "Electrophilic Aromatic Substitution (EAS). Step 1: FeCl₃ activates Cl₂ → Cl⁺ (electrophile). Step 2: Cl⁺ attacks π system forming arenium ion. Step 3: Loss of H⁺ restores aromaticity → C₆H₅Cl + HCl.",
-        subject: "Chemistry — Organic Reactions",
-        source: "JEE Advanced",
-        difficulty: "Hard",
-      },
-      {
-        question: "If the roots of the equation x² − px + q = 0 are in the ratio 2:3, prove that 6p² = 25q.",
-        answer: "Let roots be 2α and 3α. Sum = 5α = p → α = p/5. Product = 6α² = q → 6(p/5)² = q → 6p²/25 = q → 6p² = 25q. ∎",
-        subject: "Mathematics — Quadratic Equations",
-        source: "CBSE Class 10 / Olympiad",
-        difficulty: "Medium",
-      },
-      {
-        question: "A solution contains 0.3 mol of NaCl and 0.2 mol of glucose in 1 kg of water. Calculate the boiling point elevation. (Kb for water = 0.512 K·kg/mol)",
-        answer: "NaCl dissociates: i = 2, so effective molality = 2×0.3 + 0.2 = 0.8 mol/kg. ΔTb = Kb × m = 0.512 × 0.8 = 0.41 K. BP = 100.41°C",
-        subject: "Chemistry — Solutions",
-        source: "NEET",
-        difficulty: "Medium",
+        "Question": "If the roots of the equation x² − px + q = 0 are in the ratio 2:3, prove that 6p² = 25q.",
+        "Answer": "Let roots be 2α and 3α. Sum = 5α = p → α = p/5. Product = 6α² = q → 6(p/5)² = q → 6p² = 25q. ∎",
+        "Subject": "Mathematics — Quadratic Equations",
+        "Difficulty": "Medium",
       },
     ],
   },
   "language-literacy": {
-    icon: Globe2,
     title: "Language, Literacy & Comprehension",
     subtitle: "English, Hindi & 8 Indic Languages",
     overview: "Curriculum-aligned language content from Class 1 to Class 12 covering English grammar, Hindi literature, reading comprehension, and academic content in 8 Indic languages. One of the largest structured multilingual education corpora available for Indic AI development.",
@@ -227,39 +186,16 @@ const datasetConfigs = {
     },
     sampleData: [
       {
-        passage: "The ancient city of Mohenjo-daro, one of the largest settlements of the Indus Valley Civilisation, was remarkable for its urban planning. Its streets were laid out in a grid pattern, and the city had an advanced drainage system with covered drains running alongside the roads.",
-        question: "What does the passage suggest about the Indus Valley Civilisation?",
-        answer: "It was a highly organised and technically advanced civilisation with sophisticated infrastructure including planned streets and underground drainage.",
-        language: "English",
-        subject: "English Reading Comprehension",
-        grade: "Grade 8",
-        type: "Inferential Q&A",
-      },
-      {
-        content: "मेरे देश की धरती — कविता\nमेरे देश की धरती सोना उगले, उगले हीरे मोती।\nमेरे देश की धरती सोना उगले।\n\nप्रश्न: कवि ने 'धरती' को किसका प्रतीक बताया है?\nउत्तर: कवि ने 'धरती' को समृद्धि और उर्वरता का प्रतीक बताया है। वे कहते हैं कि यह भूमि इतनी उपजाऊ है मानो सोना, हीरे और मोती उगाती हो।",
-        language: "Hindi",
-        subject: "Hindi Literature & Comprehension",
-        grade: "Grade 9",
-        type: "Poetry Analysis Q&A",
-      },
-      {
-        content: "ভারতের জাতীয় পশু বাঘ। এটি শক্তি ও সাহসের প্রতীক। বাঘ ভারতের বনে বাস করে এবং এটি একটি বিপন্ন প্রজাতি।\n\nপ্রশ্ন: ভারতের জাতীয় পশু কী এবং এটি কীসের প্রতীক?\nউত্তর: ভারতের জাতীয় পশু হল বাঘ, যা শক্তি ও সাহসের প্রতীক।",
-        language: "Bengali",
-        subject: "Bengali Language & General Knowledge",
-        grade: "Grade 6",
-        type: "Factual Q&A",
-      },
-      {
-        content: "Grammar Exercise — Voices\nActive: The teacher explained the concept clearly.\nPassive: The concept was explained clearly by the teacher.\n\nRule: In passive voice, the object of the active sentence becomes the subject. The verb changes to 'be + past participle'. The original subject becomes 'by + agent' (optional).",
-        language: "English",
-        subject: "English Grammar",
-        grade: "Grade 10",
-        type: "Grammar Exercise",
+        "Passage": "The ancient city of Mohenjo-daro was remarkable for its urban planning. Its streets were laid out in a grid pattern, and the city had an advanced drainage system with covered drains running alongside the roads.",
+        "Question": "What does the passage suggest about the Indus Valley Civilisation?",
+        "Answer": "It was a highly organised and technically advanced civilisation with sophisticated infrastructure including planned streets and underground drainage.",
+        "Language": "English",
+        "Subject": "Reading Comprehension",
+        "Grade": "Grade 8",
       },
     ],
   },
   "social-sciences": {
-    icon: FileText,
     title: "Social Sciences, Civics & General Knowledge",
     subtitle: "History, Geography, Polity & UPSC",
     overview: "Structured academic content covering Indian and world history, geography, political science, economics, and civics — from Class 6 through to the UPSC examination syllabus. Critical for grounding AI models in accurate Indian historical, governance, and general knowledge.",
@@ -288,37 +224,14 @@ const datasetConfigs = {
     },
     sampleData: [
       {
-        question: "What were the main causes of the First War of Indian Independence (1857)?",
-        answer: "Causes included: (1) Political — annexation policy (Doctrine of Lapse) by Lord Dalhousie; (2) Economic — drain of wealth and ruin of Indian industries; (3) Social — interference in social customs and fear of Christianisation; (4) Military — discrimination in pay and the introduction of the Enfield rifle cartridge greased with animal fat.",
-        subject: "Indian History — Modern India",
-        source: "NCERT Class 8 / UPSC Prelims",
-        level: "Class 10 / UPSC",
-      },
-      {
-        question: "Explain the Directive Principles of State Policy (DPSP) and how they differ from Fundamental Rights.",
-        answer: "DPSPs (Part IV, Articles 36–51) are guidelines for the state to frame policies for socio-economic justice. Unlike Fundamental Rights (justiciable — enforceable in court), DPSPs are non-justiciable — they cannot be enforced in a court of law. However, they are fundamental to governance and the state must apply them in making laws.",
-        subject: "Indian Polity — Constitutional Framework",
-        source: "UPSC Mains GS-II",
-        level: "UPSC",
-      },
-      {
-        question: "Describe the distribution of black soil in India and explain why it is ideal for cotton cultivation.",
-        answer: "Black soil (Regur soil) is found in the Deccan Plateau — Maharashtra, Gujarat, Madhya Pradesh, and parts of Karnataka and Andhra Pradesh. It is ideal for cotton because: (1) it has high water-retention capacity, (2) it is rich in lime, iron, magnesia, and potash, (3) it swells when wet and cracks when dry, allowing self-ploughing, and (4) it remains moist for a long period.",
-        subject: "Physical Geography — Soils of India",
-        source: "NCERT Class 11 / UPSC Prelims",
-        level: "Class 11 / UPSC",
-      },
-      {
-        question: "What is the significance of the 73rd Constitutional Amendment Act, 1992?",
-        answer: "The 73rd Amendment gave constitutional status to Panchayati Raj Institutions (PRIs). It added Part IX (Articles 243–243O) and the 11th Schedule. Key provisions: three-tier system (Gram Panchayat, Panchayat Samiti, Zila Parishad), reservation of seats for SCs, STs, and women (one-third), five-year term, and State Finance Commissions.",
-        subject: "Indian Polity — Local Government",
-        source: "UPSC Mains GS-II",
-        level: "UPSC",
+        "Question": "What were the main causes of the First War of Indian Independence (1857)?",
+        "Answer": "Causes included: (1) Political — annexation policy (Doctrine of Lapse); (2) Economic — drain of wealth and ruin of Indian industries; (3) Social — interference in social customs; (4) Military — introduction of the Enfield rifle cartridge greased with animal fat.",
+        "Subject": "Indian History — Modern India",
+        "Level": "Class 10 / UPSC",
       },
     ],
   },
   "higher-education": {
-    icon: Database,
     title: "Higher Education & Professional Knowledge",
     subtitle: "Commerce, Law & Engineering — Diploma to UG",
     overview: "Undergraduate and diploma-level content spanning commerce, economics, accountancy, constitutional law, and core engineering sciences. Built for AI assistants targeting professional and higher-education domains, grounded in Indian academic syllabi.",
@@ -347,40 +260,25 @@ const datasetConfigs = {
     },
     sampleData: [
       {
-        question: "A company forfeits 500 shares of ₹10 each (₹6 called up) held by Ramesh, who had paid ₹2 per share as application money. These shares are reissued at ₹4 per share as fully paid up. Pass journal entries for forfeiture and reissue.",
-        subject: "Accountancy — Share Capital",
-        domain: "Commerce",
-        solution: "Forfeiture: Share Capital A/c Dr ₹3,000 | To Share Allotment A/c ₹2,000 | To Calls-in-Arrears A/c ₹1,000 (if any) | To Forfeited Shares A/c ₹1,000. Reissue: Bank A/c Dr ₹2,000 | Forfeited Shares A/c Dr ₹3,000 | To Share Capital A/c ₹5,000. Capital Reserve = Forfeited Shares balance after reissue.",
-        level: "Class 12 / B.Com",
-      },
-      {
-        question: "Distinguish between 'void agreement' and 'voidable contract' under the Indian Contract Act, 1872. Give one example of each.",
-        subject: "Business Law / Contract Law",
-        domain: "Law",
-        solution: "A void agreement (Section 2(g)) is not enforceable by law from the very beginning — e.g., an agreement with a minor. A voidable contract (Section 2(i)) is enforceable at the option of one of the parties — it remains valid until the aggrieved party chooses to avoid it — e.g., a contract made under coercion. Key difference: void agreement has no legal effect at all; voidable contract has legal effect until rescinded.",
-        level: "B.Com / LLB",
-      },
-      {
-        question: "For a simply supported beam of span 6 m carrying a uniformly distributed load (UDL) of 20 kN/m, find the maximum bending moment and its location.",
-        subject: "Strength of Materials / Structural Engineering",
-        domain: "Engineering",
-        solution: "Reactions: RA = RB = (20×6)/2 = 60 kN. Maximum BM occurs at mid-span (x = 3 m). M_max = (w × L²)/8 = (20 × 36)/8 = 90 kN·m. The bending moment diagram is parabolic with peak at centre.",
-        level: "Diploma / B.Tech",
-      },
-      {
-        question: "Explain the concept of 'price elasticity of demand'. If a 10% rise in price causes quantity demanded to fall by 25%, classify the elasticity and calculate its value.",
-        subject: "Micro-Economics",
-        domain: "Commerce",
-        solution: "Price Elasticity of Demand (PED) = % change in Qd / % change in Price = −25/10 = −2.5 (absolute value: 2.5). Since |PED| > 1, demand is elastic — consumers are highly responsive to the price change. This is typical of goods with many substitutes or those considered non-essential.",
-        level: "Class 12 / B.Com / B.A. Economics",
+        "Question": "Distinguish between 'void agreement' and 'voidable contract' under the Indian Contract Act, 1872.",
+        "Answer": "A void agreement (Section 2(g)) is not enforceable by law from the very beginning — e.g., an agreement with a minor. A voidable contract (Section 2(i)) is enforceable at the option of one party — e.g., a contract made under coercion.",
+        "Subject": "Business Law / Contract Law",
+        "Domain": "Law",
+        "Level": "B.Com / LLB",
       },
     ],
   },
 };
 
+const sideCard = {
+  background: "var(--panel)",
+  border: "1px solid var(--line)",
+  borderRadius: "12px",
+  padding: "24px",
+};
+
 export default function DatasetDetailPage() {
   const { slug } = useParams();
-  const [isFormOpen, setIsFormOpen] = useState(false);
   const [downloadFiles, setDownloadFiles] = useState([]);
 
   const dataset = datasetConfigs[slug];
@@ -390,8 +288,8 @@ export default function DatasetDetailPage() {
       try {
         const response = await axios.get(`${API}/files/category/${slug}`);
         setDownloadFiles(response.data);
-      } catch (error) {
-        if (process.env.NODE_ENV === "development") console.error("Error fetching files:", error);
+      } catch {
+        // silently ignore
       }
     };
     if (slug) fetchFiles();
@@ -399,21 +297,17 @@ export default function DatasetDetailPage() {
 
   if (!dataset) {
     return (
-      <div className="min-h-screen bg-[#0A0A0A] pt-24 flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl text-white mb-4">Dataset not found</h1>
-          <Link to="/datasets" className="text-blue-400 hover:underline">
-            Back to datasets
-          </Link>
+      <div className="bg-[#0A0A0A]" style={{ paddingTop: "96px", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ textAlign: "center" }}>
+          <h2 style={{ color: "var(--paper)", marginBottom: "16px" }}>Dataset not found</h2>
+          <Link to="/datasets" className="s-btn ghost">← Back to Datasets</Link>
         </div>
       </div>
     );
   }
 
-  const IconComponent = dataset.icon;
-
   return (
-    <div className="min-h-screen bg-[#0A0A0A] pt-24" data-testid="dataset-detail-page">
+    <div className="bg-[#0A0A0A]" style={{ paddingTop: "96px" }} data-testid="dataset-detail-page">
       <Helmet>
         <title>{dataset.title} — Nalandadata.ai</title>
         <meta name="description" content={dataset.overview.slice(0, 155)} />
@@ -430,208 +324,148 @@ export default function DatasetDetailPage() {
           "isAccessibleForFree": false,
         })}</script>
       </Helmet>
-      {/* Header */}
-      <section className="py-16 relative">
-        <div className="absolute inset-0 hero-gradient opacity-50" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Link
-            to="/datasets"
-            className="inline-flex items-center gap-2 text-gray-400 hover:text-white mb-8 transition-colors"
-            data-testid="back-to-datasets"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back to Datasets
-          </Link>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="flex items-start gap-6"
-          >
-            <div className="w-20 h-20 rounded-2xl bg-blue-500/10 flex items-center justify-center flex-shrink-0">
-              <IconComponent className="w-10 h-10 text-blue-400" />
-            </div>
-            <div>
-              <p className="text-blue-400 text-sm font-mono mb-2">{dataset.subtitle}</p>
-              <h1 className="text-4xl sm:text-5xl font-bold text-white mb-4">
-                {dataset.title}
-              </h1>
-              <p className="text-lg text-gray-400 max-w-3xl">
-                {dataset.overview}
-              </p>
-            </div>
-          </motion.div>
+      {/* Hero */}
+      <section className="s-band" style={{ borderTop: "none", paddingBottom: "48px" }}>
+        <div className="s-wrap">
+          <nav className="s-crumb" aria-label="Breadcrumb" style={{ marginBottom: "18px" }}>
+            <Link to="/">Home</Link> / <Link to="/datasets">Datasets</Link> / {dataset.title}
+          </nav>
+          <p className="s-eyebrow">{dataset.subtitle}</p>
+          <div className="s-sec-head" style={{ maxWidth: "72ch" }}>
+            <h2>{dataset.title}</h2>
+            <p className="lead">{dataset.overview}</p>
+          </div>
         </div>
       </section>
 
-      {/* Benchmark & Composition charts (SWE-bench++-style) — only when present */}
+      {/* Benchmark charts (DrishtiTable only) */}
       {dataset.benchmark && (
-        <section className="py-12 border-t border-white/5">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section className="s-band alt" style={{ paddingTop: "40px", paddingBottom: "40px" }}>
+          <div className="s-wrap">
             <BenchmarkCharts benchmark={dataset.benchmark} />
           </div>
         </section>
       )}
 
-      {/* Main Content */}
-      <section className="py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-            {/* Left Column - Details */}
-            <div className="lg:col-span-2 space-y-12">
-              {/* Use Cases */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.1 }}
-              >
-                <h2 className="text-2xl font-bold text-white mb-6">Use Cases</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {dataset.useCases.map((useCase, i) => (
-                    <div
-                      key={i}
-                      className="flex items-center gap-3 p-4 rounded-lg bg-white/[0.02] border border-white/5"
-                    >
-                      <CheckCircle2 className="w-5 h-5 text-blue-400 flex-shrink-0" />
-                      <span className="text-gray-300">{useCase}</span>
+      {/* Main content */}
+      <section className="s-band alt">
+        <div className="s-wrap">
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 320px", gap: "48px", alignItems: "start" }}>
+
+            {/* Left: use cases + schema + samples */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "48px" }}>
+
+              {/* Use cases */}
+              <div>
+                <p className="s-eyebrow" style={{ marginBottom: "20px" }}>Use Cases</p>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
+                  {dataset.useCases.map((uc, i) => (
+                    <div key={i} style={{
+                      background: "var(--ink)",
+                      border: "1px solid var(--line)",
+                      borderRadius: "8px",
+                      padding: "14px 16px",
+                      color: "var(--paper)",
+                      fontSize: "0.9rem",
+                      lineHeight: 1.4,
+                      display: "flex",
+                      gap: "10px",
+                      alignItems: "flex-start",
+                    }}>
+                      <span style={{ color: "var(--accent)", flexShrink: 0, marginTop: "1px" }}>✓</span>
+                      {uc}
                     </div>
                   ))}
                 </div>
-              </motion.div>
+              </div>
 
-              {/* Dataset Structure */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-              >
-                <h2 className="text-2xl font-bold text-white mb-6">Dataset Structure</h2>
-                <div className="overflow-x-auto rounded-xl border border-white/10">
-                  <table className="w-full table-dark min-w-[480px]">
-                    <thead>
-                      <tr>
-                        <th className="text-left p-4 w-1/3">Field</th>
-                        <th className="text-left p-4">Description</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {dataset.structure.map((item, i) => (
-                        <tr key={i}>
-                          <td className="p-4 font-mono text-blue-400">{item.field}</td>
-                          <td className="p-4 text-gray-400">{item.description}</td>
+              {/* Dataset structure */}
+              <div>
+                <p className="s-eyebrow" style={{ marginBottom: "20px" }}>Dataset Structure</p>
+                <div className="s-tablecard">
+                  <div className="s-tbl-scroll">
+                    <table style={{ width: "100%", borderCollapse: "collapse", minWidth: "480px" }}>
+                      <thead>
+                        <tr>
+                          <th style={{ fontFamily: "var(--mono)", fontSize: "10.5px", letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--muted)", textAlign: "left", padding: "14px 22px 10px", borderBottom: "1px solid var(--line)", fontWeight: 600 }}>Field</th>
+                          <th style={{ fontFamily: "var(--mono)", fontSize: "10.5px", letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--muted)", textAlign: "left", padding: "14px 22px 10px", borderBottom: "1px solid var(--line)", fontWeight: 600 }}>Description</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody>
+                        {dataset.structure.map((item, i) => (
+                          <tr key={i} style={{ borderBottom: i < dataset.structure.length - 1 ? "1px solid var(--line-soft)" : "none" }}>
+                            <td style={{ fontFamily: "var(--mono)", fontSize: "13.5px", color: "var(--accent)", padding: "13px 22px" }}>{item.field}</td>
+                            <td style={{ fontSize: "13.5px", color: "#CFC8BB", padding: "13px 22px" }}>{item.description}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
-              </motion.div>
+              </div>
 
-              {/* Sample Data Preview */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.3 }}
-              >
-                <h2 className="text-2xl font-bold text-white mb-6">Sample Data Preview</h2>
-                <div className="space-y-4">
+              {/* Sample data */}
+              <div>
+                <p className="s-eyebrow" style={{ marginBottom: "20px" }}>Sample Data Preview</p>
+                <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
                   {dataset.sampleData.map((sample, i) => (
-                    <div
-                      key={i}
-                      className="p-6 rounded-xl bg-[#121212] border border-white/5"
-                    >
+                    <div key={i} style={{ background: "var(--ink)", border: "1px solid var(--line)", borderRadius: "12px", padding: "24px" }}>
                       {Object.entries(sample).map(([key, value]) => (
-                        <div key={key} className="flex gap-4 mb-2 last:mb-0">
-                          <span className="text-gray-500 font-mono text-sm w-28 flex-shrink-0 capitalize">
-                            {key.replace(/([A-Z])/g, ' $1').trim()}:
+                        <div key={key} style={{ display: "flex", gap: "16px", marginBottom: "10px" }}>
+                          <span style={{ fontFamily: "var(--mono)", fontSize: "10.5px", letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--muted)", flexShrink: 0, width: "100px", paddingTop: "2px" }}>
+                            {key}
                           </span>
-                          <span className="text-gray-300 text-sm">
-                            {Array.isArray(value) ? value.join(", ") : value}
-                          </span>
+                          <span style={{ fontSize: "13.5px", color: "#CFC8BB", lineHeight: 1.6 }}>{value}</span>
                         </div>
                       ))}
                     </div>
                   ))}
                 </div>
-              </motion.div>
+              </div>
             </div>
 
-            {/* Right Column - Stats & CTA */}
-            <div className="space-y-8 lg:sticky lg:top-28 lg:self-start">
-              {/* Dataset Stats */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                className="p-6 rounded-xl bg-[#121212] border border-white/5"
-              >
-                <h3 className="text-lg font-semibold text-white mb-6">Dataset Size</h3>
-                <div className="space-y-4">
+            {/* Right: stats + CTAs (sticky) */}
+            <div style={{ position: "sticky", top: "96px", display: "flex", flexDirection: "column", gap: "16px" }}>
+
+              {/* Stats */}
+              <div style={sideCard}>
+                <p style={{ fontFamily: "var(--mono)", fontSize: "10.5px", letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--muted)", marginBottom: "18px" }}>Dataset Size</p>
+                <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                   {Object.entries(dataset.stats).map(([key, value]) => (
-                    <div key={key} className="flex justify-between items-center">
-                      <span className="text-gray-400">{key}</span>
-                      <span className="text-white font-mono font-semibold">{value}</span>
+                    <div key={key} style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: "8px" }}>
+                      <span style={{ color: "var(--muted)", fontSize: "13.5px" }}>{key}</span>
+                      <span style={{ fontFamily: "var(--mono)", fontSize: "13.5px", fontWeight: 600, color: "var(--paper)" }}>{value}</span>
                     </div>
                   ))}
                 </div>
-              </motion.div>
+              </div>
 
-              {/* Download CTA */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.3 }}
-                className="p-6 rounded-xl bg-gradient-to-br from-blue-500/10 to-indigo-500/10 border border-blue-500/20"
-              >
-                <h3 className="text-lg font-semibold text-white mb-3">
-                  Download Sample Dataset
-                </h3>
-                <p className="text-gray-400 text-sm mb-6">
+              {/* Download sample */}
+              <div style={{ ...sideCard, background: "var(--accent-tint)", borderColor: "var(--accent-deep)" }}>
+                <p style={{ fontWeight: 700, color: "var(--paper)", marginBottom: "8px", fontSize: "0.95rem" }}>Download Sample Dataset</p>
+                <p style={{ color: "var(--muted)", fontSize: "0.85rem", lineHeight: 1.6, marginBottom: "16px" }}>
                   Get access to sample data and explore the dataset structure.
                 </p>
-                <Button
-                  onClick={() => setIsFormOpen(true)}
-                  className="w-full btn-primary"
-                  data-testid="download-sample-btn"
-                >
-                  <Download className="w-4 h-4 mr-2" />
-                  Download Sample
-                </Button>
-              </motion.div>
+                <Link className="s-btn primary" to="/contact" style={{ width: "100%", textAlign: "center", justifyContent: "center", display: "block" }} data-testid="download-sample-btn">
+                  Download Sample →
+                </Link>
+              </div>
 
-              {/* Request Full Dataset */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.4 }}
-                className="p-6 rounded-xl bg-[#121212] border border-white/5"
-              >
-                <h3 className="text-lg font-semibold text-white mb-3">
-                  Need the Full Dataset?
-                </h3>
-                <p className="text-gray-400 text-sm mb-6">
+              {/* Request full */}
+              <div style={sideCard}>
+                <p style={{ fontWeight: 700, color: "var(--paper)", marginBottom: "8px", fontSize: "0.95rem" }}>Need the Full Dataset?</p>
+                <p style={{ color: "var(--muted)", fontSize: "0.85rem", lineHeight: 1.6, marginBottom: "16px" }}>
                   Contact our team to discuss licensing and custom requirements.
                 </p>
-                <Button
-                  onClick={() => setIsFormOpen(true)}
-                  className="w-full btn-secondary"
-                  data-testid="request-full-dataset-btn"
-                >
+                <Link className="s-btn ghost" to="/contact" style={{ width: "100%", textAlign: "center", justifyContent: "center", display: "block" }} data-testid="request-full-dataset-btn">
                   Request Full Dataset →
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
-              </motion.div>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
       </section>
-
-      <LeadCaptureForm
-        open={isFormOpen}
-        onOpenChange={setIsFormOpen}
-        preselectedDataset={slug}
-        downloadFiles={downloadFiles}
-      />
     </div>
   );
 }
