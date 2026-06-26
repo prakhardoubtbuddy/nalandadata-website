@@ -17,7 +17,6 @@ export default function BenchmarksPage() {
 
   const tabs = [
     { id: "drishtitable", name: "DrishtiTable", sub: "84.9% TEDS · +7.5pp vs best frontier" },
-    { id: "nalandabench", name: "NalandaBench V1", sub: "66.8% accuracy · +6.3pp via GRPO" },
     { id: "imageqa", name: "Nalanda Image VL", sub: "+12.3pp vs base · STEM-VL" },
   ];
 
@@ -84,7 +83,7 @@ export default function BenchmarksPage() {
           <div className="s-sec-head">
             <p className="s-eyebrow">Leaderboard</p>
             <h2>Benchmark results.</h2>
-            <p className="lead">Two held-out benchmarks live, with domain-specific variants in progress. Select a benchmark to view its leaderboard.</p>
+            <p className="lead">Two held-out benchmarks live, with more in progress. Select a benchmark to view its leaderboard.</p>
           </div>
 
           {/* Tab nav */}
@@ -280,45 +279,6 @@ export default function BenchmarksPage() {
 
             <p style={{ fontSize: "12.5px", color: "var(--muted-2)", marginTop: "14px", lineHeight: 1.6 }}>
               To run your model on the public test set, use the <a href="https://huggingface.co/datasets/Nalandadata/DrishtiTable" target="_blank" rel="noopener noreferrer" style={{ color: "var(--muted)" }}>evaluation script on Hugging Face</a> — no form required. To submit to the held-out leaderboard, request access below.
-            </p>
-          </div>
-
-          {/* NalandaBench panel */}
-          <div className={`s-bench-panel${activeTab === "nalandabench" ? " active" : ""}`}>
-            <div className="s-bench-h">
-              <h3>NalandaBench V1 — JEE / NEET Reasoning</h3>
-              <p>MCQ accuracy on held-out JEE and NEET questions in Science and Mathematics. Tests a model's ability to reason through curriculum-grade STEM problems with verified correct answers — not pattern-matching on common training data.</p>
-            </div>
-            <div className="s-key-stat">
-              <span className="kd">+6.3pp</span>
-              <span className="kl"><b>via verified-reward RL (GRPO)</b>Same base model, same data — method made the difference</span>
-            </div>
-            <div className="s-methbox">
-              <h4>Methodology</h4>
-              <p>800 held-out MCQs drawn from JEE and NEET exam papers, verified by subject-matter experts with at least two independent answer checks per item. Plain SFT on the same data regressed accuracy by <b>−16.4 points</b> (60.5 → 44.1); verified-reward RL (GRPO) using expert-verified answers as the reward produced <b>+6.3pp</b>. <Link to="/research/nalandabench" style={{ color: "var(--accent)" }}>Full method in the case study →</Link></p>
-            </div>
-            <div className="s-lb-meta">
-              <span className="lm">NalandaBench V1 · 800 held-out MCQs</span>
-              <span className="ll">
-                <a href="https://huggingface.co/datasets/Nalandadata/NalandaJEENEETBench" target="_blank" rel="noopener noreferrer">↗ HF dataset</a>
-                <a href="https://huggingface.co/Nalandadata/nalanda-qwen-7b-grpo" target="_blank" rel="noopener noreferrer">↗ Model</a>
-              </span>
-            </div>
-            <div className="s-tablecard">
-              <div className="s-tbl-scroll">
-                <table>
-                  <caption>NalandaBench v1 — 800 held-out MCQs (JEE/NEET, science &amp; maths)</caption>
-                  <thead><tr><th>Model</th><th>Method</th><th style={{ textAlign: "right" }}>Accuracy</th><th style={{ textAlign: "right" }}>vs base</th></tr></thead>
-                  <tbody>
-                    <tr className="best"><th>Nalanda Qwen 7B GRPO <span className="badge">ours</span></th><td>Verified-reward RL</td><td style={{ textAlign: "right" }}>66.8%</td><td style={{ textAlign: "right" }} className="s-dpos">+6.3</td></tr>
-                    <tr><th>Qwen 2.5 7B Instruct <span style={{ color: "var(--accent)", fontFamily: "var(--mono)", fontSize: "11px", marginLeft: "8px" }}>baseline</span></th><td>Base model</td><td style={{ textAlign: "right" }}>60.5%</td><td style={{ textAlign: "right" }}>—</td></tr>
-                  </tbody>
-                </table>
-              </div>
-              <div className="cond">Same base model, same held-out set. Verified-reward RL (GRPO) lifted accuracy <b>+6.3 points</b> (60.5% → 66.8%) — by reasoning, not memorising. Full method in the <Link to="/research/nalandabench" style={{ color: "var(--accent)" }}>case study →</Link></div>
-            </div>
-            <p style={{ fontSize: "12.5px", color: "var(--muted-2)", marginTop: "14px", lineHeight: 1.6 }}>
-              To run your model on the public test set, use the <a href="https://huggingface.co/datasets/Nalandadata/NalandaJEENEETBench" target="_blank" rel="noopener noreferrer" style={{ color: "var(--muted)" }}>evaluation script on Hugging Face</a> — no form required.
             </p>
           </div>
 
