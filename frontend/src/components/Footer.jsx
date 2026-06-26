@@ -26,11 +26,13 @@ export default function Footer() {
         <nav style={{ display: "flex", flexWrap: "wrap", gap: "22px", marginTop: "34px", fontFamily: "var(--mono)", fontSize: "12.5px", letterSpacing: "0.04em" }}>
           <Link to="/research" style={{ color: "var(--muted)", textDecoration: "none" }}>Research</Link>
           <Link to="/benchmarks" style={{ color: "var(--muted)", textDecoration: "none" }}>Benchmarks</Link>
+          <Link to="/datasets" style={{ color: "var(--muted)", textDecoration: "none" }}>Datasets</Link>
           <Link to="/solutions" style={{ color: "var(--muted)", textDecoration: "none" }}>Solutions</Link>
           <Link to="/blog" style={{ color: "var(--muted)", textDecoration: "none" }}>Blog</Link>
           <Link to="/about" style={{ color: "var(--muted)", textDecoration: "none" }}>About</Link>
           <Link to="/contact" style={{ color: "var(--muted)", textDecoration: "none" }}>Contact</Link>
           <a href="https://huggingface.co/Nalandadata" target="_blank" rel="noopener noreferrer" style={{ color: "var(--muted)", textDecoration: "none" }}>Hugging&nbsp;Face</a>
+          <Link to="/privacy" style={{ color: "var(--muted)", textDecoration: "none" }}>Privacy</Link>
         </nav>
         <div style={{ marginTop: "40px", paddingTop: "22px", borderTop: "1px solid var(--line-soft)", fontFamily: "var(--mono)", fontSize: "11px", color: "var(--muted-2)", letterSpacing: "0.04em", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "10px" }}>
           <span>© {new Date().getFullYear()} Nalandadata</span>
