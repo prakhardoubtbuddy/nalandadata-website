@@ -5,7 +5,7 @@ export default function AboutPage() {
     <div className="bg-[#0A0A0A]" style={{ paddingTop: "96px" }}>
 
       {/* Hero */}
-      <section className="s-band" style={{ borderTop: "none" }}>
+      <section className="s-band" style={{ borderTop: "none", paddingBottom: "40px" }}>
         <div className="s-wrap">
           <nav className="s-crumb" aria-label="Breadcrumb" style={{ marginBottom: "18px" }}>
             <Link to="/">Home</Link> / About
@@ -37,31 +37,29 @@ export default function AboutPage() {
       {/* About content */}
       <section className="s-band">
         <div className="s-wrap">
-          <div className="s-diff">
-            <div>
-              <p className="body">
-                <b>Nalandadata.ai</b> is the digital initiative of S Chand Group, a leading Indian education content
-                company delivering content, solutions, and services across the education lifecycle through three
-                business segments — Early Learning, K-12, and Higher Education. We have a strong foothold in
-                CBSE/ICSE affiliated schools, with increasing presence in state board affiliated schools across India.
-              </p>
-              <p className="body" style={{ marginTop: "18px" }}>
-                We develop and nurture relationships with customers by creating quality content and educational
-                innovations. In recent years, we have increased our focus on investing and improving our digital
-                offerings across every business segment.
-              </p>
-              <p className="body" style={{ marginTop: "18px" }}>
-                Over the last decade, we have coupled our print content with digital and interactive methods of
-                learning, providing flexibility in the delivery of content to students. Our aim is to lead the
-                transition to digital in the knowledge industry. In the K-12 segment, we operate through
-                Destination Success, Mystudygear, Intellitab, Ignitor, and Testcoach Prime.
-              </p>
-              <p className="body" style={{ marginTop: "18px" }}>
-                In the higher education segment, our digital efforts are focused on test preparation — an area
-                seeing rapid growth as examinations shift to online formats, driving demand for online content
-                and assessment solutions.
-              </p>
-            </div>
+          <div style={{ maxWidth: "70ch", display: "flex", flexDirection: "column", gap: "18px" }}>
+            <p style={{ color: "#CFC8BB", margin: 0 }}>
+              <b style={{ color: "var(--paper)" }}>Nalandadata.ai</b> is the digital initiative of S Chand Group, a leading Indian education content
+              company delivering content, solutions, and services across the education lifecycle through three
+              business segments — Early Learning, K-12, and Higher Education. We have a strong foothold in
+              CBSE/ICSE affiliated schools, with increasing presence in state board affiliated schools across India.
+            </p>
+            <p style={{ color: "#CFC8BB", margin: 0 }}>
+              We develop and nurture relationships with customers by creating quality content and educational
+              innovations. In recent years, we have increased our focus on investing and improving our digital
+              offerings across every business segment.
+            </p>
+            <p style={{ color: "#CFC8BB", margin: 0 }}>
+              Over the last decade, we have coupled our print content with digital and interactive methods of
+              learning, providing flexibility in the delivery of content to students. Our aim is to lead the
+              transition to digital in the knowledge industry. In the K-12 segment, we operate through
+              Destination Success, Mystudygear, Intellitab, Ignitor, and Testcoach Prime.
+            </p>
+            <p style={{ color: "#CFC8BB", margin: 0 }}>
+              In the higher education segment, our digital efforts are focused on test preparation — an area
+              seeing rapid growth as examinations shift to online formats, driving demand for online content
+              and assessment solutions.
+            </p>
           </div>
         </div>
       </section>
