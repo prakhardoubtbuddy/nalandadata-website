@@ -334,7 +334,8 @@
   .s-related, .s-segs, .s-steps, .s-verify, .s-dist-grid { grid-template-columns: 1fr !important; }
   .s-statband > div { border-right: none !important; border-bottom: 1px solid var(--line); }
   .s-statband > div:last-child { border-bottom: none; }
-  .s-bench-tab { min-width: auto; padding: 12px 14px; }
+  .s-bench-tab { min-width: auto; padding: 12px 14px; flex: 1; }
   .s-bench-tab .tn { font-size: 12.5px; }
-  .s-bench-tab .ts { font-size: 9.5px; }
+  .s-bench-tab .ts { font-size: 9.5px; white-space: normal; }
+  .s-tablecard caption { white-space: normal; }
 }
