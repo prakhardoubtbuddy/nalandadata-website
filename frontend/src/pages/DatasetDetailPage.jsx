@@ -395,8 +395,8 @@ export default function DatasetDetailPage() {
                       <tbody>
                         {dataset.structure.map((item, i) => (
                           <tr key={i} style={{ borderBottom: i < dataset.structure.length - 1 ? "1px solid var(--line-soft)" : "none" }}>
-                            <td style={{ fontFamily: "var(--mono)", fontSize: "13.5px", color: "var(--accent)", padding: "13px 22px" }}>{item.field}</td>
-                            <td style={{ fontSize: "13.5px", color: "#CFC8BB", padding: "13px 22px" }}>{item.description}</td>
+                            <td style={{ fontFamily: "var(--mono)", fontSize: "13.5px", color: "var(--accent)", padding: "13px 22px", textAlign: "left" }}>{item.field}</td>
+                            <td style={{ fontSize: "13.5px", color: "#CFC8BB", padding: "13px 22px", textAlign: "left" }}>{item.description}</td>
                           </tr>
                         ))}
                       </tbody>
