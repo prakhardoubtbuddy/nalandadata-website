@@ -90,7 +90,7 @@ export default function SolutionsPage() {
       {solutions.map((sol, i) => (
         <section key={sol.id} id={sol.id} className={`s-band${i % 2 === 1 ? " alt" : ""}`}>
           <div className="s-wrap">
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "48px", alignItems: "start" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 320px), 1fr))", gap: "48px", alignItems: "start" }}>
               {/* Left: description + features */}
               <div>
                 <p className="s-eyebrow" style={{ marginBottom: "14px" }}>{sol.label}</p>
@@ -143,7 +143,7 @@ export default function SolutionsPage() {
                 }}>
                   Use Cases
                 </p>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(130px, 1fr))", gap: "12px" }}>
                   {sol.useCases.map((uc, j) => (
                     <div key={j} style={{
                       background: "rgba(255,255,255,0.03)",
