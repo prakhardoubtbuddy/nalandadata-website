@@ -353,7 +353,7 @@ export default function DatasetDetailPage() {
       {/* Main content */}
       <section className="s-band alt">
         <div className="s-wrap">
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 320px", gap: "48px", alignItems: "start" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 300px), 1fr))", gap: "48px", alignItems: "start" }}>
 
             {/* Left: use cases + schema + samples */}
             <div style={{ display: "flex", flexDirection: "column", gap: "48px" }}>
@@ -361,7 +361,7 @@ export default function DatasetDetailPage() {
               {/* Use cases */}
               <div>
                 <p className="s-eyebrow" style={{ marginBottom: "20px" }}>Use Cases</p>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 200px), 1fr))", gap: "12px" }}>
                   {dataset.useCases.map((uc, i) => (
                     <div key={i} style={{
                       background: "var(--ink)",
@@ -427,8 +427,8 @@ export default function DatasetDetailPage() {
               </div>
             </div>
 
-            {/* Right: stats + CTAs (sticky) */}
-            <div style={{ position: "sticky", top: "96px", display: "flex", flexDirection: "column", gap: "16px" }}>
+            {/* Right: stats + CTAs */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
 
               {/* Stats */}
               <div style={sideCard}>
