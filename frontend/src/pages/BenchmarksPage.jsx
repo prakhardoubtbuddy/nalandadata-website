@@ -195,7 +195,7 @@ export default function BenchmarksPage() {
               <span className="lm">DrishtiTable · {dtTop?.n_samples ?? 135} held-out tables · {dtRows.length} models</span>
               <span className="ll">
                 <a href="https://huggingface.co/datasets/Nalandadata/DrishtiTable" target="_blank" rel="noopener noreferrer">↗ HF dataset</a>
-                <a href="https://huggingface.co/spaces/nalanda-data/DrishtiTable-Leaderboard" target="_blank" rel="noopener noreferrer">↗ Eval script</a>
+                <a href="https://huggingface.co/spaces/Nalandadata/DrishtiTable-Leaderboard" target="_blank" rel="noopener noreferrer">↗ Eval script</a>
               </span>
             </div>
 
