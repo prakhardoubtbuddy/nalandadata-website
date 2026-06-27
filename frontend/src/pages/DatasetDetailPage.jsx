@@ -7,7 +7,7 @@ import API from "@/lib/api";
 
 const datasetConfigs = {
   "table-recognition": {
-    sampleHfUrl: "https://huggingface.co/datasets/Nalandadata/DrishtiTable-sample",
+    sampleHfUrl: "https://huggingface.co/datasets/Nalandadata/DrishtiTable-sample/resolve/main/sample.csv",
     title: "DrishtiTable — Table Structure Recognition",
     subtitle: "Image-to-HTML Benchmark for Indian Academic Tables",
     overview:
@@ -114,7 +114,7 @@ const datasetConfigs = {
     ],
   },
   "stem-reasoning": {
-    sampleHfUrl: "https://huggingface.co/datasets/Nalandadata/NalandaJEENEETBench-sample",
+    sampleHfUrl: "https://huggingface.co/datasets/Nalandadata/NalandaJEENEETBench-sample/resolve/main/sample.csv",
     title: "STEM Reasoning & Problem Solving",
     subtitle: "JEE / NEET / Olympiad Level Reasoning",
     overview: "A large-scale collection of mathematics and science content spanning Class 1 to Class 12, aligned to CBSE and ICSE curricula. Covers JEE Advanced, NEET, and Olympiad-level problems with multi-step worked solutions ideal for chain-of-thought and reasoning model training.",
