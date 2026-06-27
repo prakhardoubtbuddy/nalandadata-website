@@ -7,6 +7,7 @@ import API from "@/lib/api";
 
 const datasetConfigs = {
   "table-recognition": {
+    sampleHfUrl: "https://huggingface.co/datasets/Nalandadata/DrishtiTable-sample",
     title: "DrishtiTable — Table Structure Recognition",
     subtitle: "Image-to-HTML Benchmark for Indian Academic Tables",
     overview:
@@ -113,6 +114,7 @@ const datasetConfigs = {
     ],
   },
   "stem-reasoning": {
+    sampleHfUrl: "https://huggingface.co/datasets/Nalandadata/NalandaJEENEETBench-sample",
     title: "STEM Reasoning & Problem Solving",
     subtitle: "JEE / NEET / Olympiad Level Reasoning",
     overview: "A large-scale collection of mathematics and science content spanning Class 1 to Class 12, aligned to CBSE and ICSE curricula. Covers JEE Advanced, NEET, and Olympiad-level problems with multi-step worked solutions ideal for chain-of-thought and reasoning model training.",
@@ -445,11 +447,26 @@ export default function DatasetDetailPage() {
               <div style={{ ...sideCard, background: "var(--accent-tint)", borderColor: "var(--accent-deep)" }}>
                 <p style={{ fontWeight: 700, color: "var(--paper)", marginBottom: "8px", fontSize: "0.95rem" }}>Download Sample Dataset</p>
                 <p style={{ color: "var(--muted)", fontSize: "0.85rem", lineHeight: 1.6, marginBottom: "16px" }}>
-                  Get access to sample data and explore the dataset structure.
+                  {dataset.sampleHfUrl
+                    ? "Free sample — download directly from Hugging Face, no sign-up required."
+                    : "Get access to sample data and explore the dataset structure."}
                 </p>
-                <Link className="s-btn primary" to="/contact" style={{ width: "100%", textAlign: "center", justifyContent: "center", display: "block" }} data-testid="download-sample-btn">
-                  Download Sample →
-                </Link>
+                {dataset.sampleHfUrl ? (
+                  <a
+                    className="s-btn primary"
+                    href={dataset.sampleHfUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ width: "100%", textAlign: "center", justifyContent: "center", display: "block" }}
+                    data-testid="download-sample-btn"
+                  >
+                    Download Sample on HF →
+                  </a>
+                ) : (
+                  <Link className="s-btn primary" to="/contact" style={{ width: "100%", textAlign: "center", justifyContent: "center", display: "block" }} data-testid="download-sample-btn">
+                    Request Sample →
+                  </Link>
+                )}
               </div>
 
               {/* Request full */}
