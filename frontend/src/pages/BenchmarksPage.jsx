@@ -202,7 +202,7 @@ export default function BenchmarksPage() {
             {/* Main leaderboard table */}
             <div className="s-tablecard">
               <div className="s-tbl-scroll">
-                <table>
+                <table style={{ minWidth: "540px" }}>
                   <caption>DrishtiTable — {dtTop?.n_samples ?? 135} held-out tables (image → HTML, TEDS)</caption>
                   <thead>
                     <tr>
@@ -333,7 +333,7 @@ export default function BenchmarksPage() {
               <p className="s-cb-eyebrow">Figure 5 · Where models break</p>
               <h4 className="s-cb-title">TEDS by table type</h4>
               <div style={{ overflowX: "auto" }}>
-                <table className="s-ptype-tbl">
+                <table className="s-ptype-tbl" style={{ minWidth: "500px" }}>
                   <thead><tr><th>Model</th><th>Statistical</th><th>Financial</th><th>Lookup</th><th>Comparison</th></tr></thead>
                   <tbody>
                     <tr className="best"><th>DrishtiTable 8B (research)</th><td>85.0</td><td>82.6</td><td>89.2</td><td>93.2</td></tr>
@@ -388,7 +388,7 @@ export default function BenchmarksPage() {
             {/* Main leaderboard table */}
             <div className="s-tablecard">
               <div className="s-tbl-scroll">
-                <table>
+                <table style={{ minWidth: "420px" }}>
                   <caption>Nalanda Image VL — {iqaOurs?.n_samples ?? 162} held-out STEM MCQs (accuracy, higher is better)</caption>
                   <thead>
                     <tr>
@@ -471,7 +471,7 @@ export default function BenchmarksPage() {
           <p className="s-eyebrow" style={{ justifyContent: "center" }}>Get on the leaderboard</p>
           <h2 style={{ fontSize: "clamp(25px,3.6vw,40px)", fontWeight: 800, letterSpacing: "-0.025em", lineHeight: 1.08, margin: 0, textAlign: "center" }}>Two ways in.</h2>
           <p style={{ margin: "18px auto 0", maxWidth: "56ch", color: "var(--muted)", textAlign: "center" }}>Depending on whether you want to evaluate your model or license the underlying data.</p>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px", maxWidth: "680px", margin: "28px auto 0", textAlign: "left" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))", gap: "20px", maxWidth: "680px", margin: "28px auto 0", textAlign: "left" }}>
             <div style={{ background: "var(--ink)", border: "1px solid var(--line)", borderRadius: "10px", padding: "24px" }}>
               <h3 style={{ fontSize: "13px", fontFamily: "var(--mono)", letterSpacing: "0.05em", textTransform: "uppercase", margin: "0 0 8px", fontWeight: 800 }}>Submit a model</h3>
               <p style={{ fontSize: "13px", color: "var(--muted)", margin: "0 0 18px", lineHeight: 1.55 }}>Evaluate your model on the held-out test set and appear on the public leaderboard. Open to any model, any lab.</p>
