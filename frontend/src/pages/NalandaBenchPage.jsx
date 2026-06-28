@@ -131,14 +131,14 @@ export default function NalandaBenchPage() {
           </div>
           <div className="s-tablecard">
             <div className="s-tbl-scroll">
-              <table>
+              <table style={{ minWidth: "360px" }}>
                 <caption>Held-out evaluation set (800 MCQs) · accuracy %, higher is better</caption>
                 <thead>
                   <tr>
                     <th scope="col">Subject</th>
-                    <th scope="col">Baseline</th>
-                    <th scope="col">Standard SFT</th>
-                    <th scope="col">Verified-reward RL</th>
+                    <th scope="col">Base</th>
+                    <th scope="col">SFT</th>
+                    <th scope="col">GRPO ↑</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -164,13 +164,13 @@ export default function NalandaBenchPage() {
           </div>
           <div className="s-tablecard">
             <div className="s-tbl-scroll">
-              <table>
+              <table style={{ minWidth: "360px" }}>
                 <caption>Public benchmarks · baseline vs the verified-reward model · accuracy %</caption>
                 <thead>
                   <tr>
                     <th scope="col">Benchmark</th>
-                    <th scope="col">Baseline</th>
-                    <th scope="col">RL model</th>
+                    <th scope="col">Base</th>
+                    <th scope="col">GRPO</th>
                     <th scope="col">Δ</th>
                   </tr>
                 </thead>

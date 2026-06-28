@@ -131,14 +131,14 @@ export default function DrishtiTablePage() {
           </div>
           <div className="s-tablecard">
             <div className="s-tbl-scroll">
-              <table>
+              <table style={{ minWidth: "380px" }}>
                 <caption>DrishtiTable test set (135 tables) · higher is better</caption>
                 <thead>
                   <tr>
                     <th scope="col">Model</th>
                     <th scope="col">Method</th>
-                    <th scope="col" style={{ textAlign: "right" }}>TEDS (%)</th>
-                    <th scope="col" style={{ textAlign: "right" }}>S-TEDS (%)</th>
+                    <th scope="col" style={{ textAlign: "right" }}>TEDS</th>
+                    <th scope="col" style={{ textAlign: "right" }}>S-TEDS</th>
                   </tr>
                 </thead>
                 <tbody>

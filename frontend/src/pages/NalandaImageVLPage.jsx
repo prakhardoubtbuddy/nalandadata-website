@@ -132,13 +132,13 @@ export default function NalandaImageVLPage() {
           </div>
           <div className="s-tablecard">
             <div className="s-tbl-scroll">
-              <table>
+              <table style={{ minWidth: "320px" }}>
                 <caption>Held-out evaluation set (162 questions) · accuracy %, higher is better</caption>
                 <thead>
                   <tr>
                     <th scope="col">Subject</th>
-                    <th scope="col">Baseline</th>
-                    <th scope="col">Nalanda Image VL</th>
+                    <th scope="col">Base</th>
+                    <th scope="col">Ours ↑</th>
                     <th scope="col">Δ</th>
                   </tr>
                 </thead>
