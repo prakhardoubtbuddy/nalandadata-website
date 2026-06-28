@@ -61,7 +61,7 @@ export default function BlogPostPage() {
   }
 
   return (
-    <div className="bg-[#0A0A0A]" style={{ paddingTop: "96px", paddingBottom: "80px" }}>
+    <div className="bg-[#0A0A0A]" style={{ paddingTop: "96px", paddingBottom: "80px", overflowX: "hidden" }}>
       <div style={{ maxWidth: "720px", margin: "0 auto", padding: "0 24px" }}>
 
         {/* Back link */}
@@ -125,7 +125,18 @@ export default function BlogPostPage() {
 
         {/* Markdown content */}
         <article className="prose-blog">
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>{post.content}</ReactMarkdown>
+          <ReactMarkdown
+            remarkPlugins={[remarkGfm]}
+            components={{
+              table: ({ node, ...props }) => (
+                <div style={{ overflowX: "auto", WebkitOverflowScrolling: "touch", margin: "1.5em 0" }}>
+                  <table {...props} style={{ margin: 0, minWidth: "480px" }} />
+                </div>
+              ),
+            }}
+          >
+            {post.content}
+          </ReactMarkdown>
         </article>
 
         {/* Footer nav */}

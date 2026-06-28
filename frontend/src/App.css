@@ -134,7 +134,7 @@
 .prose-blog blockquote { border-left: 3px solid #C8A96E; padding-left: 1em; margin: 1.5em 0; color: #888; font-style: italic; }
 .prose-blog ul, .prose-blog ol { padding-left: 1.5em; margin-bottom: 1.2em; }
 .prose-blog li { margin-bottom: 0.4em; }
-.prose-blog table { width: 100%; border-collapse: collapse; margin: 1.5em 0; font-size: 0.9em; }
+.prose-blog table { width: 100%; border-collapse: collapse; font-size: 0.9em; }
 .prose-blog th { color: #F0EBE0; font-weight: 600; text-align: left; padding: 0.6em 0.8em; border-bottom: 2px solid #2A2A2A; }
 .prose-blog td { padding: 0.6em 0.8em; border-bottom: 1px solid #1E1E1E; }
 .prose-blog tr:hover td { background: #111; }
