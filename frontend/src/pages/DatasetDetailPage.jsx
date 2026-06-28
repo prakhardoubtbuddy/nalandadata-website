@@ -387,7 +387,7 @@ export default function DatasetDetailPage() {
                 <p className="s-eyebrow" style={{ marginBottom: "20px" }}>Dataset Structure</p>
                 <div className="s-tablecard">
                   <div className="s-tbl-scroll">
-                    <table style={{ width: "100%", borderCollapse: "collapse", minWidth: "480px" }}>
+                    <table style={{ width: "100%", borderCollapse: "collapse", minWidth: "0" }}>
                       <thead>
                         <tr>
                           <th style={{ fontFamily: "var(--mono)", fontSize: "10.5px", letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--muted)", textAlign: "left", padding: "14px 22px 10px", borderBottom: "1px solid var(--line)", fontWeight: 600 }}>Field</th>
