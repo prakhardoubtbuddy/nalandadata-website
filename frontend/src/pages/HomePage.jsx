@@ -73,26 +73,6 @@ export default function HomePage() {
             <a className="s-cta-sub" href="https://huggingface.co/Nalandadata" target="_blank" rel="noopener noreferrer" style={{ borderBottom: "1px solid var(--line)" }}>Or browse our published models &amp; dataset samples on Hugging Face →</a>
           </div>
 
-          <div className="s-statband" style={{ gridTemplateColumns: "repeat(3,1fr)" }}>
-            <div>
-              <Link to="/research/drishtitable" style={{ display: "block", textDecoration: "none", color: "inherit" }}>
-                <div className="sv">84.9%</div>
-                <div className="sl">TEDS · our 8B research model beats every cloud model we tested; the released 7B is right behind at 83.2%</div>
-              </Link>
-            </div>
-            <div>
-              <Link to="/research/nalandabench" style={{ display: "block", textDecoration: "none", color: "inherit" }}>
-                <div className="sv">+6.3<span style={{ fontSize: ".55em" }}> pts</span></div>
-                <div className="sl">JEE &amp; NEET reasoning · from verified-reward RL</div>
-              </Link>
-            </div>
-            <div>
-              <Link to="/research/nalanda-image-vl" style={{ display: "block", textDecoration: "none", color: "inherit" }}>
-                <div className="sv">+12.3<span style={{ fontSize: ".55em" }}> pts</span></div>
-                <div className="sl">Science diagrams · a vision-language fine-tune</div>
-              </Link>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -136,10 +116,6 @@ export default function HomePage() {
               <Link className="vl" to="/research">Read the research →</Link>
             </div>
           </div>
-          <a className="s-demo-bar" href="https://huggingface.co/Nalandadata" target="_blank" rel="noopener noreferrer">
-            <span className="db-k">No install</span>
-            <span className="db-t">Try the GRPO-trained JEE/NEET solver live in your browser →</span>
-          </a>
         </div>
       </section>
 
