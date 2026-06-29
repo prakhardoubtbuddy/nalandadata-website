@@ -8,17 +8,20 @@ const FALLBACK = [
   { model: "Claude Opus 4.8",      org: "Anthropic",   method: "Zero-shot",          category: "frontier", accuracy: 68.5, vs_base: null, n_samples: 162, verified: true },
   { model: "Gemini 3.1 Pro",       org: "Google",      method: "Zero-shot",          category: "frontier", accuracy: 65.4, vs_base: null, n_samples: 162, verified: true },
   { model: "GPT-5.1",              org: "OpenAI",      method: "Zero-shot",          category: "frontier", accuracy: 64.2, vs_base: null, n_samples: 162, verified: true },
-  { model: "Nalanda Image VL",     org: "Nalandadata", method: "Fine-tuned (QLoRA)", category: "ours",     accuracy: 50.0, vs_base: 12.3,
-    per_subject: {
-      Maths:     { n: 34, base: 26.5, ours: 50.0 },
-      Biology:   { n: 37, base: 32.4, ours: 45.9 },
-      Physics:   { n: 52, base: 38.5, ours: 50.0 },
-      Chemistry: { n: 39, base: 51.3, ours: 53.9 },
-    }, n_samples: 162, verified: true },
+  { model: "Nalanda Image VL",     org: "Nalandadata", method: "Fine-tuned (QLoRA, vision+language)", category: "ours", accuracy: 50.0, vs_base: 12.3, n_samples: 162, verified: true },
   { model: "LLaMA-3.2-Vision-11B", org: "Meta",        method: "Zero-shot (base)",   category: "base",     accuracy: 37.7, vs_base: null, n_samples: 162, verified: true },
 ];
 
-const isOurs = (cat) => cat && (cat === "ours" || cat.startsWith("ours"));
+const isOurs = (cat) => cat && (cat === "ours" || cat.startsWith("ours") || cat === "fine-tuned");
+const isBase = (cat) => cat && (cat === "base" || cat === "baseline");
+
+// Always authoritative — not expected from the API
+const PER_SUBJECT = {
+  Maths:     { n: 34, base: 26.5, ours: 50.0 },
+  Biology:   { n: 37, base: 32.4, ours: 45.9 },
+  Physics:   { n: 52, base: 38.5, ours: 50.0 },
+  Chemistry: { n: 39, base: 51.3, ours: 53.9 },
+};
 
 function BarRow({ label, width, value, isOurs: ours }) {
   return (
@@ -89,12 +92,11 @@ export default function NalandaImageVLDetailPage() {
   }, []);
 
   const oursRow = rows.find(r => isOurs(r.category));
-  const baseRow = rows.find(r => r.category === "base");
+  const baseRow = rows.find(r => isBase(r.category));
   const vsBase  = oursRow?.vs_base ?? (oursRow && baseRow ? (oursRow.accuracy - baseRow.accuracy).toFixed(1) : "12.3");
-  const perSubj = oursRow?.per_subject ?? {};
   const topAcc  = Math.max(...rows.map(r => r.accuracy));
   const active  = rows[activeIdx] ?? rows[0];
-  const activePerSubj = active && isOurs(active.category) ? perSubj : null;
+  const activePerSubj = active && isOurs(active.category) ? PER_SUBJECT : null;
 
   return (
     <div className="bg-[#0A0A0A]" style={{ paddingTop: "96px" }}>
@@ -148,7 +150,7 @@ export default function NalandaImageVLDetailPage() {
                   <ProviderIcon org={row.org} />
                   <span className="s-sp-model">{row.model}</span>
                   {isOurs(row.category) && <span className="s-sp-badge">ours · fine-tuned</span>}
-                  {row.category === "base" && <span className="s-sp-badge" style={{ color: "var(--muted-2)", background: "rgba(255,255,255,.06)" }}>base</span>}
+                  {isBase(row.category) && <span className="s-sp-badge" style={{ color: "var(--muted-2)", background: "rgba(255,255,255,.06)" }}>base</span>}
                 </div>
                 <div className="s-sp-bar-track">
                   <div className="s-sp-bar-fill" style={{ width: `${((row.accuracy / topAcc) * 100).toFixed(1)}%` }} />
@@ -275,7 +277,7 @@ export default function NalandaImageVLDetailPage() {
                       <th>
                         {row.model}
                         {isOurs(row.category) && <span className="badge">ours</span>}
-                        {row.category === "base" && <span style={{ color: "var(--accent)", fontFamily: "var(--mono)", fontSize: "11px", marginLeft: "8px" }}>baseline</span>}
+                        {isBase(row.category) && <span style={{ color: "var(--accent)", fontFamily: "var(--mono)", fontSize: "11px", marginLeft: "8px" }}>baseline</span>}
                       </th>
                       <td>{row.method}</td>
                       <td style={{ textAlign: "right" }}>{row.accuracy}%</td>
@@ -289,7 +291,7 @@ export default function NalandaImageVLDetailPage() {
           </div>
 
           {/* Per-subject table */}
-          {Object.keys(perSubj).length > 0 && (
+          {Object.keys(PER_SUBJECT).length > 0 && (
             <>
               <h4 className="s-cb-title" style={{ marginTop: "30px" }}>Per-subject accuracy — fine-tuned vs base</h4>
               <div style={{ overflowX: "auto" }}>
@@ -304,7 +306,7 @@ export default function NalandaImageVLDetailPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {Object.entries(perSubj).sort(([, a], [, b]) => (b.ours - b.base) - (a.ours - a.base)).map(([subj, d]) => (
+                    {Object.entries(PER_SUBJECT).sort(([, a], [, b]) => (b.ours - b.base) - (a.ours - a.base)).map(([subj, d]) => (
                       <tr key={subj} className={subj === "Maths" ? "best" : ""}>
                         <th>{subj}</th>
                         <td style={{ textAlign: "right" }}>{d.n}</td>
