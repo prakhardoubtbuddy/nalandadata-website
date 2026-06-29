@@ -82,7 +82,7 @@ const SUBJECT_EXAMPLES = {
 
 export default function NalandaImageVLDetailPage() {
   const [rows, setRows] = useState(FALLBACK);
-  const [activeSubj, setActiveSubj] = useState("Maths");
+  const [activeIdx, setActiveIdx] = useState(0);
 
   useEffect(() => {
     axios.get(`${API}/hf/imageqa-leaderboard`).then(r => { if (r.data?.rows?.length) setRows(r.data.rows); }).catch(() => {});
@@ -93,7 +93,8 @@ export default function NalandaImageVLDetailPage() {
   const vsBase  = oursRow?.vs_base ?? (oursRow && baseRow ? (oursRow.accuracy - baseRow.accuracy).toFixed(1) : "12.3");
   const perSubj = oursRow?.per_subject ?? {};
   const topAcc  = Math.max(...rows.map(r => r.accuracy));
-  const example = SUBJECT_EXAMPLES[activeSubj] ?? SUBJECT_EXAMPLES.Maths;
+  const active  = rows[activeIdx] ?? rows[0];
+  const activePerSubj = active && isOurs(active.category) ? perSubj : null;
 
   return (
     <div className="bg-[#0A0A0A]" style={{ paddingTop: "96px" }}>
@@ -126,69 +127,99 @@ export default function NalandaImageVLDetailPage() {
         <div className="s-stat-item"><div className="s-stat-num">162</div><div className="s-stat-lbl">Held-out evaluation questions across 4 STEM subjects.</div></div>
       </div>
 
-      {/* ── Split panel: per-subject results ── */}
+      {/* ── Split panel: model leaderboard ── */}
       <div className="s-split-panel">
 
-        {/* LEFT: subject rows */}
+        {/* LEFT: ranked model list */}
         <div className="s-sp-left">
           <div className="s-sp-head">
-            <span className="s-sp-head-label">Fine-tuned vs baseline · per subject</span>
-            <span className="s-sp-head-label">LLaMA-3.2-Vision-11B</span>
+            <span className="s-sp-head-label">Leaderboard · Accuracy</span>
+            <span className="s-sp-head-label">{rows.length} models</span>
           </div>
-          {Object.entries(perSubj).sort(([, a], [, b]) => (b.ours - b.base) - (a.ours - a.base)).map(([subj, d]) => (
+          {rows.map((row, i) => (
             <div
-              key={subj}
-              className={`s-sp-row${activeSubj === subj ? " active" : ""}`}
-              onClick={() => setActiveSubj(subj)}
+              key={row.model}
+              className={`s-sp-row${i === activeIdx ? " active" : ""}${isOurs(row.category) ? " ours" : ""}`}
+              onClick={() => setActiveIdx(i)}
             >
-              <span className="s-sp-rank" style={{ fontSize: "10px" }}>{subj.slice(0, 3).toUpperCase()}</span>
+              <span className="s-sp-rank">{i + 1}</span>
               <div className="s-sp-row-main">
                 <div className="s-sp-row-top">
-                  <span className="s-sp-model">{subj}</span>
-                  <span className="s-sp-badge" style={{ color: "#22c55e", background: "rgba(34,197,94,.12)" }}>+{(d.ours - d.base).toFixed(1)}</span>
+                  <ProviderIcon org={row.org} />
+                  <span className="s-sp-model">{row.model}</span>
+                  {isOurs(row.category) && <span className="s-sp-badge">ours · fine-tuned</span>}
+                  {row.category === "base" && <span className="s-sp-badge" style={{ color: "var(--muted-2)", background: "rgba(255,255,255,.06)" }}>base</span>}
                 </div>
-                <div style={{ display: "flex", gap: "3px" }}>
-                  <div className="s-sp-bar-track" style={{ flex: 1 }}>
-                    <div className="s-sp-bar-fill" style={{ width: `${(d.base / topAcc) * 100}%`, background: "rgba(255,255,255,.2)" }} />
-                  </div>
-                  <div className="s-sp-bar-track" style={{ flex: 1 }}>
-                    <div className="s-sp-bar-fill" style={{ width: `${(d.ours / topAcc) * 100}%` }} />
-                  </div>
+                <div className="s-sp-bar-track">
+                  <div className="s-sp-bar-fill" style={{ width: `${((row.accuracy / topAcc) * 100).toFixed(1)}%` }} />
                 </div>
               </div>
               <div className="s-sp-score-col">
-                <div className="s-sp-score">{d.ours}%</div>
-                <div className="s-sp-delta">was {d.base}%</div>
+                <div className="s-sp-score">{row.accuracy}%</div>
+                <div className="s-sp-delta">{i === 0 ? "—" : `−${(topAcc - row.accuracy).toFixed(1)}`}</div>
               </div>
             </div>
           ))}
-          <div style={{ padding: "12px 14px", fontFamily: "var(--mono)", fontSize: "10px", color: "var(--muted-2)", lineHeight: 1.6, borderTop: "1px solid rgba(255,255,255,.04)" }}>
-            Gold = fine-tuned &nbsp;|&nbsp; Light = zero-shot baseline · 162 held-out MCQs
-          </div>
         </div>
 
-        {/* RIGHT: subject detail */}
+        {/* RIGHT: model detail */}
         <div className="s-sp-right">
           <div className="s-sp-detail-head">
-            <ProviderIcon org="Nalandadata" />
-            <span className="s-sp-detail-name">Nalanda Image VL · {activeSubj}</span>
+            <ProviderIcon org={active?.org ?? "Nalandadata"} />
+            <span className="s-sp-detail-name">{active?.model}</span>
             <span style={{ color: "var(--muted-2)", margin: "0 4px" }}>|</span>
-            <span className="s-sp-detail-score">{perSubj[activeSubj]?.ours ?? 50.0}%</span>
+            <span className="s-sp-detail-score">{active?.accuracy}% acc</span>
           </div>
           <div style={{ fontSize: "12.5px", color: "var(--muted-2)", marginBottom: "18px" }}>
-            was {perSubj[activeSubj]?.base ?? 37.7}% zero-shot · gain: +{perSubj[activeSubj] ? (perSubj[activeSubj].ours - perSubj[activeSubj].base).toFixed(1) : vsBase}pp · n={perSubj[activeSubj]?.n ?? 162}
+            {active?.n_samples ?? 162} MCQs · {active?.method}
+            {active?.vs_base != null && <> · <span style={{ color: "#7fc794" }}>+{active.vs_base}pp vs base</span></>}
           </div>
-          <div className="s-sp-task">
-            <div className="s-sp-task-label">Sample question type · {example.subj}</div>
-            <div className="s-sp-task-body">{example.body}</div>
-            <div style={{ fontSize: "12.5px", color: "var(--muted-2)", marginTop: "10px", lineHeight: 1.6 }}>
-              <b style={{ color: "var(--muted)" }}>What it takes:</b> {example.chain}
-            </div>
-          </div>
-          <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginTop: "14px" }}>
-            <a href="https://huggingface.co/Nalandadata/nalanda-image-vl" target="_blank" rel="noopener noreferrer" className="s-bench-link">↗ Model on HF</a>
-            <a href="https://huggingface.co/datasets/Nalandadata/nalanda-image-qa" target="_blank" rel="noopener noreferrer" className="s-bench-link">↗ Dataset sample</a>
-          </div>
+
+          {/* Per-subject breakdown for our model */}
+          {activePerSubj && Object.keys(activePerSubj).length > 0 ? (
+            <>
+              <div className="s-sp-tabs">
+                <button className="s-sp-tab active">Per-subject</button>
+                <button className="s-sp-tab">Method</button>
+              </div>
+              <table className="s-sp-crit" style={{ marginBottom: "14px" }}>
+                <thead><tr><th>Subject</th><th style={{ textAlign: "right" }}>Base</th><th style={{ textAlign: "right" }}>Ours</th><th style={{ textAlign: "right" }}>Δ</th></tr></thead>
+                <tbody>
+                  {Object.entries(activePerSubj).sort(([, a], [, b]) => (b.ours - b.base) - (a.ours - a.base)).map(([subj, d]) => (
+                    <tr key={subj}>
+                      <td>{subj}</td>
+                      <td style={{ textAlign: "right" }}>{d.base}%</td>
+                      <td style={{ textAlign: "right", color: "var(--accent)", fontWeight: 600 }}>{d.ours}%</td>
+                      <td style={{ textAlign: "right", color: "#7fc794" }}>+{(d.ours - d.base).toFixed(1)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                <a href="https://huggingface.co/Nalandadata/nalanda-image-vl" target="_blank" rel="noopener noreferrer" className="s-bench-link">↗ Model on HF</a>
+                <a href="https://huggingface.co/datasets/Nalandadata/nalanda-image-qa" target="_blank" rel="noopener noreferrer" className="s-bench-link">↗ Dataset sample</a>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="s-sp-tabs">
+                <button className="s-sp-tab active">Task</button>
+              </div>
+              {(() => {
+                const subjects = ["Maths", "Biology", "Physics", "Chemistry"];
+                const ex = SUBJECT_EXAMPLES[subjects[activeIdx % subjects.length]] ?? SUBJECT_EXAMPLES.Maths;
+                return (
+                  <div className="s-sp-task">
+                    <div className="s-sp-task-label">Sample question type · {ex.subj}</div>
+                    <div className="s-sp-task-body">{ex.body}</div>
+                    <div style={{ fontSize: "12.5px", color: "var(--muted-2)", marginTop: "10px", lineHeight: 1.6 }}>
+                      <b style={{ color: "var(--muted)" }}>What it takes:</b> {ex.chain}
+                    </div>
+                  </div>
+                );
+              })()}
+            </>
+          )}
         </div>
       </div>
 
