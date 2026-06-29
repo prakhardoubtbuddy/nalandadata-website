@@ -22,6 +22,8 @@ import NalandaBenchPage from "@/pages/NalandaBenchPage";
 import NalandaImageVLPage from "@/pages/NalandaImageVLPage";
 import DrishtiTablePage from "@/pages/DrishtiTablePage";
 import BenchmarksPage from "@/pages/BenchmarksPage";
+import DrishtiTableDetailPage from "@/pages/DrishtiTableDetailPage";
+import NalandaImageVLDetailPage from "@/pages/NalandaImageVLDetailPage";
 import ResourcesPage from "@/pages/ResourcesPage";
 
 // Layout & utilities
@@ -64,6 +66,8 @@ function App() {
                 <Route path="/research/nalanda-image-vl" element={<NalandaImageVLPage />} />
                 <Route path="/research/drishtitable" element={<DrishtiTablePage />} />
                 <Route path="/benchmarks" element={<BenchmarksPage />} />
+                <Route path="/benchmarks/drishtitable" element={<DrishtiTableDetailPage />} />
+                <Route path="/benchmarks/nalanda-image-vl" element={<NalandaImageVLDetailPage />} />
                 <Route path="*" element={<NotFoundPage />} />
               </Route>
               <Route path="/admin" element={<AdminPage />} />
