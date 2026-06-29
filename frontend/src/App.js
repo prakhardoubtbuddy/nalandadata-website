@@ -1,5 +1,5 @@
 import "@/App.css";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { HelmetProvider } from "react-helmet-async";
@@ -17,10 +17,6 @@ import PrivacyPage from "@/pages/PrivacyPage";
 import BlogPage from "@/pages/BlogPage";
 import BlogPostPage from "@/pages/BlogPostPage";
 import NotFoundPage from "@/pages/NotFoundPage";
-import ResearchPage from "@/pages/ResearchPage";
-import NalandaBenchPage from "@/pages/NalandaBenchPage";
-import NalandaImageVLPage from "@/pages/NalandaImageVLPage";
-import DrishtiTablePage from "@/pages/DrishtiTablePage";
 import BenchmarksPage from "@/pages/BenchmarksPage";
 import DrishtiTableDetailPage from "@/pages/DrishtiTableDetailPage";
 import NalandaImageVLDetailPage from "@/pages/NalandaImageVLDetailPage";
@@ -61,10 +57,10 @@ function App() {
                 <Route path="/privacy" element={<PrivacyPage />} />
                 <Route path="/blog" element={<BlogPage />} />
                 <Route path="/blog/:slug" element={<BlogPostPage />} />
-                <Route path="/research" element={<ResearchPage />} />
-                <Route path="/research/nalandabench" element={<NalandaBenchPage />} />
-                <Route path="/research/nalanda-image-vl" element={<NalandaImageVLPage />} />
-                <Route path="/research/drishtitable" element={<DrishtiTablePage />} />
+                <Route path="/research" element={<Navigate to="/" replace />} />
+                <Route path="/research/nalandabench" element={<Navigate to="/benchmarks" replace />} />
+                <Route path="/research/nalanda-image-vl" element={<Navigate to="/benchmarks/nalanda-image-vl" replace />} />
+                <Route path="/research/drishtitable" element={<Navigate to="/benchmarks/drishtitable" replace />} />
                 <Route path="/benchmarks" element={<BenchmarksPage />} />
                 <Route path="/benchmarks/drishtitable" element={<DrishtiTableDetailPage />} />
                 <Route path="/benchmarks/nalanda-image-vl" element={<NalandaImageVLDetailPage />} />
