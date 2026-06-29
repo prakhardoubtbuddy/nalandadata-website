@@ -11,7 +11,7 @@ function MiniIcon({ org }) {
   );
   if (org === "Anthropic") return (
     <div className="s-mini-icon" style={{ background: "#CC785C" }}>
-      <svg viewBox="0 0 24 24" width="10" height="10" fill="white" fillRule="evenodd"><path d="M14.4 2L22 21.6h-4.16l-1.62-4.3H7.78L6.16 21.6H2L9.6 2h4.8zm-2.4 5.9L9.3 14.56h5.4l-2.7-6.66z"/></svg>
+      <svg viewBox="0 0 24 24" width="10" height="10"><path d="M14.4 2L22 21.6h-4.16l-1.62-4.3H7.78L6.16 21.6H2L9.6 2h4.8zm-2.4 5.9L9.3 14.56h5.4l-2.7-6.66z" fill="white" fillRule="evenodd"/></svg>
     </div>
   );
   if (org === "OpenAI") return (

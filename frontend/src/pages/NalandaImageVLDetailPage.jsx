@@ -42,8 +42,8 @@ function ProviderIcon({ org }) {
   );
   if (org === "Anthropic") return (
     <div className="s-sp-icon" style={{ background: "#CC785C" }}>
-      <svg viewBox="0 0 24 24" width="11" height="11" fill="white" fillRule="evenodd">
-        <path d="M14.4 2L22 21.6h-4.16l-1.62-4.3H7.78L6.16 21.6H2L9.6 2h4.8zm-2.4 5.9L9.3 14.56h5.4l-2.7-6.66z"/>
+      <svg viewBox="0 0 24 24" width="11" height="11">
+        <path d="M14.4 2L22 21.6h-4.16l-1.62-4.3H7.78L6.16 21.6H2L9.6 2h4.8zm-2.4 5.9L9.3 14.56h5.4l-2.7-6.66z" fill="white" fillRule="evenodd"/>
       </svg>
     </div>
   );
@@ -99,8 +99,8 @@ export default function NalandaImageVLDetailPage() {
     <div className="bg-[#0A0A0A]" style={{ paddingTop: "96px" }}>
 
       {/* Breadcrumb */}
-      <div className="s-crumb">
-        <div className="s-wrap s-crumb-inner">
+      <div className="s-breadbar">
+        <div className="s-wrap s-breadbar-inner">
           <Link to="/">Home</Link>
           <span style={{ opacity: .4 }}>/</span>
           <Link to="/benchmarks">Benchmarks</Link>

@@ -386,11 +386,11 @@
 .s-detail-header h1 { font-size: clamp(26px,3.8vw,42px); font-weight: 800; letter-spacing: -.025em; line-height: 1.1; margin-bottom: 10px; }
 .s-detail-header h1 .hl { color: var(--accent); }
 .s-detail-header .sub { font-size: 14px; color: var(--muted); max-width: 62ch; line-height: 1.65; }
-/* Crumb */
-.s-crumb { padding: 13px 0; border-bottom: 1px solid var(--line); }
-.s-crumb-inner { font-family: var(--mono); font-size: 11.5px; color: var(--muted-2); display: flex; align-items: center; gap: 8px; }
-.s-crumb-inner a { color: var(--muted); text-decoration: none; }
-.s-crumb-inner a:hover { color: var(--paper); }
+/* Breadcrumb bar (detail pages) */
+.s-breadbar { padding: 13px 0; border-bottom: 1px solid var(--line); }
+.s-breadbar-inner { font-family: var(--mono); font-size: 11.5px; color: var(--muted-2); display: flex; align-items: center; gap: 8px; }
+.s-breadbar-inner a { color: var(--muted); text-decoration: none; }
+.s-breadbar-inner a:hover { color: var(--paper); }
 /* Stat strip (Image VL page) */
 .s-stat-strip { display: flex; flex-wrap: wrap; border-bottom: 1px solid var(--line); }
 .s-stat-item { flex: 1 1 180px; padding: 20px 26px; border-right: 1px solid var(--line); }
@@ -417,6 +417,16 @@
   .s-metastrip div { border-right: none; border-bottom: 1px solid var(--line); }
   .s-metastrip div:last-child { border-bottom: none; }
   .s-bar-row { grid-template-columns: 96px 1fr 48px; gap: 8px; }
+  /* benchmark cards */
+  .s-bench-card-body { grid-template-columns: 1fr; }
+  .s-bench-meta { border-right: none; border-bottom: 1px solid var(--line); }
+  /* split panel */
+  .s-split-panel { grid-template-columns: 1fr; }
+  .s-sp-left { border-right: none; border-bottom: 1px solid var(--line); max-height: 360px; }
+  .s-sp-right { max-height: none; }
+  /* stat strip */
+  .s-stat-item { border-right: none; border-bottom: 1px solid var(--line); }
+  .s-stat-item:last-child { border-bottom: none; }
 }
 
 @media (max-width: 560px) {
