@@ -174,7 +174,6 @@ export default function SolutionsPage() {
           </p>
           <div style={{ display: "flex", gap: "14px", justifyContent: "center", flexWrap: "wrap" }}>
             <Link className="s-btn primary" to="/contact">Contact our team →</Link>
-            <Link className="s-btn ghost" to="/research">See the research →</Link>
           </div>
         </div>
       </section>

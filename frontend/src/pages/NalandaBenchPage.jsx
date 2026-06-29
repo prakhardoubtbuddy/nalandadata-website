@@ -6,7 +6,7 @@ export default function NalandaBenchPage() {
       <section className="s-pagehead">
         <div className="s-wrap">
           <nav className="s-crumb" aria-label="Breadcrumb">
-            <Link to="/">Home</Link> / <Link to="/research">Research</Link> / NalandaBench
+            <Link to="/">Home</Link> / NalandaBench
           </nav>
         </div>
       </section>
@@ -280,28 +280,6 @@ print(tok.decode(model.generate(ids, max_new_tokens=512)[0], skip_special_tokens
         </div>
       </section>
 
-      <section className="s-band alt">
-        <div className="s-wrap">
-          <div className="s-sec-head">
-            <p className="s-eyebrow">Related research</p>
-            <h2>More of what the data does to a model.</h2>
-          </div>
-          <div className="s-related">
-            <Link className="s-rcc" to="/research/drishtitable">
-              <div className="res">84.9% TEDS</div>
-              <div className="ti">DrishtiTable</div>
-              <div className="dm">Table structure recognition</div>
-              <div className="go">Read the case study →</div>
-            </Link>
-            <Link className="s-rcc" to="/research/nalanda-image-vl">
-              <div className="res">+23.5 pts</div>
-              <div className="ti">Nalanda Image VL</div>
-              <div className="dm">Multimodal science · vision-language</div>
-              <div className="go">Read the case study →</div>
-            </Link>
-          </div>
-        </div>
-      </section>
     </div>
   );
 }

@@ -133,7 +133,6 @@ export default function AboutPage() {
           </p>
           <div style={{ display: "flex", gap: "14px", justifyContent: "center", flexWrap: "wrap" }}>
             <Link className="s-btn primary" to="/contact">Talk to a researcher →</Link>
-            <Link className="s-btn ghost" to="/research">See the research →</Link>
           </div>
         </div>
       </section>

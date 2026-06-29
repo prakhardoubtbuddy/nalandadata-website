@@ -6,7 +6,7 @@ export default function NalandaImageVLPage() {
       <section className="s-pagehead">
         <div className="s-wrap">
           <nav className="s-crumb" aria-label="Breadcrumb">
-            <Link to="/">Home</Link> / <Link to="/research">Research</Link> / Nalanda Image VL
+            <Link to="/">Home</Link> / Nalanda Image VL
           </nav>
         </div>
       </section>
@@ -250,28 +250,6 @@ print(processor.decode(model.generate(**inputs, max_new_tokens=512)[0],
         </div>
       </section>
 
-      <section className="s-band alt">
-        <div className="s-wrap">
-          <div className="s-sec-head">
-            <p className="s-eyebrow">Related research</p>
-            <h2>More of what the data does to a model.</h2>
-          </div>
-          <div className="s-related">
-            <Link className="s-rcc" to="/research/nalandabench">
-              <div className="res">+6.3 pts</div>
-              <div className="ti">NalandaBench</div>
-              <div className="dm">JEE &amp; NEET reasoning · RLVR</div>
-              <div className="go">Read the case study →</div>
-            </Link>
-            <Link className="s-rcc" to="/research/drishtitable">
-              <div className="res">84.9% TEDS</div>
-              <div className="ti">DrishtiTable</div>
-              <div className="dm">Table structure recognition · vision-language</div>
-              <div className="go">Read the case study →</div>
-            </Link>
-          </div>
-        </div>
-      </section>
     </div>
   );
 }

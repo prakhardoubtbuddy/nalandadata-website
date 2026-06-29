@@ -24,7 +24,6 @@ export default function Footer() {
           </div>
         </div>
         <nav style={{ display: "flex", flexWrap: "wrap", gap: "22px", marginTop: "34px", fontFamily: "var(--mono)", fontSize: "12.5px", letterSpacing: "0.04em" }}>
-          <Link to="/research" style={{ color: "var(--muted)", textDecoration: "none" }}>Research</Link>
           <Link to="/benchmarks" style={{ color: "var(--muted)", textDecoration: "none" }}>Benchmarks</Link>
           <Link to="/datasets" style={{ color: "var(--muted)", textDecoration: "none" }}>Datasets</Link>
           <Link to="/solutions" style={{ color: "var(--muted)", textDecoration: "none" }}>Solutions</Link>

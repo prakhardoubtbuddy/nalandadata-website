@@ -65,7 +65,7 @@ export default function HomePage() {
             <span className="s-chip">RLVR reward data</span>
             <span className="s-chip">Multimodal &amp; vision-language</span>
             <span className="s-chip">Indic &amp; sovereign AI</span>
-            <Link className="s-chip link" to="/research">See the proof →</Link>
+            <Link className="s-chip link" to="/benchmarks">See the benchmarks →</Link>
           </div>
           <div className="s-hero-cta">
             <a className="s-btn primary" href="#connect">Download a sample</a>
@@ -81,8 +81,8 @@ export default function HomePage() {
         <div className="s-wrap">
           <div className="s-latest">
             <span className="lk">Latest</span>
-            <Link className="lt" to="/research/drishtitable"><span className="when">New</span><b>DrishtiTable</b> — our 8B research model tops every cloud model on table extraction</Link>
-            <Link className="lt" to="/research/nalanda-image-vl"><span className="when">New</span><b>Nalanda Image VL</b> — a vision model that reads science diagrams</Link>
+            <Link className="lt" to="/benchmarks"><span className="when">New</span><b>DrishtiTable</b> — our 8B model tops every cloud model on table extraction</Link>
+            <Link className="lt" to="/benchmarks"><span className="when">New</span><b>Nalanda Image VL</b> — a vision model that reads science diagrams</Link>
             <a className="lt" href="https://huggingface.co/Nalandadata" target="_blank" rel="noopener noreferrer"><span className="when">HF</span><b>Models &amp; dataset samples</b> on Hugging Face</a>
           </div>
         </div>
@@ -113,7 +113,7 @@ export default function HomePage() {
               <div className="vk">Held-out numbers</div>
               <h3>Methods and metrics, in full</h3>
               <p>Every case study shows the held-out test set, the metric, and the exact comparison conditions.</p>
-              <Link className="vl" to="/research">Read the research →</Link>
+              <Link className="vl" to="/benchmarks">See the benchmarks →</Link>
             </div>
           </div>
         </div>
@@ -160,42 +160,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* RESEARCH TEASER */}
-      <section className="s-band alt" id="research-teaser">
-        <div className="s-wrap">
-          <div className="s-teaser-head">
-            <div className="s-sec-head">
-              <p className="s-eyebrow">Research</p>
-              <h2>The experiments behind the claims.</h2>
-              <p className="lead">Each experiment shows what verified, curriculum-grade data does to a real model — method, held-out numbers, and a public mirror on Hugging Face.</p>
-            </div>
-            <Link className="s-viewall" to="/research">View all research →</Link>
-          </div>
-          <div className="s-casecards">
-            <Link className="s-cc" to="/research/drishtitable">
-              <div className="res">84.9% TEDS</div>
-              <div className="ti">DrishtiTable</div>
-              <div className="dm">Table structure recognition</div>
-              <div className="ds2">A fine-tuned 8B research model tops every frontier cloud model on table extraction; the released 7B is right behind at 83.2%.</div>
-              <div className="go">Read the case study →</div>
-            </Link>
-            <Link className="s-cc" to="/research/nalandabench">
-              <div className="res">+6.3 pts</div>
-              <div className="ti">NalandaBench</div>
-              <div className="dm">STEM reasoning · RLVR (GRPO)</div>
-              <div className="ds2">Plain fine-tuning lost 16 points on the same data; verified-reward RL turned it into a 6.3-point gain.</div>
-              <div className="go">Read the case study →</div>
-            </Link>
-            <Link className="s-cc" to="/research/nalanda-image-vl">
-              <div className="res">+12.3 pts</div>
-              <div className="ti">Nalanda Image VL</div>
-              <div className="dm">Multimodal science · vision-language</div>
-              <div className="ds2">Fine-tuning a vision model on diagram data lifted held-out accuracy by 12.3 points.</div>
-              <div className="go">Read the case study →</div>
-            </Link>
-          </div>
-        </div>
-      </section>
 
       {/* BENCHMARKS */}
       <section className="s-band" id="benchmarks">

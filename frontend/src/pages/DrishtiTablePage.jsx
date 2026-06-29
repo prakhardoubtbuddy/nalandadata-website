@@ -6,7 +6,7 @@ export default function DrishtiTablePage() {
       <section className="s-pagehead">
         <div className="s-wrap">
           <nav className="s-crumb" aria-label="Breadcrumb">
-            <Link to="/">Home</Link> / <Link to="/research">Research</Link> / DrishtiTable
+            <Link to="/">Home</Link> / DrishtiTable
           </nav>
         </div>
       </section>
@@ -288,28 +288,6 @@ print(processor.decode(model.generate(**inputs)[0], skip_special_tokens=True))`}
         </div>
       </section>
 
-      <section className="s-band alt">
-        <div className="s-wrap">
-          <div className="s-sec-head">
-            <p className="s-eyebrow">Related research</p>
-            <h2>More of what the data does to a model.</h2>
-          </div>
-          <div className="s-related">
-            <Link className="s-rcc" to="/research/nalandabench">
-              <div className="res">+6.3 pts</div>
-              <div className="ti">NalandaBench</div>
-              <div className="dm">JEE &amp; NEET reasoning · RLVR</div>
-              <div className="go">Read the case study →</div>
-            </Link>
-            <Link className="s-rcc" to="/research/nalanda-image-vl">
-              <div className="res">+23.5 pts</div>
-              <div className="ti">Nalanda Image VL</div>
-              <div className="dm">Multimodal science · vision-language</div>
-              <div className="go">Read the case study →</div>
-            </Link>
-          </div>
-        </div>
-      </section>
     </div>
   );
 }
