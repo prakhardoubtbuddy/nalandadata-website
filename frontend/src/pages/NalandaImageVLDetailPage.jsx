@@ -13,7 +13,7 @@ const FALLBACK = [
       Maths:     { n: 34, base: 26.5, ours: 50.0 },
       Biology:   { n: 37, base: 32.4, ours: 45.9 },
       Physics:   { n: 52, base: 38.5, ours: 50.0 },
-      Chemistry: { n: 39, base: 51.3, ours: 53.8 },
+      Chemistry: { n: 39, base: 51.3, ours: 53.9 },
     }, n_samples: 162, verified: true },
   { model: "LLaMA-3.2-Vision-11B", org: "Meta",        method: "Zero-shot (base)",   category: "base",     accuracy: 37.7, vs_base: null, n_samples: 162, verified: true },
 ];
