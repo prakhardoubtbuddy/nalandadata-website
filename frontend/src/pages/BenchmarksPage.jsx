@@ -11,7 +11,7 @@ function MiniIcon({ org }) {
   );
   if (org === "Anthropic") return (
     <div className="s-mini-icon" style={{ background: "#CC785C" }}>
-      <svg viewBox="0 0 24 24" width="10" height="10"><path d="M14.4 2L22 21.6h-4.16l-1.62-4.3H7.78L6.16 21.6H2L9.6 2h4.8zm-2.4 5.9L9.3 14.56h5.4l-2.7-6.66z" fill="white" fillRule="evenodd"/></svg>
+      <svg viewBox="0 0 24 24" width="14" height="14"><path d="M14.4 2L22 21.6h-4.16l-1.62-4.3H7.78L6.16 21.6H2L9.6 2h4.8zm-2.4 5.9L9.3 14.56h5.4l-2.7-6.66z" fill="white" fillRule="evenodd"/></svg>
     </div>
   );
   if (org === "OpenAI") return (
@@ -159,9 +159,9 @@ export default function BenchmarksPage() {
                   <div className="s-bench-name">DrishtiTable</div>
                   <p className="s-bench-desc">Image → HTML table recognition on {dtTop?.n_samples ?? 135} held-out Indian-textbook tables, ranked by TEDS. A fine-tuned 8B model leads every frontier model by +{dtVsBest} points. Domain-specific training beats scale.</p>
                   <div className="s-bench-links">
-                    <a className="s-bench-link" href="https://huggingface.co/datasets/Nalandadata/DrishtiTable" target="_blank" rel="noopener noreferrer">↗ Dataset</a>
-                    <a className="s-bench-link" href="https://huggingface.co/spaces/Nalandadata/DrishtiTable-Leaderboard" target="_blank" rel="noopener noreferrer">↗ Eval script</a>
-                    <a className="s-bench-link" href="https://huggingface.co/Nalandadata" target="_blank" rel="noopener noreferrer">↗ Models</a>
+                    <Link className="s-bench-link" to="/blog/drishtitable-8b-beats-all-frontier-models">↗ Blog</Link>
+                    <span className="s-bench-link" style={{ opacity: 0.4, cursor: "default" }}>Paper — coming</span>
+                    <a className="s-bench-link" href="https://huggingface.co/datasets/Nalandadata/DrishtiTable" target="_blank" rel="noopener noreferrer">↗ Data</a>
                   </div>
                   <Link className="s-bench-read-more" to="/benchmarks/drishtitable">Read more</Link>
                   <Link className="s-bench-cta" to="/benchmarks/drishtitable">View full leaderboard →</Link>
@@ -198,9 +198,9 @@ export default function BenchmarksPage() {
                   <div className="s-bench-name">Nalanda Image VL</div>
                   <p className="s-bench-desc">Multiple-choice science reasoning on {iqaOurs?.n_samples ?? 162} held-out questions across Physics, Chemistry, Biology and Maths. Fine-tuning LLaMA-3.2-Vision-11B on 22K diagram-grounded pairs yields a +{iqaVsBase}pp gain over the zero-shot base.</p>
                   <div className="s-bench-links">
-                    <a className="s-bench-link" href="https://huggingface.co/datasets/Nalandadata/nalanda-image-qa" target="_blank" rel="noopener noreferrer">↗ Dataset</a>
-                    <a className="s-bench-link" href="https://huggingface.co/Nalandadata/nalanda-image-vl" target="_blank" rel="noopener noreferrer">↗ Model</a>
-                    <a className="s-bench-link" href="https://huggingface.co/datasets/Nalandadata/nalanda-image-qa/tree/main/scripts" target="_blank" rel="noopener noreferrer">↗ Eval script</a>
+                    <span className="s-bench-link" style={{ opacity: 0.4, cursor: "default" }}>Blog — coming</span>
+                    <span className="s-bench-link" style={{ opacity: 0.4, cursor: "default" }}>Paper — coming</span>
+                    <a className="s-bench-link" href="https://huggingface.co/datasets/Nalandadata/nalanda-image-qa" target="_blank" rel="noopener noreferrer">↗ Data</a>
                   </div>
                   <Link className="s-bench-read-more" to="/benchmarks/nalanda-image-vl">Read more</Link>
                   <Link className="s-bench-cta" to="/benchmarks/nalanda-image-vl">View full leaderboard →</Link>

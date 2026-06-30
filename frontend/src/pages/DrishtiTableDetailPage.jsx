@@ -41,7 +41,7 @@ function ProviderIcon({ org }) {
   );
   if (org === "Anthropic") return (
     <div className="s-sp-icon" style={{ background: "#CC785C" }}>
-      <svg viewBox="0 0 24 24" width="11" height="11">
+      <svg viewBox="0 0 24 24" width="15" height="15">
         <path d="M14.4 2L22 21.6h-4.16l-1.62-4.3H7.78L6.16 21.6H2L9.6 2h4.8zm-2.4 5.9L9.3 14.56h5.4l-2.7-6.66z" fill="white" fillRule="evenodd"/>
       </svg>
     </div>
@@ -172,11 +172,13 @@ export default function DrishtiTableDetailPage() {
             Sample task for illustration only. The held-out test set is not publicly released.
           </p>
           <div className="s-sp-task">
-            <div className="s-sp-task-label">Input — table image</div>
-            <div className="s-sp-task-body">A multi-header statistical table from a Business Statistics textbook showing quarterly sales data across 4 regions with subtotals and a grand total row.</div>
-            <div style={{ width: "100%", height: "64px", background: "var(--ink)", border: "1px dashed var(--line)", borderRadius: "6px", display: "flex", alignItems: "center", justifyContent: "center", marginTop: "10px", fontFamily: "var(--mono)", fontSize: "10px", color: "var(--muted-2)" }}>
-              [ table image — held-out test set ]
-            </div>
+            <div className="s-sp-task-label">Input — sample table image</div>
+            <img
+              src="https://huggingface.co/datasets/Nalandadata/DrishtiTable-sample/resolve/main/images/9788121929561_Quant__1_page_027_table_41.png"
+              alt="Sample table from DrishtiTable dataset — Quantitative Techniques textbook"
+              style={{ width: "100%", marginTop: "10px", borderRadius: "6px", border: "1px solid var(--line)", display: "block" }}
+            />
+            <p style={{ fontSize: "10.5px", color: "var(--muted-2)", marginTop: "6px", lineHeight: 1.4 }}>From <em>Quantitative Techniques</em> · public sample · <a href="https://huggingface.co/datasets/Nalandadata/DrishtiTable-sample" target="_blank" rel="noopener noreferrer" style={{ color: "var(--muted)" }}>DrishtiTable-sample ↗</a></p>
           </div>
           <table className="s-sp-crit">
             <thead><tr><th>Criterion</th><th>Result</th></tr></thead>
@@ -368,24 +370,75 @@ export default function DrishtiTableDetailPage() {
         </div>
       </section>
 
+      {/* ── Public Sample ── */}
+      <section className="s-band" id="sample">
+        <div className="s-wrap">
+          <p className="s-eyebrow">Public sample</p>
+          <h2 style={{ fontSize: "clamp(22px,3vw,32px)", fontWeight: 800, letterSpacing: "-.025em", marginBottom: "8px" }}>10 annotated tables, free to download</h2>
+          <p style={{ fontSize: "14px", color: "var(--muted)", marginBottom: "22px" }}>
+            A representative sample of the DrishtiTable dataset — each row includes the original table image and its expert-annotated HTML ground truth. No sign-up required.{" "}
+            <a href="https://huggingface.co/datasets/Nalandadata/DrishtiTable-sample" target="_blank" rel="noopener noreferrer" style={{ color: "var(--muted)" }}>Full sample on Hugging Face ↗</a>
+          </p>
+          <div className="s-tbl-scroll">
+            <table style={{ minWidth: "640px", fontSize: "12.5px" }}>
+              <thead>
+                <tr>
+                  <th style={{ width: "32px" }}>#</th>
+                  <th>Table ID</th>
+                  <th>Source</th>
+                  <th style={{ textAlign: "center" }}>Image</th>
+                  <th style={{ textAlign: "center" }}>HTML annotation</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { id: "9788121929561_Quant__1_page_027_table_41",            source: "Quantitative Techniques, p.27"  },
+                  { id: "9788121929561_Quant__1_page_059_table_63",            source: "Quantitative Techniques, p.59"  },
+                  { id: "9788121929561_Quant__1_page_423_table_135",           source: "Quantitative Techniques, p.423" },
+                  { id: "9788121929561_Quant__1_pdf_page_430_table_110",       source: "Quantitative Techniques, p.430" },
+                  { id: "9788121929561_Quant__1_pdf_page_444_table_139",       source: "Quantitative Techniques, p.444" },
+                  { id: "9788121929561_Quant__1_pdf_page_486_table_200",       source: "Quantitative Techniques, p.486" },
+                  { id: "9789325963474_Operation_Research_page_281_table_338", source: "Operation Research, p.281"      },
+                  { id: "9789325968967_quantitative_techniques__1_page_154_table_87",  source: "Quantitative Techniques, p.154" },
+                  { id: "9789325968967_quantitative_techniques__1_page_182_table_115", source: "Quantitative Techniques, p.182" },
+                  { id: "9789325976177_Business_Stats__1_page_012_table_38",   source: "Business Statistics, p.12"     },
+                ].map((row, i) => {
+                  const base = "https://huggingface.co/datasets/Nalandadata/DrishtiTable-sample/resolve/main";
+                  const imgUrl  = `${base}/images/${row.id}.png`;
+                  const htmlUrl = `${base}/annotations/${row.id}.html`;
+                  return (
+                    <tr key={row.id}>
+                      <td style={{ textAlign: "center", color: "var(--muted-2)" }}>{i + 1}</td>
+                      <td style={{ fontFamily: "var(--mono)", fontSize: "11px", wordBreak: "break-all" }}>{row.id}</td>
+                      <td style={{ color: "var(--muted)", whiteSpace: "nowrap" }}>{row.source}</td>
+                      <td style={{ textAlign: "center" }}>
+                        <a href={imgUrl} target="_blank" rel="noopener noreferrer">
+                          <img src={imgUrl} alt={row.id} style={{ height: "48px", maxWidth: "120px", objectFit: "contain", border: "1px solid var(--line)", borderRadius: "4px", display: "block", margin: "0 auto" }} />
+                        </a>
+                      </td>
+                      <td style={{ textAlign: "center" }}>
+                        <a href={htmlUrl} target="_blank" rel="noopener noreferrer" className="s-bench-link">↗ View HTML</a>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: "11.5px", color: "var(--muted-2)", marginTop: "12px" }}>
+            Download the full sample as CSV:{" "}
+            <a href="https://huggingface.co/datasets/Nalandadata/DrishtiTable-sample/resolve/main/sample.csv" target="_blank" rel="noopener noreferrer" style={{ color: "var(--muted)" }}>sample.csv ↗</a>
+          </p>
+        </div>
+      </section>
+
       {/* ── CTA ── */}
       <section className="s-band s-cs-cta">
-        <div className="s-wrap">
-          <p className="s-eyebrow" style={{ justifyContent: "center" }}>Get on the leaderboard</p>
-          <h2 style={{ fontSize: "clamp(25px,3.6vw,40px)", fontWeight: 800, letterSpacing: "-0.025em", lineHeight: 1.08, margin: 0, textAlign: "center" }}>Two ways in.</h2>
-          <p style={{ margin: "18px auto 0", maxWidth: "56ch", color: "var(--muted)", textAlign: "center" }}>Submit your model to the held-out leaderboard, or license the full dataset.</p>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))", gap: "20px", maxWidth: "680px", margin: "28px auto 0", textAlign: "left" }}>
-            <div style={{ background: "var(--ink)", border: "1px solid var(--line)", borderRadius: "10px", padding: "24px" }}>
-              <h3 style={{ fontSize: "13px", fontFamily: "var(--mono)", letterSpacing: "0.05em", textTransform: "uppercase", margin: "0 0 8px", fontWeight: 800 }}>Submit a model</h3>
-              <p style={{ fontSize: "13px", color: "var(--muted)", margin: "0 0 18px", lineHeight: 1.55 }}>Evaluate on the held-out test set and appear on the public leaderboard. Open to any model, any lab.</p>
-              <Link className="s-btn primary" to="/contact" style={{ display: "block", textAlign: "center" }}>Submit a model →</Link>
-            </div>
-            <div style={{ background: "var(--ink)", border: "1px solid var(--line)", borderRadius: "10px", padding: "24px" }}>
-              <h3 style={{ fontSize: "13px", fontFamily: "var(--mono)", letterSpacing: "0.05em", textTransform: "uppercase", margin: "0 0 8px", fontWeight: 800 }}>License the dataset</h3>
-              <p style={{ fontSize: "13px", color: "var(--muted)", margin: "0 0 18px", lineHeight: 1.55 }}>Access the full benchmark dataset for training, evaluation, or your own pipeline.</p>
-              <Link className="s-btn ghost" to="/contact" style={{ display: "block", textAlign: "center" }}>License the dataset →</Link>
-            </div>
-          </div>
+        <div className="s-wrap" style={{ textAlign: "center" }}>
+          <p className="s-eyebrow" style={{ justifyContent: "center" }}>Get the data</p>
+          <h2 style={{ fontSize: "clamp(25px,3.6vw,40px)", fontWeight: 800, letterSpacing: "-0.025em", lineHeight: 1.08, margin: 0 }}>License the dataset.</h2>
+          <p style={{ margin: "18px auto 28px", maxWidth: "56ch", color: "var(--muted)" }}>Access the full DrishtiTable benchmark dataset for training, evaluation, or integration into your own pipeline.</p>
+          <Link className="s-btn primary" to="/contact">License the dataset →</Link>
         </div>
       </section>
     </div>
