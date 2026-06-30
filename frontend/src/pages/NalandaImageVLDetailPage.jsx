@@ -201,7 +201,7 @@ export default function NalandaImageVLDetailPage() {
           <p style={{ fontSize: "14.5px", color: "var(--muted)", marginBottom: "20px" }}>The dataset sample and held-out evaluation questions are public — the same questions every model on this leaderboard was scored on.</p>
           <div style={{ display: "flex", flexWrap: "wrap", gap: "12px" }}>
             <a className="s-btn ghost" href="https://huggingface.co/Nalandadata/nalanda-image-vl" target="_blank" rel="noopener noreferrer">Open the model on Hugging Face →</a>
-            <a className="s-btn primary" href="https://huggingface.co/datasets/Nalandadata/nalanda-image-qa" target="_blank" rel="noopener noreferrer">Download a data sample →</a>
+            <a className="s-btn primary" href="https://huggingface.co/datasets/Nalandadata/nalanda-image-qa-sample" target="_blank" rel="noopener noreferrer">Download a data sample →</a>
           </div>
         </div>
       </section>
@@ -314,7 +314,7 @@ export default function NalandaImageVLDetailPage() {
           <p className="s-eyebrow" style={{ justifyContent: "center" }}>Try it</p>
           <h2 style={{ fontSize: "clamp(25px,3.6vw,40px)", fontWeight: 800, letterSpacing: "-0.025em", lineHeight: 1.08, margin: 0, textAlign: "center" }}>Want a model that reads your diagrams?</h2>
           <div className="s-cta-row">
-            <a className="s-btn primary" href="https://huggingface.co/datasets/Nalandadata/nalanda-image-qa" target="_blank" rel="noopener noreferrer">Download a sample</a>
+            <a className="s-btn primary" href="https://huggingface.co/datasets/Nalandadata/nalanda-image-qa-sample" target="_blank" rel="noopener noreferrer">Download a sample</a>
             <Link className="s-btn ghost" to="/contact">Talk to a researcher</Link>
           </div>
         </div>
