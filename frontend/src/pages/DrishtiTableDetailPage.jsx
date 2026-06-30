@@ -72,9 +72,44 @@ function ProviderIcon({ org }) {
   );
 }
 
+const SAMPLE_GT_HTML = `<table>
+  <tbody>
+    <tr>
+      <td>95</td><td>76</td><td>72</td><td>67</td><td>69</td>
+    </tr>
+    <tr>
+      <td>78</td><td>80</td><td>48</td><td>86</td><td>59</td>
+    </tr>
+    <tr>
+      <td>94</td><td>95</td><td>48</td><td>58</td><td>75</td>
+    </tr>
+    <tr>
+      <td>89</td><td>93</td><td>69</td><td>81</td><td>68</td>
+    </tr>
+  </tbody>
+</table>`;
+
+const SAMPLE_FRONTIER_HTML = `<table>
+  <tbody>
+    <tr>
+      <td>95</td><td>76</td><td>72</td><td>67</td><td>69</td>
+    </tr>
+    <tr>
+      <td>78</td><td>80</td><td>48</td><td>86</td>
+    </tr>
+    <tr>
+      <td>94</td><td>95</td><td>48</td><td>58</td><td>75</td>
+    </tr>
+    <tr>
+      <td>89</td><td>93</td><td>69</td><td>68</td>
+    </tr>
+  </tbody>
+</table>`;
+
 export default function DrishtiTableDetailPage() {
   const [rows, setRows] = useState(FALLBACK);
   const [activeIdx, setActiveIdx] = useState(0);
+  const [activeTab, setActiveTab] = useState("task");
   const [compSet, setCompSet] = useState("full");
 
   useEffect(() => {
@@ -164,35 +199,127 @@ export default function DrishtiTableDetailPage() {
           </div>
 
           <div className="s-sp-tabs">
-            <button className="s-sp-tab active">Task</button>
-            <button className="s-sp-tab">Environment</button>
-            <button className="s-sp-tab">Trajectory</button>
+            {["task","environment","trajectory"].map(t => (
+              <button key={t} className={`s-sp-tab${activeTab === t ? " active" : ""}`} onClick={() => setActiveTab(t)}>
+                {t.charAt(0).toUpperCase() + t.slice(1)}
+              </button>
+            ))}
           </div>
-          <p style={{ fontSize: "11.5px", color: "var(--muted-2)", lineHeight: 1.6, marginBottom: "16px" }}>
-            Sample task for illustration only. The held-out test set is not publicly released.
-          </p>
-          <div className="s-sp-task">
-            <div className="s-sp-task-label">Input — sample table image</div>
-            <img
-              src="https://huggingface.co/datasets/Nalandadata/DrishtiTable-sample/resolve/main/images/9788121929561_Quant__1_page_027_table_41.png"
-              alt="Sample table from DrishtiTable dataset — Quantitative Techniques textbook"
-              style={{ width: "100%", marginTop: "10px", borderRadius: "6px", border: "1px solid var(--line)", display: "block" }}
-            />
-            <p style={{ fontSize: "10.5px", color: "var(--muted-2)", marginTop: "6px", lineHeight: 1.4 }}>From <em>Quantitative Techniques</em> · public sample · <a href="https://huggingface.co/datasets/Nalandadata/DrishtiTable-sample" target="_blank" rel="noopener noreferrer" style={{ color: "var(--muted)" }}>DrishtiTable-sample ↗</a></p>
-          </div>
-          <table className="s-sp-crit">
-            <thead><tr><th>Criterion</th><th>Result</th></tr></thead>
-            <tbody>
-              <tr><td>Correct row count</td><td><span className="s-sp-pill-yes">Yes</span></td></tr>
-              <tr><td>Merged cells preserved</td><td><span className="s-sp-pill-yes">Yes</span></td></tr>
-              <tr><td>Header hierarchy correct</td><td><span className="s-sp-pill-yes">Yes</span></td></tr>
-              <tr><td>Cell content exact match</td><td><span className="s-sp-pill-yes">Yes</span></td></tr>
-            </tbody>
-          </table>
-          <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginTop: "16px" }}>
-            <a href="https://huggingface.co/datasets/Nalandadata/DrishtiTable" target="_blank" rel="noopener noreferrer" className="s-bench-link">↗ HF Dataset</a>
-            <a href="https://huggingface.co/Nalandadata" target="_blank" rel="noopener noreferrer" className="s-bench-link">↗ Model weights</a>
-          </div>
+
+          {/* ── TASK TAB ── */}
+          {activeTab === "task" && (
+            <>
+              <p style={{ fontSize: "11.5px", color: "var(--muted-2)", lineHeight: 1.6, marginBottom: "16px" }}>
+                Sample task for illustration. The held-out test set is not publicly released.
+              </p>
+              <div className="s-sp-task">
+                <div className="s-sp-task-label">Input — sample table image</div>
+                <img
+                  src="https://huggingface.co/datasets/Nalandadata/DrishtiTable-sample/resolve/main/images/9788121929561_Quant__1_page_027_table_41.png"
+                  alt="Sample table from DrishtiTable dataset"
+                  style={{ width: "100%", marginTop: "10px", borderRadius: "6px", border: "1px solid var(--line)", display: "block" }}
+                />
+                <p style={{ fontSize: "10.5px", color: "var(--muted-2)", marginTop: "6px", lineHeight: 1.4 }}>
+                  From <em>Quantitative Techniques</em> · public sample · <a href="https://huggingface.co/datasets/Nalandadata/DrishtiTable-sample" target="_blank" rel="noopener noreferrer" style={{ color: "var(--muted)" }}>DrishtiTable-sample ↗</a>
+                </p>
+              </div>
+              <table className="s-sp-crit">
+                <thead><tr><th>Criterion</th><th>Result</th></tr></thead>
+                <tbody>
+                  <tr><td>Correct row count</td><td><span className="s-sp-pill-yes">Yes</span></td></tr>
+                  <tr><td>Merged cells preserved</td><td><span className="s-sp-pill-yes">Yes</span></td></tr>
+                  <tr><td>Header hierarchy correct</td><td><span className="s-sp-pill-yes">Yes</span></td></tr>
+                  <tr><td>Cell content exact match</td><td><span className="s-sp-pill-yes">Yes</span></td></tr>
+                </tbody>
+              </table>
+              <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginTop: "16px" }}>
+                <a href="https://huggingface.co/datasets/Nalandadata/DrishtiTable" target="_blank" rel="noopener noreferrer" className="s-bench-link">↗ HF Dataset</a>
+                <a href="https://huggingface.co/Nalandadata" target="_blank" rel="noopener noreferrer" className="s-bench-link">↗ Model weights</a>
+              </div>
+            </>
+          )}
+
+          {/* ── ENVIRONMENT TAB ── */}
+          {activeTab === "environment" && (
+            <>
+              <p style={{ fontSize: "11.5px", color: "var(--muted-2)", lineHeight: 1.6, marginBottom: "16px" }}>
+                {isOurs(active?.category) ? "Fine-tuning and inference configuration for this model." : "Inference configuration used during evaluation."}
+              </p>
+              {active?.org === "Nalandadata" ? (
+                <table className="s-sp-crit">
+                  <thead><tr><th>Setting</th><th>Value</th></tr></thead>
+                  <tbody>
+                    <tr><td>Base model</td><td style={{ fontFamily: "var(--mono)", fontSize: "11px" }}>{active?.category === "ours-research" ? "Qwen3-VL-8B" : "Qwen2.5-VL-7B-Instruct"}</td></tr>
+                    <tr><td>Method</td><td>{active?.category === "ours-research" ? "Full SFT" : "QLoRA (4-bit NF4)"}</td></tr>
+                    {active?.category !== "ours-research" && <tr><td>LoRA rank</td><td>16 · alpha 32</td></tr>}
+                    <tr><td>Framework</td><td>Unsloth</td></tr>
+                    <tr><td>Hardware</td><td>1× A100 40 GB</td></tr>
+                    <tr><td>Train time</td><td>~35 min</td></tr>
+                    <tr><td>Temperature</td><td>0 (greedy / deterministic)</td></tr>
+                    <tr><td>Max new tokens</td><td>4096</td></tr>
+                    <tr><td>Input format</td><td>Raw image + task prompt</td></tr>
+                    <tr><td>Training data</td><td>1,141 tables (train split)</td></tr>
+                  </tbody>
+                </table>
+              ) : (
+                <table className="s-sp-crit">
+                  <thead><tr><th>Setting</th><th>Value</th></tr></thead>
+                  <tbody>
+                    <tr><td>Provider</td><td>{active?.org}</td></tr>
+                    <tr><td>Model</td><td style={{ fontFamily: "var(--mono)", fontSize: "11px" }}>{active?.model}</td></tr>
+                    <tr><td>Access</td><td>API · zero-shot</td></tr>
+                    <tr><td>Fine-tuning</td><td>None</td></tr>
+                    <tr><td>Temperature</td><td>0 (greedy / deterministic)</td></tr>
+                    <tr><td>Max tokens</td><td>4096</td></tr>
+                    <tr><td>Prompt</td><td>Direct task prompt (no few-shot)</td></tr>
+                    <tr><td>Input format</td><td>Image + task description</td></tr>
+                  </tbody>
+                </table>
+              )}
+              <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginTop: "16px" }}>
+                {active?.org === "Nalandadata" && <a href="https://huggingface.co/Nalandadata" target="_blank" rel="noopener noreferrer" className="s-bench-link">↗ Model weights</a>}
+                <a href="https://huggingface.co/datasets/Nalandadata/DrishtiTable" target="_blank" rel="noopener noreferrer" className="s-bench-link">↗ Eval script</a>
+              </div>
+            </>
+          )}
+
+          {/* ── TRAJECTORY TAB ── */}
+          {activeTab === "trajectory" && (
+            <>
+              <p style={{ fontSize: "11.5px", color: "var(--muted-2)", lineHeight: 1.6, marginBottom: "12px" }}>
+                HTML output on the public sample table (row 1, <em>Quantitative Techniques</em> p.27). {active?.org === "Nalandadata" ? "Fine-tuned model output matches ground truth." : "Frontier model output — note missing cells in rows 2 and 4."}
+              </p>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px", marginBottom: "12px" }}>
+                <div>
+                  <div style={{ fontSize: "10px", fontFamily: "var(--mono)", color: "var(--accent)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "6px" }}>Ground truth</div>
+                  <pre style={{ background: "var(--ink)", border: "1px solid var(--line)", borderRadius: "6px", padding: "10px", fontSize: "10px", fontFamily: "var(--mono)", color: "var(--muted)", overflowX: "auto", margin: 0, lineHeight: 1.6, whiteSpace: "pre-wrap", wordBreak: "break-all" }}>{SAMPLE_GT_HTML}</pre>
+                </div>
+                <div>
+                  <div style={{ fontSize: "10px", fontFamily: "var(--mono)", color: active?.org === "Nalandadata" ? "#7fc794" : "#e07070", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "6px" }}>
+                    {active?.model?.replace("DrishtiTable-", "DT-") ?? "Model"} output
+                  </div>
+                  <pre style={{ background: "var(--ink)", border: `1px solid ${active?.org === "Nalandadata" ? "rgba(127,199,148,.3)" : "rgba(224,112,112,.3)"}`, borderRadius: "6px", padding: "10px", fontSize: "10px", fontFamily: "var(--mono)", color: "var(--muted)", overflowX: "auto", margin: 0, lineHeight: 1.6, whiteSpace: "pre-wrap", wordBreak: "break-all" }}>
+                    {active?.org === "Nalandadata" ? SAMPLE_GT_HTML : SAMPLE_FRONTIER_HTML}
+                  </pre>
+                </div>
+              </div>
+              <table className="s-sp-crit">
+                <thead><tr><th>Metric</th><th>Score</th></tr></thead>
+                <tbody>
+                  <tr>
+                    <td>TEDS (this sample)</td>
+                    <td><span className={isOurs(active?.category) ? "s-sp-pill-yes" : ""} style={active?.org !== "Nalandadata" ? { color: "#e07070", fontWeight: 600 } : {}}>{active?.org === "Nalandadata" ? "100.0%" : "71.4%"}</span></td>
+                  </tr>
+                  <tr><td>Row count match</td><td><span className="s-sp-pill-yes">Yes</span></td></tr>
+                  <tr><td>Cell count match</td><td>{active?.org === "Nalandadata" ? <span className="s-sp-pill-yes">Yes</span> : <span style={{ color: "#e07070", fontWeight: 600, fontSize: "11px" }}>No — 2 cells missing</span>}</td></tr>
+                  <tr><td>Content exact match</td><td><span className="s-sp-pill-yes">Yes</span></td></tr>
+                </tbody>
+              </table>
+              <p style={{ fontSize: "10.5px", color: "var(--muted-2)", marginTop: "10px", lineHeight: 1.5 }}>
+                Illustrative example using the public sample. Held-out test scores are averaged over {active?.n_samples ?? 135} tables.
+              </p>
+            </>
+          )}
         </div>
       </div>
 
