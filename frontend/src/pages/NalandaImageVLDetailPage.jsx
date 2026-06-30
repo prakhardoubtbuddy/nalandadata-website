@@ -198,7 +198,7 @@ export default function NalandaImageVLDetailPage() {
         <div className="s-wrap">
           <p className="s-eyebrow">Reproducibility</p>
           <h2 style={{ fontSize: "clamp(22px,3vw,32px)", fontWeight: 800, letterSpacing: "-.025em", marginBottom: "12px" }}>Everything here is public.</h2>
-          <p style={{ fontSize: "14.5px", color: "var(--muted)", marginBottom: "20px" }}>The fine-tuned model and a dataset sample are public, and the held-out questions are the same ones the baseline was scored on.</p>
+          <p style={{ fontSize: "14.5px", color: "var(--muted)", marginBottom: "20px" }}>The dataset sample and held-out evaluation questions are public — the same questions every model on this leaderboard was scored on.</p>
           <div style={{ display: "flex", flexWrap: "wrap", gap: "12px" }}>
             <a className="s-btn ghost" href="https://huggingface.co/Nalandadata/nalanda-image-vl" target="_blank" rel="noopener noreferrer">Open the model on Hugging Face →</a>
             <a className="s-btn primary" href="https://huggingface.co/datasets/Nalandadata/nalanda-image-qa" target="_blank" rel="noopener noreferrer">Download a data sample →</a>
