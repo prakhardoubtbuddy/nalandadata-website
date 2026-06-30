@@ -114,7 +114,7 @@ export default function NalandaImageVLDetailPage() {
         <div className="s-wrap">
           <p className="s-eyebrow">STEM Science QA · Accuracy</p>
           <h1>Teaching a vision model to read <span className="hl">science diagrams.</span></h1>
-          <p className="sub">We built 22,679 science questions paired with diagrams and step-by-step answers, then fine-tuned LLaMA-3.2-Vision-11B — training the vision layers. Overall accuracy rose from 37.7% to 50.0% (+12.3 points); mathematics nearly doubled.</p>
+          <p className="sub">We built a multimodal STEM dataset paired with diagrams and chain-of-thought answers, then fine-tuned LLaMA-3.2-Vision-11B — training the vision layers alongside the language layers.</p>
         </div>
       </div>
 
@@ -217,7 +217,7 @@ export default function NalandaImageVLDetailPage() {
           </div>
           <div className="s-methbox">
             <h4>Methodology</h4>
-            <p>{162} held-out scorable MCQs with expert ground-truth answers. Every model scored with identical exact-match scorer over its full response. Decoding is deterministic (greedy / temperature 0). <a href="https://huggingface.co/datasets/Nalandadata/nalanda-image-qa" target="_blank" rel="noopener noreferrer">Full methodology &amp; scoring on Hugging Face →</a></p>
+            <p>Expert ground-truth answers for every held-out question. Each model scored with an identical exact-match scorer over its full response. Decoding is deterministic (greedy / temperature 0). <a href="https://huggingface.co/datasets/Nalandadata/nalanda-image-qa" target="_blank" rel="noopener noreferrer">Full methodology &amp; scoring on Hugging Face →</a></p>
           </div>
           <div className="s-lb-meta">
             <span className="lm">Nalanda Image VL · {162} held-out MCQs · {rows.length} models</span>
@@ -255,7 +255,6 @@ export default function NalandaImageVLDetailPage() {
                 </tbody>
               </table>
             </div>
-            <div className="cond">Honest ranking by real accuracy on the same {162} held-out questions. Fine-tuning lifts the open 11B model <b>+{vsBase} points</b> ({37.7}% → {50.0}%) — a large gain from a small curated dataset. Frontier models lead on absolute accuracy; the result here is the <b>fine-tuning gain</b>.</div>
           </div>
 
           {/* Per-subject table */}
@@ -298,10 +297,10 @@ export default function NalandaImageVLDetailPage() {
           <p className="s-eyebrow">The approach</p>
           <h2 style={{ fontSize: "clamp(22px,3vw,32px)", fontWeight: 800, letterSpacing: "-.025em", marginBottom: "24px" }}>What we did, in four steps.</h2>
           <div className="s-dt-steps">
-            <div className="s-dt-step"><div className="num">1</div><div><h5>Curate</h5><p><b>22,679 multimodal questions</b>, filtered from a pool of 180,505, spanning physics, mathematics, chemistry and biology — circuits, ray diagrams, geometric constructions, molecular structures and cell diagrams.</p></div></div>
+            <div className="s-dt-step"><div className="num">1</div><div><h5>Curate</h5><p>Filtered from a pool of 180,505 questions spanning physics, mathematics, chemistry and biology — circuits, ray diagrams, geometric constructions, molecular structures and cell diagrams.</p></div></div>
             <div className="s-dt-step"><div className="num">2</div><div><h5>Reason-annotate</h5><p>Each answer carries a full <b>chain-of-thought explanation</b> that identifies the answer, names the underlying principle, and walks from the visual to the result. The model learns the path, not just the label.</p></div></div>
             <div className="s-dt-step"><div className="num">3</div><div><h5>Fine-tune</h5><p>QLoRA fine-tuning of <b>LLaMA-3.2-Vision-11B</b> in 4-bit, rank 32, on a single A100. The key choice: we train the <b>vision layers</b> as well as the language layers — science diagrams sit too far from natural images to freeze the encoder.</p></div></div>
-            <div className="s-dt-step"><div className="num">4</div><div><h5>Evaluate</h5><p><b>162 held-out questions</b> the model never saw, each scored with its diagram, against the same model run zero-shot as the baseline. Broken down by subject, so it is clear where the gains land.</p></div></div>
+            <div className="s-dt-step"><div className="num">4</div><div><h5>Evaluate</h5><p>Held-out questions the model never saw, each scored with its diagram, against the same model run zero-shot as the baseline. Broken down by subject, so it is clear where the gains land.</p></div></div>
           </div>
           <p style={{ fontSize: "12.5px", color: "var(--muted-2)", marginTop: "14px", lineHeight: 1.6 }}>
             To run your model on the public test set, use the <a href="https://huggingface.co/datasets/Nalandadata/nalanda-image-qa/tree/main/scripts" target="_blank" rel="noopener noreferrer" style={{ color: "var(--muted)" }}>evaluation script on Hugging Face</a> — no form required.
