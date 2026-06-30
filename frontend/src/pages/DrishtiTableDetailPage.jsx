@@ -331,12 +331,7 @@ export default function DrishtiTableDetailPage() {
 
           <div className="s-key-stat">
             <span className="kd">{topTeds}% TEDS</span>
-            <span className="kl"><b>top result — the fine-tuned 8B, +{vsBest} points over the best frontier model (Claude Sonnet 4.6)</b>The released 7B is right behind at {oursRows[1]?.teds ?? 83.2}%, itself ahead of every frontier model tested.</span>
-          </div>
-
-          <div className="s-methbox">
-            <h4>Methodology</h4>
-            <p>{rows[0]?.n_samples ?? 135} held-out Indian-textbook tables, never seen during training. Each table is provided as an image; models output the HTML table structure. Evaluated using TEDS against expert-verified ground-truth HTML. <a href="https://huggingface.co/datasets/Nalandadata/DrishtiTable" target="_blank" rel="noopener noreferrer">Full methodology &amp; dataset on Hugging Face →</a></p>
+            <span className="kl"><b>top result — the fine-tuned 8B, +{vsBest} points over the best frontier model (Claude Sonnet 4.6)</b>The released 7B is right behind at {oursRows[1]?.teds ?? 83.2}%, itself ahead of every frontier model tested. Each model receives the same image and task prompt; outputs are scored with TEDS against expert-verified ground-truth HTML. <a href="https://huggingface.co/datasets/Nalandadata/DrishtiTable" target="_blank" rel="noopener noreferrer">Full methodology on Hugging Face →</a></span>
           </div>
 
           <div className="s-lb-meta">
@@ -376,7 +371,6 @@ export default function DrishtiTableDetailPage() {
                 </tbody>
               </table>
             </div>
-            <div className="cond">Image → HTML recognition on {rows[0]?.n_samples ?? 135} held-out Indian-textbook tables, ranked by TEDS. The fine-tuned <b>8B tops the board at {topTeds}%</b>; the released 7B is right behind at <b>{oursRows[1]?.teds ?? 83.2}%</b> — both ahead of every frontier model tested.</div>
           </div>
 
           {/* TEDS bar chart */}
@@ -476,7 +470,6 @@ export default function DrishtiTableDetailPage() {
               </tbody>
             </table>
           </div>
-          <p className="s-cb-note">Per-type TEDS (%) on the {rows[0]?.n_samples ?? 135}-table test set. Frontier models collapse hardest on <b style={{ color: "var(--accent)" }}>Financial</b> tables — where the fine-tuned model leads by <b style={{ color: "var(--accent)" }}>15–19 points</b> (82.0 vs 53–67).</p>
         </div>
       </section>
 
