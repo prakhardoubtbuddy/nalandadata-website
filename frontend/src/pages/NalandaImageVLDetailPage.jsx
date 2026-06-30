@@ -44,8 +44,8 @@ function ProviderIcon({ org }) {
   );
   if (org === "Anthropic") return (
     <div className="s-sp-icon" style={{ background: "#CC785C" }}>
-      <svg viewBox="0 0 41 32" width="15" height="12" fill="white">
-        <path d="M24.8 0h-8.4L0 32h8.4l3.3-8.7h17.6L32.7 32H41L24.8 0zm-10.4 16.8 5.2-13.6 5.2 13.6h-10.4z"/>
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="white">
+        <path d="M12 2L13.8 10.2L22 12L13.8 13.8L12 22L10.2 13.8L2 12L10.2 10.2Z"/>
       </svg>
     </div>
   );
