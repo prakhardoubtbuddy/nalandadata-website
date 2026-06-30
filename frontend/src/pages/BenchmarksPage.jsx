@@ -49,19 +49,11 @@ const DT_FALLBACK = [
 ];
 
 const IQA_FALLBACK = [
-  { model: "Claude Sonnet 4.6",     org: "Anthropic",   method: "Zero-shot",         category: "frontier", accuracy: 72.2, vs_base: null, n_samples: 162, verified: true },
-  { model: "Claude Opus 4.8",       org: "Anthropic",   method: "Zero-shot",         category: "frontier", accuracy: 68.5, vs_base: null, n_samples: 162, verified: true },
-  { model: "Gemini 3.1 Pro",        org: "Google",      method: "Zero-shot",         category: "frontier", accuracy: 65.4, vs_base: null, n_samples: 162, verified: true },
-  { model: "GPT-5.1",               org: "OpenAI",      method: "Zero-shot",         category: "frontier", accuracy: 64.2, vs_base: null, n_samples: 162, verified: true },
-  { model: "Nalanda Image VL",      org: "Nalandadata", method: "Fine-tuned (QLoRA)", category: "ours",    accuracy: 50.0, vs_base: 12.3,
-    per_subject: {
-      Maths:     { n: 34, base: 26.5, ours: 50.0 },
-      Biology:   { n: 37, base: 32.4, ours: 45.9 },
-      Physics:   { n: 52, base: 38.5, ours: 50.0 },
-      Chemistry: { n: 39, base: 51.3, ours: 53.8 },
-    },
-    n_samples: 162, verified: true },
-  { model: "LLaMA-3.2-Vision-11B",  org: "Meta",        method: "Zero-shot (base)",  category: "base",    accuracy: 37.7, vs_base: null, n_samples: 162, verified: true },
+  { model: "Claude Sonnet 4.6",     org: "Anthropic",   method: "Zero-shot",        category: "frontier", accuracy: 72.2, vs_base: null, n_samples: 162, verified: true },
+  { model: "Claude Opus 4.8",       org: "Anthropic",   method: "Zero-shot",        category: "frontier", accuracy: 68.5, vs_base: null, n_samples: 162, verified: true },
+  { model: "Gemini 3.1 Pro",        org: "Google",      method: "Zero-shot",        category: "frontier", accuracy: 65.4, vs_base: null, n_samples: 162, verified: true },
+  { model: "GPT-5.1",               org: "OpenAI",      method: "Zero-shot",        category: "frontier", accuracy: 64.2, vs_base: null, n_samples: 162, verified: true },
+  { model: "LLaMA-3.2-Vision-11B",  org: "Meta",        method: "Zero-shot (base)", category: "base",     accuracy: 37.7, vs_base: null, n_samples: 162, verified: true },
 ];
 
 // ── Helpers ─────────────────────────────────────────────────────────────────
@@ -82,7 +74,7 @@ export default function BenchmarksPage() {
 
   useEffect(() => {
     axios.get(`${API}/hf/leaderboard`).then(r => { if (r.data?.rows?.length) setDtRows(r.data.rows); }).catch(() => {});
-    axios.get(`${API}/hf/imageqa-leaderboard`).then(r => { if (r.data?.rows?.length) setIqaRows(r.data.rows); }).catch(() => {});
+    axios.get(`${API}/hf/imageqa-leaderboard`).then(r => { if (r.data?.rows?.length) setIqaRows(r.data.rows.filter(r => r.org !== "Nalandadata")); }).catch(() => {});
   }, []);
 
   const dtTop      = dtRows[0];
@@ -91,9 +83,7 @@ export default function BenchmarksPage() {
   const dtTopTeds  = dtTop?.teds ?? 84.9;
   const dtVsBest   = dtOurs[0] && dtFrontier[0] ? (dtOurs[0].teds - dtFrontier[0].teds).toFixed(1) : "7.5";
 
-  const iqaOurs    = iqaRows.find(r => isOursCategory(r.category));
-  const iqaBase    = iqaRows.find(r => r.category === "base");
-  const iqaVsBase  = iqaOurs?.vs_base ?? (iqaOurs && iqaBase ? (iqaOurs.accuracy - iqaBase.accuracy).toFixed(1) : "12.3");
+  const iqaVsBase  = "12.3";
 
   return (
     <div className="bg-[#0A0A0A]" style={{ paddingTop: "96px" }}>
@@ -196,7 +186,7 @@ export default function BenchmarksPage() {
                 <div className="s-bench-meta">
                   <div className="s-bench-tag">STEM Science QA · Accuracy</div>
                   <div className="s-bench-name">Nalanda Image VL</div>
-                  <p className="s-bench-desc">Multiple-choice science reasoning on {iqaOurs?.n_samples ?? 162} held-out questions across Physics, Chemistry, Biology and Maths. Fine-tuning LLaMA-3.2-Vision-11B on 22K diagram-grounded pairs yields a +{iqaVsBase}pp gain over the zero-shot base.</p>
+                  <p className="s-bench-desc">Multiple-choice science reasoning on {162} held-out questions across Physics, Chemistry, Biology and Maths. Fine-tuning LLaMA-3.2-Vision-11B on 22K diagram-grounded pairs yields a +{iqaVsBase}pp gain over the zero-shot base.</p>
                   <div className="s-bench-links">
                     <span className="s-bench-link" style={{ opacity: 0.4, cursor: "default" }}>Blog — coming</span>
                     <span className="s-bench-link" style={{ opacity: 0.4, cursor: "default" }}>Paper — coming</span>
@@ -208,7 +198,7 @@ export default function BenchmarksPage() {
 
                 {/* Mini leaderboard */}
                 <div className="s-mini-lb">
-                  <div className="s-mini-lb-title">Top results · {iqaOurs?.n_samples ?? 162} held-out MCQs</div>
+                  <div className="s-mini-lb-title">Top results · {162} held-out MCQs</div>
                   <div className="s-mini-rows">
                     {iqaRows.map(row => (
                       <div key={row.model} className={`s-mini-row${isOursCategory(row.category) ? " ours" : ""}`}>

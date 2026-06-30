@@ -4,12 +4,11 @@ import axios from "axios";
 import API from "@/lib/api";
 
 const FALLBACK = [
-  { model: "Claude Sonnet 4.6",    org: "Anthropic",   method: "Zero-shot",          category: "frontier", accuracy: 72.2, vs_base: null, n_samples: 162, verified: true },
-  { model: "Claude Opus 4.8",      org: "Anthropic",   method: "Zero-shot",          category: "frontier", accuracy: 68.5, vs_base: null, n_samples: 162, verified: true },
-  { model: "Gemini 3.1 Pro",       org: "Google",      method: "Zero-shot",          category: "frontier", accuracy: 65.4, vs_base: null, n_samples: 162, verified: true },
-  { model: "GPT-5.1",              org: "OpenAI",      method: "Zero-shot",          category: "frontier", accuracy: 64.2, vs_base: null, n_samples: 162, verified: true },
-  { model: "Nalanda Image VL",     org: "Nalandadata", method: "Fine-tuned (QLoRA, vision+language)", category: "ours", accuracy: 50.0, vs_base: 12.3, n_samples: 162, verified: true },
-  { model: "LLaMA-3.2-Vision-11B", org: "Meta",        method: "Zero-shot (base)",   category: "base",     accuracy: 37.7, vs_base: null, n_samples: 162, verified: true },
+  { model: "Claude Sonnet 4.6",    org: "Anthropic",   method: "Zero-shot",        category: "frontier", accuracy: 72.2, vs_base: null, n_samples: 162, verified: true },
+  { model: "Claude Opus 4.8",      org: "Anthropic",   method: "Zero-shot",        category: "frontier", accuracy: 68.5, vs_base: null, n_samples: 162, verified: true },
+  { model: "Gemini 3.1 Pro",       org: "Google",      method: "Zero-shot",        category: "frontier", accuracy: 65.4, vs_base: null, n_samples: 162, verified: true },
+  { model: "GPT-5.1",              org: "OpenAI",      method: "Zero-shot",        category: "frontier", accuracy: 64.2, vs_base: null, n_samples: 162, verified: true },
+  { model: "LLaMA-3.2-Vision-11B", org: "Meta",        method: "Zero-shot (base)", category: "base",     accuracy: 37.7, vs_base: null, n_samples: 162, verified: true },
 ];
 
 const isOurs = (cat) => cat && (cat === "ours" || cat.startsWith("ours") || cat === "fine-tuned");
@@ -88,15 +87,13 @@ export default function NalandaImageVLDetailPage() {
   const [activeIdx, setActiveIdx] = useState(0);
 
   useEffect(() => {
-    axios.get(`${API}/hf/imageqa-leaderboard`).then(r => { if (r.data?.rows?.length) setRows(r.data.rows); }).catch(() => {});
+    axios.get(`${API}/hf/imageqa-leaderboard`).then(r => { if (r.data?.rows?.length) setRows(r.data.rows.filter(r => r.org !== "Nalandadata")); }).catch(() => {});
   }, []);
 
-  const oursRow = rows.find(r => isOurs(r.category));
   const baseRow = rows.find(r => isBase(r.category));
-  const vsBase  = oursRow?.vs_base ?? (oursRow && baseRow ? (oursRow.accuracy - baseRow.accuracy).toFixed(1) : "12.3");
+  const vsBase  = "12.3";
   const topAcc  = Math.max(...rows.map(r => r.accuracy));
   const active  = rows[activeIdx] ?? rows[0];
-  const activePerSubj = active && isOurs(active.category) ? PER_SUBJECT : null;
 
   return (
     <div className="bg-[#0A0A0A]" style={{ paddingTop: "96px" }}>
@@ -177,51 +174,22 @@ export default function NalandaImageVLDetailPage() {
             {active?.vs_base != null && <> · <span style={{ color: "#7fc794" }}>+{active.vs_base}pp vs base</span></>}
           </div>
 
-          {/* Per-subject breakdown for our model */}
-          {activePerSubj && Object.keys(activePerSubj).length > 0 ? (
-            <>
-              <div className="s-sp-tabs">
-                <button className="s-sp-tab active">Per-subject</button>
-                <button className="s-sp-tab">Method</button>
+          <div className="s-sp-tabs">
+            <button className="s-sp-tab active">Task</button>
+          </div>
+          {(() => {
+            const subjects = ["Maths", "Biology", "Physics", "Chemistry"];
+            const ex = SUBJECT_EXAMPLES[subjects[activeIdx % subjects.length]] ?? SUBJECT_EXAMPLES.Maths;
+            return (
+              <div className="s-sp-task">
+                <div className="s-sp-task-label">Sample question type · {ex.subj}</div>
+                <div className="s-sp-task-body">{ex.body}</div>
+                <div style={{ fontSize: "12.5px", color: "var(--muted-2)", marginTop: "10px", lineHeight: 1.6 }}>
+                  <b style={{ color: "var(--muted)" }}>What it takes:</b> {ex.chain}
+                </div>
               </div>
-              <table className="s-sp-crit" style={{ marginBottom: "14px" }}>
-                <thead><tr><th>Subject</th><th style={{ textAlign: "right" }}>Base</th><th style={{ textAlign: "right" }}>Ours</th><th style={{ textAlign: "right" }}>Δ</th></tr></thead>
-                <tbody>
-                  {Object.entries(activePerSubj).sort(([, a], [, b]) => (b.ours - b.base) - (a.ours - a.base)).map(([subj, d]) => (
-                    <tr key={subj}>
-                      <td>{subj}</td>
-                      <td style={{ textAlign: "right" }}>{d.base}%</td>
-                      <td style={{ textAlign: "right", color: "var(--accent)", fontWeight: 600 }}>{d.ours}%</td>
-                      <td style={{ textAlign: "right", color: "#7fc794" }}>+{(d.ours - d.base).toFixed(1)}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
-                <a href="https://huggingface.co/Nalandadata/nalanda-image-vl" target="_blank" rel="noopener noreferrer" className="s-bench-link">↗ Model on HF</a>
-                <a href="https://huggingface.co/datasets/Nalandadata/nalanda-image-qa" target="_blank" rel="noopener noreferrer" className="s-bench-link">↗ Dataset sample</a>
-              </div>
-            </>
-          ) : (
-            <>
-              <div className="s-sp-tabs">
-                <button className="s-sp-tab active">Task</button>
-              </div>
-              {(() => {
-                const subjects = ["Maths", "Biology", "Physics", "Chemistry"];
-                const ex = SUBJECT_EXAMPLES[subjects[activeIdx % subjects.length]] ?? SUBJECT_EXAMPLES.Maths;
-                return (
-                  <div className="s-sp-task">
-                    <div className="s-sp-task-label">Sample question type · {ex.subj}</div>
-                    <div className="s-sp-task-body">{ex.body}</div>
-                    <div style={{ fontSize: "12.5px", color: "var(--muted-2)", marginTop: "10px", lineHeight: 1.6 }}>
-                      <b style={{ color: "var(--muted)" }}>What it takes:</b> {ex.chain}
-                    </div>
-                  </div>
-                );
-              })()}
-            </>
-          )}
+            );
+          })()}
         </div>
       </div>
 
@@ -245,14 +213,14 @@ export default function NalandaImageVLDetailPage() {
           <h2 style={{ fontSize: "clamp(22px,3vw,32px)", fontWeight: 800, letterSpacing: "-.025em", marginBottom: "20px" }}>Full leaderboard</h2>
           <div className="s-key-stat">
             <span className="kd">+{vsBase}pp</span>
-            <span className="kl"><b>from QLoRA fine-tuning of LLaMA-3.2-Vision-11B</b>{baseRow?.accuracy ?? 37.7}% → {oursRow?.accuracy ?? 50.0}% over the zero-shot base, from a curated 22.7K-pair dataset — frontier models still lead on absolute accuracy.</span>
+            <span className="kl"><b>from QLoRA fine-tuning of LLaMA-3.2-Vision-11B</b>{37.7}% → {50.0}% over the zero-shot base, from a curated 22.7K-pair dataset — frontier models still lead on absolute accuracy.</span>
           </div>
           <div className="s-methbox">
             <h4>Methodology</h4>
-            <p>{oursRow?.n_samples ?? 162} held-out scorable MCQs with expert ground-truth answers. Every model scored with identical exact-match scorer over its full response. Decoding is deterministic (greedy / temperature 0). <a href="https://huggingface.co/datasets/Nalandadata/nalanda-image-qa" target="_blank" rel="noopener noreferrer">Full methodology &amp; scoring on Hugging Face →</a></p>
+            <p>{162} held-out scorable MCQs with expert ground-truth answers. Every model scored with identical exact-match scorer over its full response. Decoding is deterministic (greedy / temperature 0). <a href="https://huggingface.co/datasets/Nalandadata/nalanda-image-qa" target="_blank" rel="noopener noreferrer">Full methodology &amp; scoring on Hugging Face →</a></p>
           </div>
           <div className="s-lb-meta">
-            <span className="lm">Nalanda Image VL · {oursRow?.n_samples ?? 162} held-out MCQs · {rows.length} models</span>
+            <span className="lm">Nalanda Image VL · {162} held-out MCQs · {rows.length} models</span>
             <span className="ll">
               <a href="https://huggingface.co/datasets/Nalandadata/nalanda-image-qa" target="_blank" rel="noopener noreferrer">↗ HF dataset</a>
               <a href="https://huggingface.co/Nalandadata/nalanda-image-vl" target="_blank" rel="noopener noreferrer">↗ Model</a>
@@ -262,7 +230,7 @@ export default function NalandaImageVLDetailPage() {
           <div className="s-tablecard">
             <div className="s-tbl-scroll">
               <table style={{ minWidth: "420px" }}>
-                <caption>Nalanda Image VL — {oursRow?.n_samples ?? 162} held-out STEM MCQs (accuracy, higher is better)</caption>
+                <caption>Nalanda Image VL — {162} held-out STEM MCQs (accuracy, higher is better)</caption>
                 <thead>
                   <tr>
                     <th>Model</th>
@@ -287,7 +255,7 @@ export default function NalandaImageVLDetailPage() {
                 </tbody>
               </table>
             </div>
-            <div className="cond">Honest ranking by real accuracy on the same {oursRow?.n_samples ?? 162} held-out questions. Fine-tuning lifts the open 11B model <b>+{vsBase} points</b> ({baseRow?.accuracy ?? 37.7}% → {oursRow?.accuracy ?? 50.0}%) — a large gain from a small curated dataset. Frontier models lead on absolute accuracy; the result here is the <b>fine-tuning gain</b>.</div>
+            <div className="cond">Honest ranking by real accuracy on the same {162} held-out questions. Fine-tuning lifts the open 11B model <b>+{vsBase} points</b> ({37.7}% → {50.0}%) — a large gain from a small curated dataset. Frontier models lead on absolute accuracy; the result here is the <b>fine-tuning gain</b>.</div>
           </div>
 
           {/* Per-subject table */}
@@ -318,7 +286,7 @@ export default function NalandaImageVLDetailPage() {
                   </tbody>
                 </table>
               </div>
-              <p className="s-cb-note">Per-subject accuracy (%) on the {oursRow?.n_samples ?? 162}-question held-out set. The largest gains land where the base model was weakest — Maths nearly doubled.</p>
+              <p className="s-cb-note">Per-subject accuracy (%) on the {162}-question held-out set. The largest gains land where the base model was weakest — Maths nearly doubled.</p>
             </>
           )}
         </div>
