@@ -56,7 +56,7 @@ export default function NalandaBenchPage() {
           </div>
           <div className="s-verify-row">
             <a className="s-btn ghost" href="https://huggingface.co/Nalandadata/nalanda-qwen-7b-grpo" target="_blank" rel="noopener noreferrer">Open the model on Hugging Face →</a>
-            <a className="s-btn primary" href="https://huggingface.co/datasets/Nalandadata/NalandaJEENEETBench" target="_blank" rel="noopener noreferrer">Download a data sample →</a>
+            <a className="s-btn primary" href="https://huggingface.co/datasets/Nalandadata/NalandaJEENEETBench-sample" target="_blank" rel="noopener noreferrer">Download a data sample →</a>
           </div>
         </div>
       </section>
