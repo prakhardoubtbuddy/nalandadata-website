@@ -56,7 +56,7 @@ export default function DrishtiTablePage() {
           </div>
           <div className="s-verify-row">
             <a className="s-btn ghost" href="https://huggingface.co/Nalandadata/DrishtiTable-Qwen2.5-VL-7B" target="_blank" rel="noopener noreferrer">Open the model on Hugging Face →</a>
-            <a className="s-btn primary" href="https://huggingface.co/datasets/Nalandadata/DrishtiTable" target="_blank" rel="noopener noreferrer">Download a data sample →</a>
+            <a className="s-btn primary" href="https://huggingface.co/datasets/Nalandadata/DrishtiTable-sample" target="_blank" rel="noopener noreferrer">Download a data sample →</a>
           </div>
         </div>
       </section>

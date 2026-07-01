@@ -57,7 +57,7 @@ export default function NalandaImageVLPage() {
           </div>
           <div className="s-verify-row">
             <a className="s-btn ghost" href="https://huggingface.co/Nalandadata/nalanda-image-vl" target="_blank" rel="noopener noreferrer">Open the model on Hugging Face →</a>
-            <a className="s-btn primary" href="https://huggingface.co/datasets/Nalandadata/nalanda-image-qa" target="_blank" rel="noopener noreferrer">Download a data sample →</a>
+            <a className="s-btn primary" href="https://huggingface.co/datasets/Nalandadata/nalanda-image-qa-sample" target="_blank" rel="noopener noreferrer">Download a data sample →</a>
           </div>
         </div>
       </section>
