@@ -50,10 +50,12 @@ export default function BlogPostPage() {
   if (notFound || !post) {
     return (
       <div className="bg-[#0A0A0A]" style={{ paddingTop: "96px", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <div style={{ textAlign: "center" }}>
-          <p style={{ color: "var(--muted)", fontSize: "15px", marginBottom: "16px" }}>Post not found.</p>
-          <Link to="/blog" style={{ color: "var(--accent)", fontSize: "13px", fontFamily: "var(--mono)" }}>
-            ← Back to Blog
+        <div style={{ textAlign: "center", maxWidth: "480px", padding: "0 24px" }}>
+          <p style={{ color: "var(--accent)", fontFamily: "var(--mono)", fontSize: "11px", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "16px" }}>Coming soon</p>
+          <h1 style={{ color: "var(--paper)", fontSize: "clamp(22px,3vw,32px)", fontWeight: 800, letterSpacing: "-0.03em", lineHeight: 1.15, marginBottom: "16px" }}>This post is being written.</h1>
+          <p style={{ color: "var(--muted)", fontSize: "15px", lineHeight: 1.6, marginBottom: "32px" }}>We're putting the finishing touches on this one. Check back soon.</p>
+          <Link to="/benchmarks" style={{ color: "var(--accent)", fontSize: "13px", fontFamily: "var(--mono)", fontWeight: 600 }}>
+            ← Back to Benchmarks
           </Link>
         </div>
       </div>

@@ -225,15 +225,15 @@ export default function ContactPage() {
 
                   <div>
                     <label style={lbl}>Mobile Number</label>
-                    <div style={{ display: "flex", gap: "8px" }}>
-                      <select value={form.mobile_country_code} onChange={e => set("mobile_country_code", e.target.value)} style={{ ...fieldBase, width: "160px", flexShrink: 0 }} data-testid="contact-form-country-code">
+                    <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                      <select value={form.mobile_country_code} onChange={e => set("mobile_country_code", e.target.value)} style={{ ...fieldBase, width: "160px", flexShrink: 0, minWidth: 0 }} data-testid="contact-form-country-code">
                         {countryCodes.map((c, i) => (
                           <option key={`${c.code}-${c.country}-${i}`} value={`${c.code}-${c.country}`}>
                             {c.flag} {c.country} ({c.code})
                           </option>
                         ))}
                       </select>
-                      <input type="tel" value={form.mobile_number} onChange={e => set("mobile_number", e.target.value)} style={{ ...fieldBase, flex: 1 }} placeholder="Mobile number" data-testid="contact-form-mobile" />
+                      <input type="tel" value={form.mobile_number} onChange={e => set("mobile_number", e.target.value)} style={{ ...fieldBase, flex: 1, minWidth: "140px" }} placeholder="Mobile number" data-testid="contact-form-mobile" />
                     </div>
                   </div>
 
